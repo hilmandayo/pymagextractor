@@ -1,0 +1,19 @@
+{
+  "video": null,
+  "save_list": {
+    "pedestrian": {
+      "front": "pedestrian/front.csv",
+      "back": "pedestrian/back.csv",
+      "side": "pedestrian/side.csv",
+      "weird": "pedestrian/weird.csv"
+    },
+    "car": {
+      "front": "car/front.csv",
+      "back": "car/back.csv",
+      "side": "car/side.csv"
+    },
+    "sign": {
+      "stop": "sign/stop.csv"
+    }
+  }
+}

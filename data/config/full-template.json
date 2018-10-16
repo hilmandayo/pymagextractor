@@ -1,0 +1,147 @@
+// This is just for possible future use.
+{
+    // This is a comment.
+
+    /*
+      This is also a comment.
+    */
+
+    /* This is the configuration for the software.
+     *
+     * Every config will need to end with the `,` sign, except when the
+     * closing bracket is followed. For example:
+     * {
+     *   "option1": value1,
+     *   "option2": value2,
+     *   "option3": {
+     *     "small_option1": small_value1,
+     *     "small_option2": small_value2       <--- no `,` sign
+     *   }                                     <--- no `,` sign
+     * }
+     */
+
+    /*
+     * `base_path`:
+     * The directory path of the whole project. This means
+     * every configuration after the `base_path` is considered
+     * to be within the `base_path` directory.
+     *
+     * `hdf5_videos_dir`:
+     * The directory that stores directories of hdf5 format videos and their
+     * corresponding processed (during the pre-process step) csv files.
+     * So, within this directory, every video will has their own directory
+     * in which it will be collected with corresponding CSV files.
+     *
+     * `target_hdf5_dir`:
+     * Directory of which hdf5 video and its corresponding CSV files reside.
+     *
+     * *** --- ***
+     *
+     * So, for example, with below configuration, this program will know the
+     * full path of the hdf5 video as:
+     * `/home/hilman/Documents/dl_image_extractor/hdf5_videos/osaka`.
+     *
+     * Within the `osaka` directory, the system will considered any file
+     * that ends with '.hdf5' as the video file, and any CSV file (.csv)
+     * that has 'original' string as the original csv file, and any CSV file
+     * (.csv) that has 'refined' string as the refined CSV file.
+     *
+     * Suggestion is to name the three files within the `osaka` dir as follow:
+     * 1. video.hdf5
+     * 2. original_result.csv
+     * 3. refined_result.csv
+     */
+    "base_path": "/Users/hilman_dayo/Documents/dl_image_extractor/",
+    "hdf5_videos_dir": "hdf5_videos/",
+    "target_hdf5_dir": "other/",
+
+    /* Configuration for the size of the video during the
+     * image extraction process.
+     * However, the size of the saved image (with the used defined
+     * detection coordinates) will be the same with size of the original
+     * `hdf5_video`.
+     *
+     * `width`:
+     * Width of the video.
+     * `height`:
+     * Height of the video.
+     *
+     * If user set up only `width` value (and set up the `height` as `null`),
+     * the value of `height` will be calculated automatically in which the
+     * height/width ratio of the video will be preserve
+     * (if `height` is set to a value and * `width` is set to `null`,
+     * the same process will take effect).
+     * If both of the `width` and `height` is set to `null`, the video
+     * will be set same to the size of the original `hdf5_video`.
+     */
+    "width": 640,
+    "height": 480,
+
+    /*
+     * Offset configuration.
+     * Depends on the computer system, sometimes, the video shown during the
+     * image extraction process is offset a bit from the origin (0, 0).
+     * The origin start from the upper-left corner.
+     * This can be confirmed by checking if there is any green pixel
+     * surrounding the two videos.
+     *
+     * This problem can be solved by setting the value of `width_offset` and
+     * `height_offset` below.
+     * It is important to make sure that there are no green pixels visible
+     * in the background to prevent the coordinates defined by the user
+     * from being wrongly defined.
+     *
+     * `width_offset`:
+     * Move the video `n` pixels to the right.
+     *
+     * `height_offset`:
+     * Move the video `n` pixels downwards.
+     */
+    "width_offset": 1,
+    "height_offset": 1,
+
+    /*
+     * Configurations for saving data annotations.
+     *
+     * `save_parent_dir`:
+     * The name of the directory for the saved data database.
+     *
+     * `save`:
+     * This is the setting for data that want to be saved and
+     * their paths. For example, if we have this kind of structure:
+     *
+     * "save": {
+     *   "pedestrian": {
+     *     "front": "pedestrian/front.csv",
+     *     "back": "pedestrian/back.csv"       <--- no `,` sign
+     *   },
+     *   "car": {
+     *     "front": "car/front.csv"            <--- no `,` sign
+     *   }
+     *
+     * This will initialize a window with the save button for
+     * pedestrian (front and back) and car (front). After annotate
+     * the data, if one of the button is pressed, the data will
+     * be saved to the corresponding pressed button.
+     * For example, if the front of a car is annotated, by
+     * pressing car (front) save button, the annotated data will
+     * be saved to `base_path`/`save_parent_dir`/car/front.csv.
+     */
+     "save_parent_dir": "save/",
+     "save_list": {
+       "pedestrian": {
+         "front": "pedestrian/front.csv",
+         "back": "pedestrian/back.csv",
+         "side": "pedestrian/side.csv",
+         "weird": "pedestrian/weird.csv"
+       },
+       "car": {
+         "front": "car/front.csv",
+         "back": "car/back.csv",
+         "side": "car/side.csv"
+       },
+       "sign": {
+         "stop": "sign/stop.csv"
+       }
+     }
+}
