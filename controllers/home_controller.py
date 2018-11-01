@@ -2,6 +2,7 @@ import sys
 from PySide2 import QtCore, QtGui, QtWidgets
 from views.home_view import HomeView
 from controllers.display_controller import DisplayController
+from controllers.object_controller import ObjectController
 from models.video import Video
 
 
@@ -12,11 +13,13 @@ class HomeController:
         self.view = HomeView(self)
         self.video = Video()
         self.display_controller = DisplayController(self)
+        self.object_controller = ObjectController(self)
         self.init()
 
     def init(self):
         self.view.ui.search_bnt.clicked.connect(self.search_video)
         self.view.ui.start_bnt.clicked.connect(self.display_video)
+        self.view.ui.add_bnt.clicked.connect(self.add_object)
         self.update_video_browser(self.view.ui.video_browser)
 
     def run(self):
@@ -41,3 +44,7 @@ class HomeController:
             label.setText(self.video.path)
         else:
             label.setText("Select a video")
+
+    def add_object(self):
+        self.object_controller.run()
+

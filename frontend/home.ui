@@ -547,16 +547,6 @@
        <string>Start</string>
       </property>
      </widget>
-     <widget class="QTextBrowser" name="video_browser">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>461</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="search_bnt">
       <property name="geometry">
        <rect>
@@ -581,6 +571,19 @@
       </property>
       <property name="text">
        <string>Add</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="video_browser">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>461</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'frontend/home.ui',
 # licensing of 'frontend/home.ui' applies.
 #
-# Created: Thu Nov  1 21:07:02 2018
+# Created: Fri Nov  2 03:15:58 2018
 #      by: pyside2-uic  running on PySide2 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -189,15 +189,16 @@ class Ui_HomeWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.start_bnt.setPalette(palette)
         self.start_bnt.setObjectName("start_bnt")
-        self.video_browser = QtWidgets.QTextBrowser(self.extractor_tab)
-        self.video_browser.setGeometry(QtCore.QRect(10, 50, 461, 31))
-        self.video_browser.setObjectName("video_browser")
         self.search_bnt = QtWidgets.QPushButton(self.extractor_tab)
         self.search_bnt.setGeometry(QtCore.QRect(480, 50, 80, 31))
         self.search_bnt.setObjectName("search_bnt")
         self.add_bnt = QtWidgets.QPushButton(self.extractor_tab)
         self.add_bnt.setGeometry(QtCore.QRect(480, 410, 80, 25))
         self.add_bnt.setObjectName("add_bnt")
+        self.video_browser = QtWidgets.QLineEdit(self.extractor_tab)
+        self.video_browser.setGeometry(QtCore.QRect(10, 50, 461, 31))
+        self.video_browser.setReadOnly(True)
+        self.video_browser.setObjectName("video_browser")
         self.tabWidget.addTab(self.extractor_tab, "")
         self.checker_tab = QtWidgets.QWidget()
         self.checker_tab.setObjectName("checker_tab")
