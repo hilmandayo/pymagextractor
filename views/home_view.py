@@ -1,6 +1,4 @@
-import sys
-from functools import partial
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 from frontend.home import Ui_HomeWindow
 
 

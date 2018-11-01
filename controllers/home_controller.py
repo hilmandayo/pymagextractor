@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 from views.home_view import HomeView
 from controllers.display_controller import DisplayController
 from models.video import Video
@@ -15,15 +15,15 @@ class HomeController:
         self.init()
 
     def init(self):
-        self.view.ui.pushButton_load.clicked.connect(self.load_video)
-        self.view.ui.pushButton_display.clicked.connect(self.display_video)
-        self.update_video_label(self.view.ui.label_video)
+        self.view.ui.search_bnt.clicked.connect(self.search_video)
+        self.view.ui.start_bnt.clicked.connect(self.display_video)
+        self.update_video_browser(self.view.ui.video_browser)
 
     def run(self):
         self.view.show()
         return self.app.exec_()
 
-    def load_video(self):
+    def search_video(self):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
@@ -31,13 +31,13 @@ class HomeController:
         if file_path:
             self.video.path = file_path
 
-        self.update_video_label(self.view.ui.label_video)
+        self.update_video_browser(self.view.ui.video_browser)
 
     def display_video(self):
         self.display_controller.run()
 
-    def update_video_label(self, label):
+    def update_video_browser(self, label):
         if self.video.path:
-            label.setText("Video Info: " + self.video.path)
+            label.setText(self.video.path)
         else:
-            label.setText("Video Info: No video loaded yet")
+            label.setText("Select a video")

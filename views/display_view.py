@@ -1,22 +1,22 @@
-from PyQt5.QtCore import QDir, Qt, QUrl
-from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
+from PySide2.QtCore import QDir, Qt, QUrl
+from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
+from PySide2.QtMultimediaWidgets import QVideoWidget
+from PySide2.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
         QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
-from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
-from PyQt5.QtGui import QIcon
+from PySide2.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
+from PySide2.QtGui import QIcon
 import sys
 
 
 class DisplayView(QMainWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, controller):
         super(DisplayView, self).__init__()
         self.setWindowTitle("Pymagextractor - Display")
 
+        self.controller = controller
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-
-        videoWidget = QVideoWidget()
+        self.videoWidget = QVideoWidget()
 
         self.playButton = QPushButton()
         self.playButton.setEnabled(False)
@@ -61,14 +61,16 @@ class DisplayView(QMainWindow):
         controlLayout.addWidget(self.positionSlider)
 
         layout = QVBoxLayout()
-        layout.addWidget(videoWidget)
+        layout.addWidget(self.videoWidget)
         layout.addLayout(controlLayout)
         layout.addWidget(self.errorLabel)
 
         # Set widget to contain window contents
         wid.setLayout(layout)
 
-        self.mediaPlayer.setVideoOutput(videoWidget)
+        #self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(self.controller.home_controller.video.path)))
+        self.playButton.setEnabled(True)
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
@@ -79,8 +81,7 @@ class DisplayView(QMainWindow):
                 QDir.homePath())
 
         if fileName != '':
-            self.mediaPlayer.setMedia(
-                    QMediaContent(QUrl.fromLocalFile(fileName)))
+            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
             self.playButton.setEnabled(True)
 
     def exitCall(self):
