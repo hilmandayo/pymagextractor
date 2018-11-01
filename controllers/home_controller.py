@@ -10,10 +10,16 @@ class HomeController:
 
     def __init__(self):
         self.app = QtWidgets.QApplication(sys.argv)
-        self.view = HomeView(self)
+        # List of models
         self.video = Video()
+        self.list_objects = []
+
+        self.view = HomeView(self)
+
+        # List of controllers
         self.display_controller = DisplayController(self)
         self.object_controller = ObjectController(self)
+
         self.init()
 
     def init(self):
@@ -21,6 +27,7 @@ class HomeController:
         self.view.ui.start_bnt.clicked.connect(self.display_video)
         self.view.ui.add_bnt.clicked.connect(self.add_object)
         self.update_video_browser(self.view.ui.video_browser)
+        self.view.ui.object_list.clicked.connect(self.on_listview)
 
     def run(self):
         self.view.show()
@@ -47,4 +54,13 @@ class HomeController:
 
     def add_object(self):
         self.object_controller.run()
+
+    def update_object_list(self):
+        self.view.ui.object_list.clear()
+        for object in self.list_objects:
+            self.view.ui.object_list.addItem(object.name)
+
+    def on_listview(self, index):
+        self.object_controller.run(self.list_objects[index.row()])
+        print(index.data())
 
