@@ -2,82 +2,94 @@ import sys
 from PySide2 import QtCore, QtGui, QtWidgets
 from views.object_view import ObjectView
 from models.object import Object
+from controllers.view_controller import ViewController
 
 
 class ObjectController:
 
     def __init__(self, home_controller):
+        # Controllers and Views
         self.home_controller = home_controller
+        self.view_controller = ViewController(self)
         self.view = ObjectView(self)
-        self.object = Object()
+
+        self.new_object = None
+        self.edit_object = None
         self.init()
-        self.edit_mode = False
 
     def init(self):
+        """Initial setup for connecting all events"""
         self.view.ui.cancel_bnt.clicked.connect(self.close)
         self.view.ui.save_bnt.clicked.connect(self.save)
         self.view.ui.delete_bnt.clicked.connect(self.delete)
-        self.view.ui.front_search_bnt.clicked.connect(self.front_file_search)
-        self.view.ui.back_search_bnt.clicked.connect(self.back_file_search)
+        self.view.ui.add_view_bnt.clicked.connect(self.add_view)
+        self.view.ui.object_name.textChanged.connect(self.update_name)
+        self.view.ui.view_list.clicked.connect(self.on_listview)
 
-    def run(self, loaded_object=None):
-        if loaded_object:
-            self.object = loaded_object
-            self.view.ui.name_text.setText(self.object.name)
-            self.edit_mode = True
+    def update(self):
+        """Update for every time the controller is called"""
+        self.view.ui.object_name.setText(self.new_object.name)
+        self.update_view_list()
+        # If it's editing mode
+        if self.edit_object:
+            self.view.ui.delete_bnt.setEnabled(True)
         else:
-            self.object = Object()  # create a new object
-            self.view.ui.name_text.setText("")
-            self.edit_mode = False
+            self.view.ui.delete_bnt.setEnabled(False)
 
-        self.view.ui.delete_bnt.setEnabled(self.edit_mode)
-        self.view.ui.save_bnt.setEnabled(not self.edit_mode)
-        self.update_fields()
+    def run(self, object_selected=None):
+        """Start window"""
+        self.new_object = Object()
+        self.edit_object = object_selected
+        if self.edit_object:
+            self.new_object.name = self.edit_object.name
+            self.new_object.view_list = self.edit_object.view_list
+
+        self.update()
+        self.view.setWindowModality(QtCore.Qt.ApplicationModal)
         self.view.show()
 
     def close(self):
+        """Close window"""
+        self.home_controller.update()
         self.view.close()
 
     def save(self):
-        self.object.name = self.view.ui.name_text.text()
-        if self.object.verify():
-            if self.edit_mode:
-                QtWidgets.QMessageBox.about(self.view, "Success", "Alterations Saved")
-            else:
-                self.home_controller.list_objects.append(self.object)
-                QtWidgets.QMessageBox.about(self.view, "Success", "New Object Saved")
+        """Save new object"""
+        if self.new_object.verify():
+            # If it's editing a new object delete the old one and add the new one
+            if self.edit_object:
+                self.home_controller.optionsDB.delete_object(self.edit_object)
 
-            self.home_controller.update_object_list()
-            self.view.close()
+            if self.home_controller.optionsDB.add_object(self.new_object):
+                QtWidgets.QMessageBox.about(self.view, "Success", "Object Saved")
+                self.home_controller.update()
+                self.view.close()
+            else:
+                self.home_controller.optionsDB.add_object(self.edit_object)  # Poor implementation
+                QtWidgets.QMessageBox.about(self.view, "Error", "Name already exist")
+
+
         else:
             QtWidgets.QMessageBox.about(self.view, "Error", "Information Incomplete")
 
     def delete(self):
-        self.home_controller.list_objects.remove(self.object)
-        QtWidgets.QMessageBox.about(self.view, "Error", "Object Deleted")
-        self.home_controller.update_object_list()
+        """Deleting the editing object"""
+        self.home_controller.optionsDB.delete_object(self.edit_object)
+        QtWidgets.QMessageBox.about(self.view, "Success", "Object Deleted")
+        self.home_controller.update()
         self.view.close()
 
+    def update_name(self):
+        self.new_object.name = self.view.ui.object_name.text()
 
-    def file_search(self):
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
-                                                             "All Files (*);;Python Files (*.py)", options=options)
-        return file_path
+    def add_view(self):
+        """Call new window to add a new view to the object"""
+        self.view_controller.run(self.new_object)
 
-    def front_file_search(self):
-        file_path = self.file_search()
-        if file_path:
-            self.object.front = file_path
-            self.update_fields()
+    def update_view_list(self):
+        self.view.ui.view_list.clear()
+        for view in self.new_object.view_list:
+            self.view.ui.view_list.addItem(view.name)
 
-    def back_file_search(self):
-        file_path = self.file_search()
-        if file_path:
-            self.object.back = file_path
-            self.update_fields()
-
-    def update_fields(self):
-        self.view.ui.front_text.setText(self.object.front)
-        self.view.ui.back_text.setText(self.object.back)
+    def on_listview(self, index):
+        self.view_controller.run(self.new_object, self.new_object.view_list[index.row()])
