@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'frontend/home.ui',
 # licensing of 'frontend/home.ui' applies.
 #
-# Created: Fri Nov  2 03:15:58 2018
+# Created: Fri Nov  2 04:47:45 2018
 #      by: pyside2-uic  running on PySide2 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -50,6 +50,7 @@ class Ui_HomeWindow(object):
         self.object_list.setGeometry(QtCore.QRect(10, 210, 551, 192))
         self.object_list.setObjectName("object_list")
         self.start_bnt = QtWidgets.QPushButton(self.extractor_tab)
+        self.start_bnt.setEnabled(False)
         self.start_bnt.setGeometry(QtCore.QRect(430, 120, 131, 29))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))

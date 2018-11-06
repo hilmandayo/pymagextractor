@@ -1,10 +1,10 @@
-from PySide2.QtCore import QDir, Qt, QUrl
-from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
-from PySide2.QtMultimediaWidgets import QVideoWidget
-from PySide2.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
+from PyQt5.QtCore import QDir, Qt, QUrl
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QAbstractVideoSurface
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
         QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
-from PySide2.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
-from PySide2.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
+from PyQt5.QtGui import QIcon
 import sys
 
 
@@ -68,7 +68,7 @@ class DisplayView(QMainWindow):
         # Set widget to contain window contents
         wid.setLayout(layout)
 
-        #self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.mediaPlayer.setVideoOutput(self.videoWidget)
         self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(self.controller.home_controller.video.path)))
         self.playButton.setEnabled(True)
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)

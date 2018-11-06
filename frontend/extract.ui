@@ -26,7 +26,7 @@
     <property name="title">
      <string>Extractor</string>
     </property>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="original_box">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -38,8 +38,19 @@
      <property name="title">
       <string>Original Detection</string>
      </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>29</y>
+        <width>371</width>
+        <height>291</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="original_layout"/>
+     </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="refined_box">
      <property name="geometry">
       <rect>
        <x>410</x>
@@ -51,8 +62,19 @@
      <property name="title">
       <string>Refined Detection</string>
      </property>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>371</width>
+        <height>291</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="refined_layout"/>
+     </widget>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="play_bnt">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -62,10 +84,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="previous_bnt">
      <property name="geometry">
       <rect>
        <x>270</x>
@@ -78,7 +100,7 @@
       <string>Previous</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="next_bnt">
      <property name="geometry">
       <rect>
        <x>470</x>
@@ -91,7 +113,7 @@
       <string>Next</string>
      </property>
     </widget>
-    <widget class="QSlider" name="horizontalSlider">
+    <widget class="QSlider" name="slider">
      <property name="geometry">
       <rect>
        <x>19</x>
@@ -135,23 +157,16 @@
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2">
-    <widget class="QLabel" name="label">
+    <widget class="QGroupBox" name="groupBox_4">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>10</y>
-       <width>131</width>
-       <height>21</height>
+       <width>120</width>
+       <height>321</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
+     <property name="title">
       <string>Save Options</string>
      </property>
     </widget>
