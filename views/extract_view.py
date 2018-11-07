@@ -24,3 +24,7 @@ class ExtractView(QtWidgets.QMainWindow):
 
         self.mediaPlayer_original.setVideoOutput(self.videoWidget_original)
         self.mediaPlayer_refined.setVideoOutput(self.videoWidget_refined)
+
+        self.widget = QtWidgets.QWidget()
+        self.ui.scroll_area.setWidget(self.widget)
+        self.layout_SArea = QtWidgets.QVBoxLayout(self.widget)

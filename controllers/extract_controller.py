@@ -1,5 +1,5 @@
 import sys
-from PySide2 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from views.extract_view import ExtractView
 from PyQt5.QtCore import QDir, Qt, QUrl
 from PyQt5.QtWidgets import QStyle
@@ -18,6 +18,9 @@ class ExtractController:
         self.view.mediaPlayer_original.stateChanged.connect(self.mediaStateChanged)
         self.view.mediaPlayer_refined.stateChanged.connect(self.mediaStateChanged)
 
+    def update(self):
+        self.load_options()
+
     def mediaStateChanged(self, state):
         if self.view.mediaPlayer_original.state() == QMediaPlayer.PlayingState:
             self.view.ui.play_bnt.setIcon(
@@ -29,6 +32,7 @@ class ExtractController:
     def run(self):
         self.view.mediaPlayer_original.setMedia(QMediaContent(QUrl.fromLocalFile(self.home_controller.video.path)))
         self.view.mediaPlayer_refined.setMedia(QMediaContent(QUrl.fromLocalFile(self.home_controller.video.path)))
+        self.update()
         self.view.show()
 
     def play(self):
@@ -38,3 +42,14 @@ class ExtractController:
         else:
             self.view.mediaPlayer_original.play()
             self.view.mediaPlayer_refined.play()
+
+    def load_options(self):
+        for option_object in self.home_controller.optionsDB.object_list:
+            group = QtWidgets.QGroupBox(option_object.name)
+            vbox = QtWidgets.QVBoxLayout()
+            for option_view in option_object.view_list:
+                bnt = QtWidgets.QPushButton(option_view.name)
+                vbox.addWidget(bnt)
+            vbox.addStretch(1)
+            group.setLayout(vbox)
+            self.view.layout_SArea.addWidget(group)

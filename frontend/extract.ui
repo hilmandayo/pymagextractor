@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>993</width>
-    <height>511</height>
+    <width>1041</width>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>821</width>
-      <height>471</height>
+      <height>491</height>
      </rect>
     </property>
     <property name="title">
@@ -78,7 +78,7 @@
      <property name="geometry">
       <rect>
        <x>370</x>
-       <y>430</y>
+       <y>450</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -91,7 +91,7 @@
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>430</y>
+       <y>450</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -104,7 +104,7 @@
      <property name="geometry">
       <rect>
        <x>470</x>
-       <y>430</y>
+       <y>450</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -117,7 +117,7 @@
      <property name="geometry">
       <rect>
        <x>19</x>
-       <y>400</y>
+       <y>420</y>
        <width>781</width>
        <height>20</height>
       </rect>
@@ -130,13 +130,26 @@
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>380</y>
+       <y>400</y>
        <width>54</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
       <string>Frames</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>370</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Objects</string>
      </property>
     </widget>
    </widget>
@@ -146,13 +159,31 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>993</width>
+     <width>1041</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Save Options</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
@@ -160,15 +191,38 @@
     <widget class="QGroupBox" name="groupBox_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>120</width>
-       <height>321</height>
+       <x>0</x>
+       <y>20</y>
+       <width>191</width>
+       <height>411</height>
       </rect>
      </property>
      <property name="title">
-      <string>Save Options</string>
+      <string>Objects</string>
      </property>
+     <widget class="QScrollArea" name="scroll_area">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>171</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>169</width>
+         <height>369</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>

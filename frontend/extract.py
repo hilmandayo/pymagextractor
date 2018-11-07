@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'frontend/extract.ui',
-# licensing of 'frontend/extract.ui' applies.
+# Form implementation generated from reading ui file 'frontend/extract.ui'
 #
-# Created: Fri Nov  2 05:28:57 2018
-#      by: pyside2-uic  running on PySide2 5.11.2
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,11 +11,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(993, 511)
+        MainWindow.resize(1041, 554)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(10, 10, 821, 471))
+        self.groupBox.setGeometry(QtCore.QRect(10, 10, 821, 491))
         self.groupBox.setObjectName("groupBox")
         self.original_box = QtWidgets.QGroupBox(self.groupBox)
         self.original_box.setGeometry(QtCore.QRect(10, 30, 391, 331))
@@ -38,52 +36,72 @@ class Ui_MainWindow(object):
         self.refined_layout.setContentsMargins(0, 0, 0, 0)
         self.refined_layout.setObjectName("refined_layout")
         self.play_bnt = QtWidgets.QPushButton(self.groupBox)
-        self.play_bnt.setGeometry(QtCore.QRect(370, 430, 80, 25))
+        self.play_bnt.setGeometry(QtCore.QRect(370, 450, 80, 25))
         self.play_bnt.setText("")
         self.play_bnt.setObjectName("play_bnt")
         self.previous_bnt = QtWidgets.QPushButton(self.groupBox)
-        self.previous_bnt.setGeometry(QtCore.QRect(270, 430, 80, 25))
+        self.previous_bnt.setGeometry(QtCore.QRect(270, 450, 80, 25))
         self.previous_bnt.setObjectName("previous_bnt")
         self.next_bnt = QtWidgets.QPushButton(self.groupBox)
-        self.next_bnt.setGeometry(QtCore.QRect(470, 430, 80, 25))
+        self.next_bnt.setGeometry(QtCore.QRect(470, 450, 80, 25))
         self.next_bnt.setObjectName("next_bnt")
         self.slider = QtWidgets.QSlider(self.groupBox)
-        self.slider.setGeometry(QtCore.QRect(19, 400, 781, 20))
+        self.slider.setGeometry(QtCore.QRect(19, 420, 781, 20))
         self.slider.setOrientation(QtCore.Qt.Horizontal)
         self.slider.setObjectName("slider")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(380, 380, 54, 17))
+        self.label_2.setGeometry(QtCore.QRect(380, 400, 54, 17))
         self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.groupBox)
+        self.label_3.setGeometry(QtCore.QRect(380, 370, 54, 17))
+        self.label_3.setObjectName("label_3")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 993, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1041, 22))
         self.menubar.setObjectName("menubar")
+        self.menuAbout = QtWidgets.QMenu(self.menubar)
+        self.menuAbout.setObjectName("menuAbout")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.dockWidget_2 = QtWidgets.QDockWidget(MainWindow)
+        self.dockWidget_2.setMinimumSize(QtCore.QSize(200, 400))
+        self.dockWidget_2.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable|QtWidgets.QDockWidget.DockWidgetMovable)
         self.dockWidget_2.setObjectName("dockWidget_2")
         self.dockWidgetContents_2 = QtWidgets.QWidget()
         self.dockWidgetContents_2.setObjectName("dockWidgetContents_2")
         self.groupBox_4 = QtWidgets.QGroupBox(self.dockWidgetContents_2)
-        self.groupBox_4.setGeometry(QtCore.QRect(20, 10, 120, 321))
+        self.groupBox_4.setGeometry(QtCore.QRect(0, 20, 191, 411))
         self.groupBox_4.setObjectName("groupBox_4")
+        self.scroll_area = QtWidgets.QScrollArea(self.groupBox_4)
+        self.scroll_area.setGeometry(QtCore.QRect(10, 30, 171, 371))
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setObjectName("scroll_area")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 169, 369))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.scroll_area.setWidget(self.scrollAreaWidgetContents)
         self.dockWidget_2.setWidget(self.dockWidgetContents_2)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget_2)
+        self.menubar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
-        self.groupBox.setTitle(QtWidgets.QApplication.translate("MainWindow", "Extractor", None, -1))
-        self.original_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Original Detection", None, -1))
-        self.refined_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Refined Detection", None, -1))
-        self.previous_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Previous", None, -1))
-        self.next_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Next", None, -1))
-        self.label_2.setText(QtWidgets.QApplication.translate("MainWindow", "Frames", None, -1))
-        self.groupBox_4.setTitle(QtWidgets.QApplication.translate("MainWindow", "Save Options", None, -1))
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.groupBox.setTitle(_translate("MainWindow", "Extractor"))
+        self.original_box.setTitle(_translate("MainWindow", "Original Detection"))
+        self.refined_box.setTitle(_translate("MainWindow", "Refined Detection"))
+        self.previous_bnt.setText(_translate("MainWindow", "Previous"))
+        self.next_bnt.setText(_translate("MainWindow", "Next"))
+        self.label_2.setText(_translate("MainWindow", "Frames"))
+        self.label_3.setText(_translate("MainWindow", "Objects"))
+        self.menuAbout.setTitle(_translate("MainWindow", "About"))
+        self.dockWidget_2.setWindowTitle(_translate("MainWindow", "Save Options"))
+        self.groupBox_4.setTitle(_translate("MainWindow", "Objects"))
 
 
 if __name__ == "__main__":

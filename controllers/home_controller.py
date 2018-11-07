@@ -27,6 +27,7 @@ class HomeController:
         self.update()
 
     def init(self):
+        """Initial setup for connecting all events"""
         self.view.ui.search_bnt.clicked.connect(self.search_video)
         self.view.ui.start_bnt.clicked.connect(self.start)
         self.view.ui.add_bnt.clicked.connect(self.add_object)
@@ -35,14 +36,17 @@ class HomeController:
         self.view.ui.load_bnt.clicked.connect(self.load_options)
 
     def update(self):
+        """Update for every time the controller is called"""
         self.update_object_list()
         self.update_video_browser()
 
     def run(self):
+        """Start window"""
         self.view.show()
         return self.app.exec_()
 
     def search_video(self):
+        """Find video path"""
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
@@ -53,25 +57,15 @@ class HomeController:
         self.update()
 
     def start(self):
+        """Open video display window"""
         self.extractor_controller.run()
 
-    def update_video_browser(self):
-        if self.video.path:
-            self.view.ui.video_browser.setText(self.video.path)
-            self.view.ui.start_bnt.setEnabled(True)
-
     def add_object(self):
+        """Open add object window"""
         self.object_controller.run()
 
-    def update_object_list(self):
-        self.view.ui.object_list.clear()
-        for object in self.optionsDB.object_list:
-            self.view.ui.object_list.addItem(object.name)
-
-    def on_listview(self, index):
-        self.object_controller.run(self.optionsDB.object_list[index.row()])
-
     def save_options(self):
+        """Save objects on a xml file"""
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_name, _ = QtWidgets.QFileDialog.getSaveFileName(self.view, "QFileDialog.getSaveFileName()", "",
@@ -82,13 +76,30 @@ class HomeController:
             self.optionsDB.save_db(file_name)
 
     def load_options(self):
+        """Load a xml file to a list of objects"""
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                              "XML files (*.xml)", options=options)
         if file_path:
             self.optionsDB.load_db(file_path)
+            print(file_path)
 
         self.update()
+
+    def update_object_list(self):
+        self.view.ui.object_list.clear()
+        for object in self.optionsDB.object_list:
+            self.view.ui.object_list.addItem(object.name)
+
+    def update_video_browser(self):
+        if self.video.path:
+            self.view.ui.video_browser.setText(self.video.path)
+            self.view.ui.start_bnt.setEnabled(True)
+
+    def on_listview(self, index):
+        self.object_controller.run(self.optionsDB.object_list[index.row()])
+
+
 
 
