@@ -52,7 +52,7 @@ class HomeController:
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                             "All Files (*);;Python Files (*.py)", options=options)
         if file_path:
-            self.video.path = file_path
+            self.video.set_path(file_path)
 
         self.update()
 

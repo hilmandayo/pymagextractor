@@ -17,9 +17,13 @@ class ExtractController:
         self.view.ui.play_bnt.clicked.connect(self.play)
         self.view.mediaPlayer_original.stateChanged.connect(self.mediaStateChanged)
         self.view.mediaPlayer_refined.stateChanged.connect(self.mediaStateChanged)
+        self.view.ui.slider.sliderMoved.connect(self.setPosition)
+        self.view.mediaPlayer_original.positionChanged.connect(self.positionChanged)
+        self.view.mediaPlayer_original.durationChanged.connect(self.durationChanged)
 
     def update(self):
         self.load_options()
+        self.view.ui.frames_label.setText("0/"+str(self.home_controller.video.length_frames))
 
     def mediaStateChanged(self, state):
         if self.view.mediaPlayer_original.state() == QMediaPlayer.PlayingState:
@@ -28,6 +32,16 @@ class ExtractController:
         else:
             self.view.ui.play_bnt.setIcon(
                 self.view.style().standardIcon(QStyle.SP_MediaPlay))
+
+    def setPosition(self, position):
+        self.view.mediaPlayer_original.setPosition(position)
+
+    def positionChanged(self, position):
+        self.view.ui.slider.setValue(position)
+        self.view.ui.frames_label.setText(str(int(position*self.home_controller.video.fps/1000)) + "/" + str(self.home_controller.video.length_frames))
+
+    def durationChanged(self, duration):
+        self.view.ui.slider.setRange(0, duration)
 
     def run(self):
         self.view.mediaPlayer_original.setMedia(QMediaContent(QUrl.fromLocalFile(self.home_controller.video.path)))
