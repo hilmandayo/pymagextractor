@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'frontend/extract.ui'
+# Form implementation generated from reading ui file 'frontend/extract.ui',
+# licensing of 'frontend/extract.ui' applies.
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created: Thu Nov 15 11:12:09 2018
+#      by: pyside2-uic  running on PySide2 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -20,33 +22,33 @@ class Ui_MainWindow(object):
         self.original_box = QtWidgets.QGroupBox(self.groupBox)
         self.original_box.setGeometry(QtCore.QRect(10, 30, 391, 331))
         self.original_box.setObjectName("original_box")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.original_box)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 29, 371, 291))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.original_layout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.original_layout.setContentsMargins(0, 0, 0, 0)
-        self.original_layout.setObjectName("original_layout")
+        self.original_video = QtWidgets.QLabel(self.original_box)
+        self.original_video.setGeometry(QtCore.QRect(0, 20, 391, 311))
+        self.original_video.setAlignment(QtCore.Qt.AlignCenter)
+        self.original_video.setObjectName("original_video")
         self.refined_box = QtWidgets.QGroupBox(self.groupBox)
         self.refined_box.setGeometry(QtCore.QRect(410, 30, 391, 331))
         self.refined_box.setObjectName("refined_box")
-        self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.refined_box)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(10, 30, 371, 291))
-        self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
-        self.refined_layout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
-        self.refined_layout.setContentsMargins(0, 0, 0, 0)
-        self.refined_layout.setObjectName("refined_layout")
+        self.refined_video = QtWidgets.QLabel(self.refined_box)
+        self.refined_video.setGeometry(QtCore.QRect(0, 20, 391, 311))
+        self.refined_video.setAlignment(QtCore.Qt.AlignCenter)
+        self.refined_video.setObjectName("refined_video")
         self.play_bnt = QtWidgets.QPushButton(self.groupBox)
         self.play_bnt.setGeometry(QtCore.QRect(370, 450, 80, 25))
+        self.play_bnt.setFocusPolicy(QtCore.Qt.NoFocus)
         self.play_bnt.setText("")
         self.play_bnt.setObjectName("play_bnt")
         self.previous_bnt = QtWidgets.QPushButton(self.groupBox)
         self.previous_bnt.setGeometry(QtCore.QRect(270, 450, 80, 25))
+        self.previous_bnt.setFocusPolicy(QtCore.Qt.NoFocus)
         self.previous_bnt.setObjectName("previous_bnt")
         self.next_bnt = QtWidgets.QPushButton(self.groupBox)
         self.next_bnt.setGeometry(QtCore.QRect(470, 450, 80, 25))
+        self.next_bnt.setFocusPolicy(QtCore.Qt.NoFocus)
         self.next_bnt.setObjectName("next_bnt")
         self.slider = QtWidgets.QSlider(self.groupBox)
         self.slider.setGeometry(QtCore.QRect(19, 420, 781, 20))
+        self.slider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.slider.setOrientation(QtCore.Qt.Horizontal)
         self.slider.setObjectName("slider")
         self.frames_label = QtWidgets.QLabel(self.groupBox)
@@ -92,18 +94,19 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.groupBox.setTitle(_translate("MainWindow", "Extractor"))
-        self.original_box.setTitle(_translate("MainWindow", "Original Detection"))
-        self.refined_box.setTitle(_translate("MainWindow", "Refined Detection"))
-        self.previous_bnt.setText(_translate("MainWindow", "Previous"))
-        self.next_bnt.setText(_translate("MainWindow", "Next"))
-        self.frames_label.setText(_translate("MainWindow", "Frames"))
-        self.objects_label.setText(_translate("MainWindow", "Objects"))
-        self.menuAbout.setTitle(_translate("MainWindow", "About"))
-        self.dockWidget_2.setWindowTitle(_translate("MainWindow", "Save Options"))
-        self.groupBox_4.setTitle(_translate("MainWindow", "Objects"))
+        MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
+        self.groupBox.setTitle(QtWidgets.QApplication.translate("MainWindow", "Extractor", None, -1))
+        self.original_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Original Detection", None, -1))
+        self.original_video.setText(QtWidgets.QApplication.translate("MainWindow", "Original Video", None, -1))
+        self.refined_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Refined Detection", None, -1))
+        self.refined_video.setText(QtWidgets.QApplication.translate("MainWindow", "Refined Video", None, -1))
+        self.previous_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Previous", None, -1))
+        self.next_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Next", None, -1))
+        self.frames_label.setText(QtWidgets.QApplication.translate("MainWindow", "Frames", None, -1))
+        self.objects_label.setText(QtWidgets.QApplication.translate("MainWindow", "Objects", None, -1))
+        self.menuAbout.setTitle(QtWidgets.QApplication.translate("MainWindow", "About", None, -1))
+        self.dockWidget_2.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "Save Options", None, -1))
+        self.groupBox_4.setTitle(QtWidgets.QApplication.translate("MainWindow", "Objects", None, -1))
 
 
 if __name__ == "__main__":

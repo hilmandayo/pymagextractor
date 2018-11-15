@@ -4,24 +4,21 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 import cv2
 
 
-class QtCapture(QtWidgets.QWidget):
+class VideoWidget(QtCore.QThread):
+    changePixmap = QtCore.pyqtSignal(QtGui.QImage)
 
     def __init__(self, filename):
-        super(QtWidgets.QWidget, self).__init__()
-
+        super(VideoWidget, self).__init__()
         self.cap = cv2.VideoCapture('/home/thales/Downloads/DBH03.mp4')
-        self.video_frame = QtWidgets.QLabel()
-        lay = QtWidgets.QVBoxLayout()
-        lay.addWidget(self.video_frame)
-        self.setLayout(lay)
 
     def nextFrameSlot(self):
         ret, frame = self.cap.read()
-        # My webcam yields frames in BGR format
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = QtGui.QImage(frame, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)
-        pix = QtGui.QPixmap.fromImage(img)
-        self.video_frame.setPixmap(pix)
+        if ret:
+            rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            convertToQtFormat = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],
+                                             QtGui.QImage.Format_RGB888)
+            p = convertToQtFormat.scaled(640, 480, QtCore.Qt.KeepAspectRatio)
+            self.changePixmap.emit(p)
 
     def start(self):
         self.timer = QtCore.QTimer()
@@ -33,7 +30,6 @@ class QtCapture(QtWidgets.QWidget):
 
     def deleteLater(self):
         self.cap.release()
-        super(QtWidgets.QWidget, self).deleteLater()
 
 
 class ControlWindow(QtWidgets.QMainWindow):
@@ -89,18 +85,26 @@ class ControlWindow(QtWidgets.QMainWindow):
 
         self.setCentralWidget(self.imageCaptureWindow)
 
+        self.label = QtWidgets.QLabel(self)
+        self.label.move(280, 120)
+        self.label.resize(640, 480)
+        self.video_widget = VideoWidget(self)
+        self.video_widget.changePixmap.connect(self.setImage)
+
+        self.layout.addWidget(self.label)
+        self.pause_button.clicked.connect(self.video_widget.pause)
+
         self.show()
 
     def startCapture(self):
-        if not self.capture:
-            self.capture = QtCapture(self.videoFileName)
-            self.layout.addWidget(self.capture)
-            self.pause_button.clicked.connect(self.capture.pause)
-        self.capture.start()
-        self.capture.show()
+        self.video_widget.start()
+
+    @QtCore.pyqtSlot(QtGui.QImage)
+    def setImage(self, image):
+        self.label.setPixmap(QtGui.QPixmap.fromImage(image))
 
     def endCapture(self):
-        self.capture.deleteLater()
+        self.video_widget.deleteLater()
         self.capture = None
 
     def loadPosMatFile(self):
