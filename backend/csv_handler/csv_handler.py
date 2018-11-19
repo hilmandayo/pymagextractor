@@ -2,6 +2,10 @@ from collections import namedtuple
 import pandas as pd
 
 
+DualObject = namedtuple('DualObject', 'refined correspond frame')
+TrackedObject = namedtuple('TrackedObject', 'frame_id track_id x1 y1 x2 y2')
+
+
 class RefinedTrackedObjects:
     """A class that will handle the CSV result of a refined tracked detected objects.
 
@@ -94,9 +98,6 @@ class DualTrackedObjects:
         self.refined_objects.close()
         self.original_objects.close()
 
-
-DualObject = namedtuple('DualObject', 'refined correspond')
-TrackedObject = namedtuple('TrackedObject', 'frame_id track_id x1 y1 x2 y2')
 
 
 class DualTrackedObject:
