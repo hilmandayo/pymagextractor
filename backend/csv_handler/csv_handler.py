@@ -1,8 +1,9 @@
+from collections import namedtuple
 import pandas as pd
 
 
-class TrackedObjects:
-    """A class that will handle the CSV result of a tracked detected objects.
+class RefinedTrackedObjects:
+    """A class that will handle the CSV result of a refined tracked detected objects.
 
     Attributes
     __________
@@ -12,50 +13,122 @@ class TrackedObjects:
         # Set the `index_col` to use the `track_id`.
         self._csv_source = pd.read_csv(csv_source, index_col=1)
 
-        # Make the `n_objects` it exclusive.
-        self.n_objects = self._csv_source.index.max() + 1
-        # This is so that `get_next_object` will be 0 when we are first starting.
-        self.current_object_id = self._csv_source.index.min() - 1
+        # TODO: Work more on this
+        self.max_track_id = self._csv_source.index.max()
+        self.min_track_id = self._csv_source.index.min()
+        # TODO: Make an interface for to check current track id.
+        self.current_track_id = self.min_track_id
+        self.iterated = False
 
-    def _increase_object_id(self):
-        if self.current_object_id < self.n_objects - 1:
-            self.current_object_id += 1
-        else:
-            # TODO: Add things to be done here.
-            pass
+    def _increase_track_id(self):
+        if self.iterated and self.current_track_id < self.max_track_id:
+            self.current_track_id += 1
 
-    def _decrease_object_id(self):
-        if self.current_object_id > 0:
-            self.current_object_id -= 1
-        else:
-            # TODO: Add things to be done here.
-            pass
+        # This code will be executed at first call to this method only.
+        if not self.iterated:
+            self.iterated = True
+
+    def _decrease_track_id(self):
+        if self.iterated and self.current_track_id > self.min_track_id:
+            self.current_track_id -= 1
 
     def _get_object(self):
-        return self._csv_source.loc[self.current_object_id]
+        return self._csv_source.loc[[self.current_track_id]]
 
     def get_next_object(self):
-        self._increase_object_id()
+        self._increase_track_id()
         return self._get_object()
 
     def get_prev_object(self):
-        self._decrease_object_id()
+        self._decrease_track_id()
         return self._get_object()
 
     def close(self):
-        pass
+        self._csv_source.close()
+
+
+class OriginalTrackedObjects:
+    def __init__(self, csv_source):
+        # Set the `index_col` to use the `frame_id`.
+        self._csv_source = pd.read_csv(csv_source, index_col=0)
+
+        self.max_frame_id = self._csv_source.index.max()
+        self.min_frame_id = self._csv_source.index.min()
+        self.current_frame_id = self.min_frame_id
+
+    def get_corresponding_objects(self, refined_tracked_object):
+        start = refined_tracked_object.frame_id.min()
+        finish = refined_tracked_object.frame_id.max()
+
+        # The pandas slicing will be inclusive
+        return self._csv_source.loc[start:finish]
+
+    def close(self):
+        self._csv_source.close()
 
 
 class DualTrackedObjects:
-    def __init__(self, orig_objects, refined_objects):
-        self.orig_objects = orig_objects
-        self.refined_objects = refined_objects
-        self.dual_objects = (self.orig_objects, self.refined_objects)
+    def __init__(self, refined: str, original: str):
+        self.original_objects = OriginalTrackedObjects(original)
+        self.refined_objects = RefinedTrackedObjects(refined)
 
     def get_next_dual_object(self):
-        for d_o in self.dual_objects:
-            d_o.get_next_object()
+        refined_object = self.refined_objects.get_next_object()
+        corresponding_objects = self.original_objects.get_corresponding_objects(refined_object)
+
+        # TODO: Test for possibility of Series instances
+        dual_object = DualTrackedObject(refined_object, corresponding_objects)
+
+        return dual_object
 
     def get_prev_dual_object(self):
-        for d_o in self.dual_objects:
-            d_o.get_prev_object()
+        refined_object = self.refined_objects.get_prev_object()
+        corresponding_objects = self.original_objects.get_corresponding_objects(refined_object)
+
+        # TODO: Test for possibility of Series instances
+        dual_object = DualTrackedObject(refined_object, corresponding_objects)
+
+        return dual_object
+
+    def close(self):
+        self.refined_objects.close()
+        self.original_objects.close()
+
+
+DualObject = namedtuple('DualObject', 'refined correspond')
+TrackedObject = namedtuple('TrackedObject', 'frame_id track_id x1 y1 x2 y2')
+
+
+class DualTrackedObject:
+    def __init__(self, refined_object: pd.DataFrame, corresponding_objects: pd.DataFrame):
+        if not isinstance(refined_object, pd.DataFrame):
+            raise TypeError(
+                f'`refined_object` if a type of {type(refined_object)}. Only accept type of `pd.DataFrame`.'
+            )
+        if not isinstance(corresponding_objects, pd.DataFrame):
+            raise TypeError(
+                f'`corresponding_object` if a type of {type(corresponding_object)}. Only accept type of `pd.DataFrame`'
+            )
+        self.refined_object = refined_object
+        self.corresponding_objects = corresponding_objects
+
+    def __getitem__(self, i: int) -> pd.Series:
+        ref = self.refined_object.iloc[i]
+        ref = TrackedObject(ref[0], ref.name, ref[1], ref[2], ref[3], ref[4])
+        j = ref.frame_id
+
+        corrs = []
+        try:
+            corr = self.corresponding_objects.loc[[j]]
+            for c in corr.itertuples():
+                corrs.append(TrackedObject(c.Index, c.track_id, c.x1, c.y1, c.x2, c.y2))
+        except KeyError:
+            corrs.append(None)
+
+        return DualObject(ref, corrs)
+
+    def __len__(self):
+        return len(self.refined_object)
+
+# TODO: make framework to produce csv as I need.
+# TODO: Check if get_next and get_prev method is working properly.
