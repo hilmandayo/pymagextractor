@@ -6,6 +6,7 @@ import cv2
 
 # TODO: Credit to the creator.
 # TODO: Test and compare this version with the normal one.
+# TODO: REWRITE BACK EVERYTHING!
 class VideoCaptureAsync:
     def __init__(self, src=0, width=None, height=None, queue_size=128):
         self.src = src
