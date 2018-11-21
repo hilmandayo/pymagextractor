@@ -7,12 +7,8 @@ from . import helper
 
 
 # TODO: Credit to the creator.
-# TODO: Test and compare this version with the normal one.
-<<<<<<< HEAD
-# TODO: REWRITE BACK EVERYTHING!
-=======
-# CONT: Try to exhaust test this framework
->>>>>>> 3220f8e... A working prototype of cv2 threads.
+# TODO: Test!
+# TODO: How to taiou the one with bigger buffer?
 class VideoCaptureAsync:
     def __init__(self, src=0, width=None, height=None, queue_size=128):
         self.src = src
@@ -24,12 +20,11 @@ class VideoCaptureAsync:
         self.started = False
         self.lock = threading.Lock()
 
+        self.refreshed = False
         # This bookkeeping would be in asymmetric format.
-        self.Q_frame_start = 0
-        self.Q_frame_end = queue_size
-
-        # Dynamic variables.
-        self.Q_frame_head = 0
+        self.refresh_start = None
+        self.refresh_end = None
+        self.Q_frame_head = None  # TODO: 0 is better?
         self.Q_frame_tail = 0
 
     # Not needed?
@@ -45,44 +40,33 @@ class VideoCaptureAsync:
         self.thread.start()
         return self
 
-    def _refresh_deque(self, old_start, old_end):
-        # print("k")
-        helper._refresh_deque(self, old_start, old_end)
+    def _refresh_deque(self, new_start, new_end, old_head, old_tail):
+        helper._refresh_deque(self, new_start, new_end, old_head, old_tail)
 
     def _update(self):
-        old_start = self.Q_frame_start
-        old_end = self.Q_frame_end
         while self.started:
-            if old_start != self.Q_frame_start or old_end != self.Q_frame_end:
-                self._refresh_deque(old_start, old_end)
-
-                # print(old_start)
-                # print(old_end)
-                # print(self.Q_frame_start)
-                # print(self.Q_frame_end)
-                # print(self.Q_frame_tail)
-                # print(self.Q_frame_head)
-                old_start = self.Q_frame_start
-                old_end = self.Q_frame_end
+            if self.refreshed:
+                old_head, old_tail = self.Q_frame_head, self.Q_frame_tail
+                new_start, new_end = self.refresh_start, self.refresh_end
+                self._refresh_deque(new_start, new_end, old_head, old_tail)
+                self.refreshed = False
 
             if not len(self.Q) >= self.Q.maxlen:
                 grabbed, frame = self.cap.read()
                 if grabbed:
-                    print("I am here")
                     self.Q.append(frame)
 
                     if self.Q_frame_head is None:
                         self.Q_frame_head = 0
                     self.Q_frame_tail += 1
-            else:
-                print(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
+            # else:
+            #     print(len(self.Q))
 
     def refresh_deque(self, start, end):
-        with self.lock:  # Is this needed?
-            self.Q_frame_start = start
-            self.Q_frame_end = end
-            self.Q_frame_head = start
-            self.Q_frame_tail = start
+        with self.lock:
+            self.refresh_start = start
+            self.refresh_end = end
+            self.refreshed = True
 
     def stop(self):
         self.started = False
