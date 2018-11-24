@@ -38,16 +38,21 @@
      <property name="title">
       <string>Original Detection</string>
      </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
+     <widget class="QLabel" name="original_video">
       <property name="geometry">
        <rect>
-        <x>9</x>
-        <y>29</y>
-        <width>371</width>
-        <height>291</height>
+        <x>0</x>
+        <y>20</y>
+        <width>391</width>
+        <height>311</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="original_layout"/>
+      <property name="text">
+       <string>Original Video</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </widget>
     <widget class="QGroupBox" name="refined_box">
@@ -62,16 +67,21 @@
      <property name="title">
       <string>Refined Detection</string>
      </property>
-     <widget class="QWidget" name="verticalLayoutWidget_2">
+     <widget class="QLabel" name="refined_video">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>371</width>
-        <height>291</height>
+        <x>0</x>
+        <y>20</y>
+        <width>391</width>
+        <height>311</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="refined_layout"/>
+      <property name="text">
+       <string>Refined Video</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </widget>
     <widget class="QPushButton" name="play_bnt">
@@ -82,6 +92,9 @@
        <width>80</width>
        <height>25</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -96,6 +109,9 @@
        <height>25</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Previous</string>
      </property>
@@ -109,6 +125,9 @@
        <height>25</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Next</string>
      </property>
@@ -121,6 +140,9 @@
        <width>781</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
