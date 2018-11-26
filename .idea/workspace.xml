@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="33fd9ddf-aecf-4173-a61d-f2d9ebf3775c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/display_controller.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/extract_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/extract_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/home_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/home_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/extract.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/extract.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/extract.ui" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/extract.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/video.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/display_view.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/extract_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/extract_view.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,13 +43,13 @@
           <entry key="Python Console" value="199" />
           <entry key="dummy" value="2" />
           <entry key="main" value="94" />
-          <entry key="py" value="11803" />
+          <entry key="py" value="11941" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="12096" />
+          <entry key="Python" value="12234" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -73,8 +64,6 @@
               <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1542212560384" expanded="true" signature="306:307" ph="..." />
-                <marker date="1542212560384" expanded="true" signature="306:308" ph="..." />
               </folding>
             </state>
           </provider>
@@ -92,16 +81,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/extract_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="107" column="8" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+            <state relative-caret-position="261">
+              <caret line="76" column="55" selection-start-line="76" selection-start-column="55" selection-end-line="76" selection-end-column="55" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
-                <marker date="1542250738370" expanded="true" signature="1004:1010" ph="..." />
-                <marker date="1542250738370" expanded="true" signature="2151:2228" ph="..." />
-                <marker date="1542250738370" expanded="true" signature="3632:3665" ph="..." />
-                <marker date="1542250738370" expanded="true" signature="4152:4157" ph="..." />
-                <marker date="1542250738370" expanded="true" signature="4495:4501" ph="..." />
-                <marker date="1542250738370" expanded="true" signature="4535:4651" ph="..." />
               </folding>
             </state>
           </provider>
@@ -110,11 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/extract_view.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#44#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="180">
+              <caret line="14" column="41" lean-forward="true" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -149,7 +129,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/video.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="240">
               <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
@@ -159,7 +139,7 @@
         <entry file="file://$PROJECT_DIR$/frontend/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -168,7 +148,7 @@
         <entry file="file://$PROJECT_DIR$/views/view_view.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
-              <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -243,6 +223,11 @@
             <path>
               <item name="pymagextractor" type="b2602c69:ProjectViewProjectNode" />
               <item name="pymagextractor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pymagextractor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pymagextractor" type="462c0819:PsiDirectoryNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pymagextractor" type="b2602c69:ProjectViewProjectNode" />
@@ -492,8 +477,6 @@
           <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1542212560384" expanded="true" signature="306:307" ph="..." />
-            <marker date="1542212560384" expanded="true" signature="306:308" ph="..." />
           </folding>
         </state>
       </provider>
@@ -528,7 +511,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/video.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="240">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
@@ -536,39 +519,30 @@
     <entry file="file://$PROJECT_DIR$/frontend/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/view_view.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
-          <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/extract_view.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#44#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="180">
+          <caret line="14" column="41" lean-forward="true" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/extract_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="107" column="8" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+        <state relative-caret-position="261">
+          <caret line="76" column="55" selection-start-line="76" selection-start-column="55" selection-end-line="76" selection-end-column="55" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
-            <marker date="1542250738370" expanded="true" signature="1004:1010" ph="..." />
-            <marker date="1542250738370" expanded="true" signature="2151:2228" ph="..." />
-            <marker date="1542250738370" expanded="true" signature="3632:3665" ph="..." />
-            <marker date="1542250738370" expanded="true" signature="4152:4157" ph="..." />
-            <marker date="1542250738370" expanded="true" signature="4495:4501" ph="..." />
-            <marker date="1542250738370" expanded="true" signature="4535:4651" ph="..." />
           </folding>
         </state>
       </provider>

@@ -71,6 +71,10 @@ class ExtractController(QtCore.QObject):
             self.video_widget.play()
 
     def load_options(self):
+        # Clear Scroll Area (Options Area)
+        for i in reversed(range(self.view.layout_SArea.count())):
+            self.view.layout_SArea.itemAt(i).widget().deleteLater()
+        # Add objects for the Scroll Area (Option Area)
         for option_object in self.home_controller.optionsDB.object_list:
             group = QtWidgets.QGroupBox(option_object.name)
             vbox = QtWidgets.QVBoxLayout()
