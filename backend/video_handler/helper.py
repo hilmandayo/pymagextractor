@@ -40,19 +40,14 @@ def _refresh_deque(self, new_start, new_end, old_head, old_tail):
 def check_position(new_start, new_end, old_head, old_tail):
     # TODO: Give a better name.
     if within(new_start, new_end, old_head, old_tail):
-        print("I am within")
         return 'within'
     if partial_forward_exceed(new_start, new_end, old_head, old_tail):
-        print("I am pfe")
         return 'partial_forward_exceed'
     if complete_forward_exceed(new_start, new_end, old_head, old_tail):
-        print("I am cfe")
         return 'complete_forward_exceed'
     if partial_backward_exceed(new_start, new_end, old_head, old_tail):
-        print("I am pbe")
         return 'partial_backward_exceed'
     if complete_backward_exceed(new_start, new_end, old_head, old_tail):
-        print("I am cbe")
         return 'complete_backward_exceed'
 
     raise Exception
@@ -60,10 +55,6 @@ def check_position(new_start, new_end, old_head, old_tail):
 
 # TODO: Check better the logic under this.
 def within(new_start, new_end, old_head, old_tail):
-    print(new_start)
-    print(new_end)
-    print(old_head)
-    print(old_tail)
     return new_start >= old_head and new_end < old_tail
 
 
@@ -89,3 +80,8 @@ def complete_backward_exceed(new_start, new_end, old_head, old_tail):
 
 def slice_deque(Q, start, end=None, maxlen=None):
     return collections.deque(itertools.islice(Q, start, end), maxlen=maxlen)
+
+
+def slice_deque_to_list(Q, start, end=None):
+    print(len(Q), start, end)
+    return list(itertools.islice(Q, start, end))

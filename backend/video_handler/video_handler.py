@@ -9,12 +9,16 @@ from . import helper
 # TODO: Credit to the creator.
 # TODO: Test!
 # TODO: How to taiou the one with bigger buffer?
-class VideoCaptureAsync:
+class FramesBuffer:
     def __init__(self, src=0, width=None, height=None, queue_size=128):
         self.src = src
         self.cap = cv2.VideoCapture(self.src)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        # TODO: Make this more robust.
+        if width is not None and height is not None:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        # else:
+        #     raise Exception
         self.Q = deque(maxlen=queue_size)
         # self.grabbed, self.frame = self.cap.read()
         self.started = False
@@ -22,6 +26,7 @@ class VideoCaptureAsync:
 
         self.refreshed = False
         # This bookkeeping would be in asymmetric format.
+        # TODO: Taiou if None
         self.refresh_start = None
         self.refresh_end = None
         self.Q_frame_head = None  # TODO: 0 is better?
@@ -67,6 +72,12 @@ class VideoCaptureAsync:
             self.refresh_start = start
             self.refresh_end = end
             self.refreshed = True
+
+    def get_frames(self, start, end):
+        with self.lock:
+            start = start - self.refresh_start
+            end = end - self.refresh_start
+            return helper.slice_deque_to_list(self.Q, start, end)
 
     def stop(self):
         self.started = False
