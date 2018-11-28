@@ -6,21 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1041</width>
-    <height>554</height>
+    <width>1152</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="extractor_box">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>821</width>
-      <height>491</height>
+      <width>931</width>
+      <height>521</height>
      </rect>
     </property>
     <property name="title">
@@ -31,8 +31,8 @@
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>391</width>
-       <height>331</height>
+       <width>450</width>
+       <height>350</height>
       </rect>
      </property>
      <property name="title">
@@ -43,8 +43,8 @@
        <rect>
         <x>0</x>
         <y>20</y>
-        <width>391</width>
-        <height>311</height>
+        <width>440</width>
+        <height>330</height>
        </rect>
       </property>
       <property name="text">
@@ -58,37 +58,21 @@
     <widget class="QGroupBox" name="refined_box">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>470</x>
        <y>30</y>
-       <width>391</width>
-       <height>331</height>
+       <width>450</width>
+       <height>350</height>
       </rect>
      </property>
      <property name="title">
       <string>Refined Detection</string>
      </property>
-     <widget class="QLabel" name="refined_video">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>20</y>
-        <width>391</width>
-        <height>311</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Refined Video</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
     </widget>
     <widget class="QPushButton" name="play_bnt">
      <property name="geometry">
       <rect>
-       <x>370</x>
-       <y>450</y>
+       <x>430</x>
+       <y>480</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -103,8 +87,8 @@
     <widget class="QPushButton" name="previous_bnt">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>450</y>
+       <x>330</x>
+       <y>480</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -119,8 +103,8 @@
     <widget class="QPushButton" name="next_bnt">
      <property name="geometry">
       <rect>
-       <x>470</x>
-       <y>450</y>
+       <x>530</x>
+       <y>480</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -136,8 +120,8 @@
      <property name="geometry">
       <rect>
        <x>19</x>
-       <y>420</y>
-       <width>781</width>
+       <y>450</y>
+       <width>901</width>
        <height>20</height>
       </rect>
      </property>
@@ -151,8 +135,8 @@
     <widget class="QLabel" name="frames_label">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>400</y>
+       <x>300</x>
+       <y>420</y>
        <width>331</width>
        <height>20</height>
       </rect>
@@ -167,8 +151,8 @@
     <widget class="QLabel" name="objects_label">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>370</y>
+       <x>310</x>
+       <y>390</y>
        <width>311</width>
        <height>17</height>
       </rect>
@@ -187,7 +171,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1041</width>
+     <width>1152</width>
      <height>22</height>
     </rect>
    </property>
@@ -222,7 +206,7 @@
        <x>0</x>
        <y>20</y>
        <width>191</width>
-       <height>411</height>
+       <height>461</height>
       </rect>
      </property>
      <property name="title">
@@ -234,7 +218,7 @@
         <x>10</x>
         <y>30</y>
         <width>171</width>
-        <height>371</height>
+        <height>421</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -246,7 +230,7 @@
          <x>0</x>
          <y>0</y>
          <width>169</width>
-         <height>369</height>
+         <height>419</height>
         </rect>
        </property>
       </widget>

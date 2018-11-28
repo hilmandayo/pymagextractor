@@ -9,7 +9,7 @@ class ExtractController(QtCore.QObject):
     def __init__(self, home_controller):
         super(ExtractController, self).__init__()
         self.home_controller = home_controller
-        self.video_widget = VideoWidget(self)
+        self.video_widget = VideoThread(self)
         self.view = ExtractView(self)
         self.init()
 
@@ -30,14 +30,12 @@ class ExtractController(QtCore.QObject):
         # Change ratio size of the image according to the label's size
         original_image = image.scaled(self.view.ui.original_video.width(),
                                       self.view.ui.original_video.height(), QtCore.Qt.KeepAspectRatio)
-        refined_image = image.scaled(self.view.ui.refined_video.width(),
-                                     self.view.ui.refined_video.height(), QtCore.Qt.KeepAspectRatio)
 
         # Update number of frame
         self.update_frame_count(frame_number)
         self.slider_update(frame_number)
         self.view.ui.original_video.setPixmap(QtGui.QPixmap.fromImage(original_image))
-        self.view.ui.refined_video.setPixmap(QtGui.QPixmap.fromImage(refined_image))
+        self.view.refined_video.set_frame(QtGui.QPixmap.fromImage(image))
 
     @QtCore.Slot(bool)
     def update_button(self, playing):
@@ -86,12 +84,12 @@ class ExtractController(QtCore.QObject):
             self.view.layout_SArea.addWidget(group)
 
 
-class VideoWidget(QtCore.QThread):
+class VideoThread(QtCore.QThread):
     changePixmap = QtCore.Signal(QtGui.QImage, int)
     changeState = QtCore.Signal(bool)
 
     def __init__(self, video=None):
-        super(VideoWidget, self).__init__()
+        super(VideoThread, self).__init__()
         self.video = video
         self.playing = False
         self.current_frame = 0
