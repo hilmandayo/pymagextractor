@@ -14,156 +14,150 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="extractor_box">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>931</width>
-      <height>521</height>
+      <x>0</x>
+      <y>0</y>
+      <width>941</width>
+      <height>541</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Extractor</string>
-    </property>
-    <widget class="QGroupBox" name="original_box">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>450</width>
-       <height>350</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Original Detection</string>
-     </property>
-     <widget class="QLabel" name="original_video">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>20</y>
-        <width>440</width>
-        <height>330</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Original Video</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="refined_box">
-     <property name="geometry">
-      <rect>
-       <x>470</x>
-       <y>30</y>
-       <width>450</width>
-       <height>350</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Refined Detection</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="play_bnt">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>480</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="previous_bnt">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>480</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Previous</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="next_bnt">
-     <property name="geometry">
-      <rect>
-       <x>530</x>
-       <y>480</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Next</string>
-     </property>
-    </widget>
-    <widget class="QSlider" name="slider">
-     <property name="geometry">
-      <rect>
-       <x>19</x>
-       <y>450</y>
-       <width>901</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="frames_label">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>420</y>
-       <width>331</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Frames</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="objects_label">
-     <property name="geometry">
-      <rect>
-       <x>310</x>
-       <y>390</y>
-       <width>311</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Objects</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QGroupBox" name="extractor_box">
+       <property name="title">
+        <string>Extractor</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>931</width>
+          <height>511</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout" stretch="7,0,0,2,2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QGroupBox" name="original_box">
+             <property name="title">
+              <string>Original Video</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="refined_box">
+             <property name="title">
+              <string>Refined Video</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="objects_label">
+           <property name="text">
+            <string>Objects</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="frames_label">
+           <property name="text">
+            <string>Frames</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="slider">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,1,1,1,2">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="next_bnt">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Next</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="play_bnt">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="previous_bnt">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Previous</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>30</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

@@ -20,3 +20,6 @@ class Video:
         self.duration = self.cv.get(cv2.CAP_PROP_POS_MSEC)
         self.width = self.cv.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.cv.get(cv2.CAP_PROP_FRAME_HEIGHT)
+
+    def frame_size(self):
+        return self.width, self.height
