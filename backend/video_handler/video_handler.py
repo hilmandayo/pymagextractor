@@ -51,6 +51,7 @@ class FramesBuffer:
     def _update(self):
         while self.started:
             if self.refreshed:
+                print('refreshing')
                 old_head, old_tail = self.Q_frame_head, self.Q_frame_tail
                 new_start, new_end = self.refresh_start, self.refresh_end
                 self._refresh_deque(new_start, new_end, old_head, old_tail)

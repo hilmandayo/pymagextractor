@@ -7,9 +7,17 @@ import cv2
 # TODO: Make a test!
 def _refresh_deque(self, new_start, new_end, old_head, old_tail):
     if new_start is None:
-        ret = complete_forward_exceed
+        ret = 'complete_forward_exceed'
     else:
         ret = check_position(new_start, new_end, old_head, old_tail)
+
+    if ret == 'within':
+        # TODO: This is temp solution. Must find other way.
+        # Maybe the bug is within the bookkeeping var.
+        i = new_start - old_head
+        self.Q = slice_deque(self.Q, i, maxlen=self.Q.maxlen)
+        self.cap.set(cv2.CAP_PROP_POS_FRAMES, old_tail)
+        self.Q_frame_head = new_start
 
     if ret == 'partial_forward_exceed':
         i = new_start - old_head
@@ -83,5 +91,4 @@ def slice_deque(Q, start, end=None, maxlen=None):
 
 
 def slice_deque_to_list(Q, start, end=None):
-    print(len(Q), start, end)
     return list(itertools.islice(Q, start, end))

@@ -1,4 +1,5 @@
 from collections import namedtuple
+import time
 
 import pandas as pd
 
@@ -18,16 +19,25 @@ class DualTrackedObjects:
 
     def get_next_dual_object(self):
         refined, correspond = self.csvdto.get_next_dual_object()
+        return self._get_object(refined, correspond)
+
+    def get_prev_dual_object(self):
+        refined, correspond = self.csvdto.get_prev_dual_object()
+        return self._get_object(refined, correspond)
+
+    def _get_object(self, refined, correspond):
         start, end = refined.frame_id.min(), refined.frame_id.max() + 1  # Asymmetric.
+        if end - start >= 128:
+            # Temporary solution for overflow
+            end = 128 + start
         self.fb.refresh_deque(start, end)
 
         # TODO: ABUNAI!
-        print(start, end)
+        time.sleep(2)
         frames = self.fb.get_frames(start, end)
 
         # TODO: Test for possibility of Series instances
         dual_object = DualTrackedObject(frames, refined, correspond)
-
         return dual_object
 
     def close(self):
@@ -46,10 +56,14 @@ class DualTrackedObject:
                 f'`corresponding_object` if a type of {type(corresponding_object)}. Only accept type of `pd.DataFrame`'
             )
         self.refined_object = refined_object
+        self.offset = self.refined_object.frame_id.min()
         self.corresponding_objects = corresponding_objects
         self.frames = frames
 
-    def __getitem__(self, i: int) -> pd.Series:
+    def __getitem__(self, i: int) -> DualObject:
+        # Temporary for overflow solution.
+        if i >= 128:
+            i = 127
         ref = self.refined_object.iloc[i]
         ref = TrackedObject(ref[0], ref.name, ref[1], ref[2], ref[3], ref[4])
         j = ref.frame_id
@@ -62,14 +76,12 @@ class DualTrackedObject:
         except KeyError:
             corrs.append(None)
 
-        end = j.max() - j.min() + 1
-        frames = self.frames[0:end]
-        frames_dic = dict()
-        i = j.min()
-        for i, f in enumerate(frames, j.min()):
-            frames_dic[i] = f
+        start = j.min() - self.offset
+        end = j.max() - self.offset + 1
+        # TODO: Need to understand and possibly modify this.
+        frames = self.frames[start:end]
 
-        return DualObject(frames_dic, ref, corrs)
+        return DualObject(frames, ref, corrs)
 
     def __len__(self):
         return len(self.refined_object)
