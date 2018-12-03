@@ -1,7 +1,6 @@
 import sys
 from PySide2 import QtCore, QtGui, QtWidgets
 from views.home_view import HomeView
-from controllers.display_controller import DisplayController
 from controllers.extract_controller import ExtractController
 from controllers.object_controller import ObjectController
 from models.video import Video
@@ -19,7 +18,6 @@ class HomeController:
         self.view = HomeView(self)
 
         # List of controllers
-        self.display_controller = DisplayController(self)
         self.extractor_controller = ExtractController(self)
         self.object_controller = ObjectController(self)
 

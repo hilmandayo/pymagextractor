@@ -1,30 +1,29 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 from frontend.extract import Ui_MainWindow
-from PyQt5.QtWidgets import QStyle
-from PyQt5.QtMultimedia import QMediaPlayer
-from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PySide2.QtWidgets import QStyle
 
 
 class ExtractView(QtWidgets.QMainWindow):
 
     def __init__(self, controller):
         super(ExtractView, self).__init__()
+        self.controller = controller
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.play_bnt.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
 
-        self.mediaPlayer_original = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.videoWidget_original = QVideoWidget()
-
-        self.mediaPlayer_refined = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.videoWidget_refined = QVideoWidget()
-
-        self.ui.original_layout.addWidget(self.videoWidget_original)
-        self.ui.refined_layout.addWidget(self.videoWidget_refined)
-
-        self.mediaPlayer_original.setVideoOutput(self.videoWidget_original)
-        self.mediaPlayer_refined.setVideoOutput(self.videoWidget_refined)
-
         self.widget = QtWidgets.QWidget()
         self.ui.scroll_area.setWidget(self.widget)
         self.layout_SArea = QtWidgets.QVBoxLayout(self.widget)
+
+    def keyPressEvent(self, qKeyEvent):
+        if qKeyEvent.key() == QtCore.Qt.Key_S:
+            if not self.controller.video_widget.playing:
+                self.controller.video_widget.next_frame_slot()
+        elif qKeyEvent.key() == QtCore.Qt.Key_A:
+            if not self.controller.video_widget.playing:
+                self.controller.video_widget.previous_frame_slot()
+        elif qKeyEvent.key() == QtCore.Qt.Key_Z:
+            self.controller.play()
+        else:
+            super().keyPressEvent(qKeyEvent)
