@@ -39,7 +39,7 @@ class ExtractView(QtWidgets.QMainWindow):
             super().keyPressEvent(qKeyEvent)
 
 
-class VideoRender(QtWidgets.QLabel):
+class VideoRender(QtWidgets.QGraphicsView):
 
     def __init__(self):
         super(VideoRender, self).__init__()
@@ -51,6 +51,7 @@ class VideoRender(QtWidgets.QLabel):
         self.end_point = QtCore.QPoint()
         self.drawing = False
         self.size_adjusted = False
+        self.init()
 
     def init(self):
         self.size_adjusted = False
@@ -58,38 +59,43 @@ class VideoRender(QtWidgets.QLabel):
     def set_frame(self, original_frame):
         # Resize frame
         self.frame = original_frame.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
+
+        # Resize render widget
         if not self.size_adjusted:
             self.ratio = original_frame.size().width() / self.frame.size().width()
             self.resize(self.frame.size())
             self.size_adjusted = True
-        self.update()
+
+        self.update_frame()
+
+    def update_frame(self):
+        scene = QtWidgets.QGraphicsScene(self)
+        self.setScene(scene)
+        # Display image
+        if self.frame:
+            item = scene.addPixmap(self.frame)
+            self.fitInView(item)
+        # Draw new recognition square
+        if self.drawing:
+            draw = QtWidgets.QGraphicsRectItem(QtCore.QRect(self.init_point, self.end_point))
+            brush = QtGui.QBrush(QtGui.QColor(10, 10, 100, 120))
+            draw.setBrush(brush)
+            scene.addItem(draw)
+        # Draw recognitions on the CSV file loaded
+        for element in self.recognition:
+            draw = QtWidgets.QGraphicsRectItem(element[0], element[1], element[2], element[3])
+            brush = QtGui.QBrush(QtGui.QColor(100, 10, 10, 120))
+            draw.setBrush(brush)
+            scene.addItem(draw)
 
     def set_recognition(self, set_of_elements):
         self.recognition = set_of_elements
-
-    def paintEvent(self, event):
-        frame_painter = QtGui.QPainter()
-        frame_painter.begin(self)
-        # Draw frame
-        if self.frame:
-            frame_painter.drawPixmap(0, 0, self.frame)
-        # Draw new recognition square
-        if self.drawing:
-            br = QtGui.QBrush(QtGui.QColor(10, 10, 100, 120))
-            frame_painter.setBrush(br)
-            frame_painter.drawRect(QtCore.QRect(self.init_point, self.end_point))
-        # Draw recognitions on the CSV file loaded
-        for element in self.recognition:
-            br = QtGui.QBrush(QtGui.QColor(100, 10, 10, 120))
-            frame_painter.setBrush(br)
-            frame_painter.drawRect(QtCore.QRect(QtCore.QPoint(element[0], element[1]), QtCore.QPoint(element[2], element[3])))
-        frame_painter.end()
 
     def mousePressEvent(self, event):
         self.drawing = True
         self.init_point = event.pos()
         self.end_point = event.pos()
-        self.update()
+        self.update_frame()
 
     def mouseMoveEvent(self, event):
         x = event.pos().x()
@@ -106,7 +112,7 @@ class VideoRender(QtWidgets.QLabel):
             self.end_point.setY(self.size().height()-4)
         else:
             self.end_point.setY(y)
-        self.update()
+        self.update_frame()
 
     def mouseReleaseEvent(self, event):
         menu = QtWidgets.QMenu(self)
@@ -114,7 +120,7 @@ class VideoRender(QtWidgets.QLabel):
         menu.addAction(save_action)
         menu.exec_(QtGui.QCursor.pos())
         self.drawing = False
-        self.update()
+        self.update_frame()
 
     def enterEvent(self, event):
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
