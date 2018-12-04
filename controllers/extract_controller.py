@@ -2,6 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from views.extract_view import ExtractView
 from PySide2.QtWidgets import QStyle
 import cv2, time
+import ctypes as ctypes
 
 
 class ExtractController(QtCore.QObject):
@@ -9,7 +10,7 @@ class ExtractController(QtCore.QObject):
     def __init__(self, home_controller):
         super(ExtractController, self).__init__()
         self.home_controller = home_controller
-        self.video_thread = VideoThread(self)
+        self.video_thread = VideoThread()
         self.view = ExtractView(self)
         self.video = self.home_controller.video
 
@@ -25,7 +26,7 @@ class ExtractController(QtCore.QObject):
         self.view.ui.frames_label.setText("0/" + str(self.video.length_frames))
         self.view.ui.slider.setRange(0, self.home_controller.video.length_frames)
         self.video_thread.set_video(self.video)
-        #self.view.refined_video.init()
+        self.view.refined_video.init()
         self.view.original_video.init()
 
     def run(self):
@@ -39,7 +40,7 @@ class ExtractController(QtCore.QObject):
         self.update_frame_count(frame_number)
         self.slider_update(frame_number)
         self.view.original_video.set_frame(image)
-        #self.view.refined_video.set_frame(image)
+        self.view.refined_video.set_frame(image)
 
     @QtCore.Slot(bool)
     def update_button(self, playing):
@@ -97,13 +98,18 @@ class VideoThread(QtCore.QThread):
         self.video = video
 
     def next_frame_slot(self):
+        # xfce4-taskmanager
         ret, frame = self.video.cv.read()
         if ret:
-            rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],
-                                             QtGui.QImage.Format_RGB888)
+            image_cv = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = QtGui.QImage(image_cv.data, image_cv.shape[1], image_cv.shape[0],
+                                  QtGui.QImage.Format_RGB888)
+
+            # Fixing memory leak bug at Pyside QImage constructor
+            ctypes.c_long.from_address(id(image_cv)).value = 1
+
             self.current_frame = self.video.cv.get(cv2.CAP_PROP_POS_FRAMES)
-            self.changePixmap.emit(QtGui.QPixmap.fromImage(image), self.current_frame)
+            self.changePixmap.emit(QtGui.QPixmap.fromImage(frame), self.current_frame)
 
     def jump_frame_slot(self, frame_slot):
         self.video.cv.set(cv2.CAP_PROP_POS_FRAMES, frame_slot)
