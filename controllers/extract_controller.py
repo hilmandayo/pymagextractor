@@ -14,8 +14,12 @@ class ExtractController(QtCore.QObject):
         self.view = ExtractView(self)
         self.video = self.home_controller.video
 
+        # Modes
+        self.edit_mode = False
+
         # Connect all signals
         self.view.ui.play_bnt.clicked.connect(self.play)
+        self.view.ui.edit_mode_bnt.clicked.connect(self.edit_mode_change)
         self.view.ui.slider.sliderPressed.connect(self.video_thread.pause)
         self.view.ui.slider.sliderReleased.connect(self.set_frame)
         self.video_thread.changePixmap.connect(self.load_video)
@@ -67,6 +71,18 @@ class ExtractController(QtCore.QObject):
             self.video_thread.pause()
         else:
             self.video_thread.play()
+            if self.edit_mode:  # Edit mode cannot be used while the video is being played
+                self.edit_mode_change()
+
+    def edit_mode_change(self):
+        self.edit_mode = not self.edit_mode
+        if self.edit_mode:
+            self.view.ui.edit_mode_bnt.setText("Edit Mode (ON)")
+            self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#83CF74;")
+            self.video_thread.pause()
+        else:
+            self.view.ui.edit_mode_bnt.setText("Edit Mode (OFF)")
+            self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#BABABA;")
 
     def load_options(self):
         # Clear Scroll Area (Options Area)
