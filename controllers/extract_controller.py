@@ -84,6 +84,11 @@ class ExtractController(QtCore.QObject):
             self.view.ui.edit_mode_bnt.setText("Edit Mode (OFF)")
             self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#BABABA;")
 
+        for recognition in self.view.original_video.scene_recognition:
+            recognition.set_edit_mode(self.edit_mode)
+        for recognition in self.view.refined_video.scene_recognition:
+            recognition.set_edit_mode(self.edit_mode)
+
     def load_options(self):
         # Clear Scroll Area (Options Area)
         for i in reversed(range(self.view.layout_SArea.count())):
