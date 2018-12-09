@@ -84,3 +84,5 @@ data/saves/
 An_example_animation_made_with_Pivot.gif
 *.xml
 venv/
+test.py
+/test*
