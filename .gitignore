@@ -79,3 +79,10 @@ Icon
 # Dirs that should be created when the app is run.
 data/configs/
 data/saves/
+
+# Some extra cleaning.
+An_example_animation_made_with_Pivot.gif
+*.xml
+venv/
+test.py
+/test*
