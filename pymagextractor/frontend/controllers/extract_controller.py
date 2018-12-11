@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from views.extract_view import ExtractView
+from pymagextractor.frontend.views.extract_view import ExtractView
 from PySide2.QtWidgets import QStyle
 import cv2, time
 import ctypes as ctypes

@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from frontend.extract import Ui_MainWindow
+from pymagextractor.frontend.qt_windows.extract import Ui_MainWindow
 from PySide2.QtWidgets import QStyle
 
 

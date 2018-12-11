@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import sys
-from controllers.home_controller import HomeController
+from pymagextractor.frontend.controllers.home_controller import HomeController
 
 
 if __name__ == '__main__':

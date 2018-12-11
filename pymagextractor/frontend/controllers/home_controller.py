@@ -1,10 +1,10 @@
 import sys
 from PySide2 import QtCore, QtGui, QtWidgets
-from views.home_view import HomeView
-from controllers.extract_controller import ExtractController
-from controllers.object_controller import ObjectController
-from models.video import Video
-from models.optionsDB import OptionsDB
+from pymagextractor.frontend.views.home_view import HomeView
+from pymagextractor.frontend.controllers.extract_controller import ExtractController
+from pymagextractor.frontend.controllers.object_controller import ObjectController
+from pymagextractor.backend.models.video import Video
+from pymagextractor.backend.models.optionsDB import OptionsDB
 
 
 class HomeController:
