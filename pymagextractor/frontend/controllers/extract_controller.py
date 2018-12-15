@@ -39,10 +39,27 @@ class ExtractController(QtCore.QObject):
         self.view.show()
 
     @QtCore.Slot(QtGui.QPixmap, int)
-    def load_video(self, image, frame_number):
+    def load_video(self, image, frame_id):
         # Update number of frame
-        self.update_frame_count(frame_number)
-        self.slider_update(frame_number)
+        self.update_frame_count(frame_id)
+        self.slider_update(frame_id)
+
+        # Set detection list on Original Video
+        if self.home_controller.original_track_list:
+            original_frame_tracked_objects = self.home_controller.original_track_list.get_all_objects(frame_id)
+            original_detection = []
+            for c in original_frame_tracked_objects:
+                original_detection.append(c.detection_on_frame(frame_id))
+            self.view.original_video.set_detection_list(original_detection)
+
+        # Set detection list on Refined Video
+        if self.home_controller.refined_track_list:
+            refined_frame_tracked_objects = self.home_controller.refined_track_list.get_all_objects(frame_id)
+            refined_detection = []
+            for c in refined_frame_tracked_objects:
+                refined_detection.append(c.detection_on_frame(frame_id))
+            self.view.refined_video.set_detection_list(refined_detection)
+
         self.view.original_video.set_frame(image)
         self.view.refined_video.set_frame(image)
 
@@ -63,7 +80,7 @@ class ExtractController(QtCore.QObject):
         self.view.ui.slider.setValue(position)
 
     def update_frame_count(self, frame_number):
-        self.view.ui.frames_label.setText(str(frame_number) + "/" +
+        self.view.ui.frames_label.setText("Frames: " + str(frame_number) + "/" +
                                           str(self.home_controller.video.length_frames))
 
     def play(self):
@@ -84,8 +101,6 @@ class ExtractController(QtCore.QObject):
             self.view.ui.edit_mode_bnt.setText("Edit Mode (OFF)")
             self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#BABABA;")
 
-        for recognition in self.view.original_video.scene_recognition:
-            recognition.set_edit_mode(self.edit_mode)
         for recognition in self.view.refined_video.scene_recognition:
             recognition.set_edit_mode(self.edit_mode)
 

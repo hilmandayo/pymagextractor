@@ -5,6 +5,8 @@ from pymagextractor.frontend.controllers.extract_controller import ExtractContro
 from pymagextractor.frontend.controllers.object_controller import ObjectController
 from pymagextractor.backend.models.video import Video
 from pymagextractor.backend.models.optionsDB import OptionsDB
+from pymagextractor.backend.models.track_list import TrackList
+from pymagextractor.backend.models.csv_handler import CSVHandler
 
 
 class HomeController:
@@ -15,6 +17,13 @@ class HomeController:
         self.video = Video()
         self.optionsDB = OptionsDB()
 
+        self.csv_original_path = None
+        self.csv_refined_path = None
+
+        self.original_track_list = None
+        self.refined_track_list = None
+
+        # View
         self.view = HomeView(self)
 
         # List of controllers
@@ -27,6 +36,8 @@ class HomeController:
     def init(self):
         """Initial setup for connecting all events"""
         self.view.ui.search_bnt.clicked.connect(self.search_video)
+        self.view.ui.search_original_bnt.clicked.connect(self.search_csv_original)
+        self.view.ui.search_refined_bnt.clicked.connect(self.search_csv_refined)
         self.view.ui.start_bnt.clicked.connect(self.start)
         self.view.ui.add_bnt.clicked.connect(self.add_object)
         self.view.ui.object_list.clicked.connect(self.on_listview)
@@ -36,10 +47,10 @@ class HomeController:
     def update(self):
         """Update for every time the controller is called"""
         self.update_object_list()
-        self.update_video_browser()
+        self.update_files_browser()
 
     def run(self):
-        """Start window"""
+        """Open home window"""
         self.view.show()
         return self.app.exec_()
 
@@ -51,6 +62,30 @@ class HomeController:
                                                             "All Files (*);;Python Files (*.py)", options=options)
         if file_path:
             self.video.set_path(file_path)
+
+        self.update()
+
+    def search_csv_original(self):
+        """Find csv original path"""
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+                                                            "All Files (*);;Python Files (*.py)", options=options)
+        if file_path:
+            self.csv_original_path = file_path
+            self.original_track_list = CSVHandler(file_path)
+
+        self.update()
+
+    def search_csv_refined(self):
+        """Find csv refined path"""
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+                                                             "All Files (*);;Python Files (*.py)", options=options)
+        if file_path:
+            self.csv_refined_path = file_path
+            self.refined_track_list = CSVHandler(file_path)
 
         self.update()
 
@@ -90,9 +125,14 @@ class HomeController:
         for object in self.optionsDB.object_list:
             self.view.ui.object_list.addItem(object.name)
 
-    def update_video_browser(self):
+    def update_files_browser(self):
         if self.video.path:
             self.view.ui.video_browser.setText(self.video.path)
+        if self.csv_original_path:
+            self.view.ui.csv_original_browser.setText(self.csv_original_path)
+        if self.csv_refined_path:
+            self.view.ui.csv_refined_browser.setText(self.csv_refined_path)
+        if self.video.path and (self.csv_original_path or self.csv_refined_path):
             self.view.ui.start_bnt.setEnabled(True)
 
     def on_listview(self, index):

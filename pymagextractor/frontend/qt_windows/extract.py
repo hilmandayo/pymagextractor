@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'frontend/extract.ui',
-# licensing of 'frontend/extract.ui' applies.
+# Form implementation generated from reading ui file 'pymagextractor/frontend/qt_windows/extract.ui',
+# licensing of 'pymagextractor/frontend/qt_windows/extract.ui' applies.
 #
-# Created: Wed Dec  5 18:15:39 2018
+# Created: Sun Dec 16 00:36:14 2018
 #      by: pyside2-uic  running on PySide2 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1152, 584)
+        MainWindow.resize(1155, 597)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -227,7 +227,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.extractor_box)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1152, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1155, 22))
         self.menubar.setObjectName("menubar")
         self.menuAbout = QtWidgets.QMenu(self.menubar)
         self.menuAbout.setObjectName("menuAbout")
@@ -264,8 +264,8 @@ class Ui_MainWindow(object):
         self.extractor_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Extractor", None, -1))
         self.original_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Original Video", None, -1))
         self.refined_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Refined Video", None, -1))
-        self.objects_label.setText(QtWidgets.QApplication.translate("MainWindow", "Objects", None, -1))
-        self.frames_label.setText(QtWidgets.QApplication.translate("MainWindow", "Frames", None, -1))
+        self.objects_label.setText(QtWidgets.QApplication.translate("MainWindow", "Objects: 0/0", None, -1))
+        self.frames_label.setText(QtWidgets.QApplication.translate("MainWindow", "Frames: 0/0", None, -1))
         self.next_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Next", None, -1))
         self.previous_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Previous", None, -1))
         self.edit_mode_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Edit Mode (OFF)", None, -1))
