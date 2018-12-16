@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'frontend/home.ui',
-# licensing of 'frontend/home.ui' applies.
+# Form implementation generated from reading ui file 'pymagextractor/frontend/qt_windows/home.ui',
+# licensing of 'pymagextractor/frontend/qt_windows/home.ui' applies.
 #
-# Created: Wed Nov  7 11:58:55 2018
+# Created: Tue Dec 11 14:45:38 2018
 #      by: pyside2-uic  running on PySide2 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -202,17 +202,17 @@ class Ui_HomeWindow(object):
         self.video_browser.setGeometry(QtCore.QRect(10, 50, 281, 31))
         self.video_browser.setReadOnly(True)
         self.video_browser.setObjectName("video_browser")
-        self.video_browser_2 = QtWidgets.QLineEdit(self.extractor_tab)
-        self.video_browser_2.setGeometry(QtCore.QRect(10, 90, 281, 31))
-        self.video_browser_2.setReadOnly(True)
-        self.video_browser_2.setObjectName("video_browser_2")
+        self.csv_original_browser = QtWidgets.QLineEdit(self.extractor_tab)
+        self.csv_original_browser.setGeometry(QtCore.QRect(10, 90, 281, 31))
+        self.csv_original_browser.setReadOnly(True)
+        self.csv_original_browser.setObjectName("csv_original_browser")
         self.search_original_bnt = QtWidgets.QPushButton(self.extractor_tab)
         self.search_original_bnt.setGeometry(QtCore.QRect(300, 90, 80, 31))
         self.search_original_bnt.setObjectName("search_original_bnt")
-        self.video_browser_3 = QtWidgets.QLineEdit(self.extractor_tab)
-        self.video_browser_3.setGeometry(QtCore.QRect(10, 130, 281, 31))
-        self.video_browser_3.setReadOnly(True)
-        self.video_browser_3.setObjectName("video_browser_3")
+        self.csv_refined_browser = QtWidgets.QLineEdit(self.extractor_tab)
+        self.csv_refined_browser.setGeometry(QtCore.QRect(10, 130, 281, 31))
+        self.csv_refined_browser.setReadOnly(True)
+        self.csv_refined_browser.setObjectName("csv_refined_browser")
         self.search_refined_bnt = QtWidgets.QPushButton(self.extractor_tab)
         self.search_refined_bnt.setGeometry(QtCore.QRect(300, 130, 80, 31))
         self.search_refined_bnt.setObjectName("search_refined_bnt")
@@ -255,9 +255,9 @@ class Ui_HomeWindow(object):
         self.search_bnt.setText(QtWidgets.QApplication.translate("HomeWindow", "Search", None, -1))
         self.add_bnt.setText(QtWidgets.QApplication.translate("HomeWindow", "Add Object", None, -1))
         self.video_browser.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Choose a video ", None, -1))
-        self.video_browser_2.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Original CSV for the video ", None, -1))
+        self.csv_original_browser.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Original CSV for the video ", None, -1))
         self.search_original_bnt.setText(QtWidgets.QApplication.translate("HomeWindow", "Search", None, -1))
-        self.video_browser_3.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Refined CSV for the video ", None, -1))
+        self.csv_refined_browser.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Refined CSV for the video ", None, -1))
         self.search_refined_bnt.setText(QtWidgets.QApplication.translate("HomeWindow", "Search", None, -1))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.extractor_tab), QtWidgets.QApplication.translate("HomeWindow", "Extractor", None, -1))
         self.label_2.setText(QtWidgets.QApplication.translate("HomeWindow", "Coming Soon", None, -1))

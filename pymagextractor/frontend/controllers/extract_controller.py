@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from pymagextractor.frontend.views.extract_view import ExtractView
 from PySide2.QtWidgets import QStyle
 import cv2, time
-import ctypes as ctypes
+from pymagextractor.backend.models.frame import Frame
 
 
 class ExtractController(QtCore.QObject):
@@ -10,9 +10,11 @@ class ExtractController(QtCore.QObject):
     def __init__(self, home_controller):
         super(ExtractController, self).__init__()
         self.home_controller = home_controller
-        self.video_thread = VideoThread()
+        self.video_thread = VideoThread(self)
         self.view = ExtractView(self)
         self.video = self.home_controller.video
+        self.original_tl = None
+        self.refined_tl = None
 
         # Modes
         self.edit_mode = False
@@ -20,15 +22,25 @@ class ExtractController(QtCore.QObject):
         # Connect all signals
         self.view.ui.play_bnt.clicked.connect(self.play)
         self.view.ui.edit_mode_bnt.clicked.connect(self.edit_mode_change)
+        self.view.ui.previous_bnt.clicked.connect(self.previous_obj)
+        self.view.ui.next_bnt.clicked.connect(self.next_obj)
         self.view.ui.slider.sliderPressed.connect(self.video_thread.pause)
         self.view.ui.slider.sliderReleased.connect(self.set_frame)
-        self.video_thread.changePixmap.connect(self.load_video)
+        self.video_thread.changeFrame.connect(self.load_video)
         self.video_thread.changeState.connect(self.update_button)
 
     def init(self):
+        self.video = self.home_controller.video
+        self.original_tl = self.home_controller.original_track_list
+        self.refined_tl = self.home_controller.refined_track_list
+
+        self.view.ui.previous_bnt.setEnabled(self.refined_tl is not None)
+        self.view.ui.next_bnt.setEnabled(self.refined_tl is not None)
+
         self.load_options()
-        self.view.ui.frames_label.setText("0/" + str(self.video.length_frames))
-        self.view.ui.slider.setRange(0, self.home_controller.video.length_frames)
+        self.view.ui.slider.setRange(0, self.video.length_frames)
+        self.update_labels()
+
         self.video_thread.set_video(self.video)
         self.view.refined_video.init()
         self.view.original_video.init()
@@ -38,11 +50,33 @@ class ExtractController(QtCore.QObject):
         self.video_thread.start()
         self.view.show()
 
-    @QtCore.Slot(QtGui.QPixmap, int)
-    def load_video(self, image, frame_number):
-        # Update number of frame
-        self.update_frame_count(frame_number)
-        self.slider_update(frame_number)
+    @QtCore.Slot(Frame, int)
+    def load_video(self, frame, tracked_frame_id):
+        video_frame_id = frame.frame_id
+        image = frame.image
+
+        self.update_labels(tracked_frame_id)
+        self.slider_update(video_frame_id)
+
+        # Set detection list on Original Video
+        if self.original_tl:
+            original_frame_tracked_objects = self.original_tl.get_all_objects(video_frame_id)
+            original_detection = []
+            for c in original_frame_tracked_objects:
+                original_detection.append(c.detection_on_frame(video_frame_id))
+            self.view.original_video.set_detection_list(original_detection)
+
+        # Set detection list on Refined Video
+        if self.refined_tl:
+            refined_detection = []
+            if not self.refined_tl.is_object_selected():  # Get all objects in the frame
+                refined_frame_tracked_objects = self.refined_tl.get_all_objects(video_frame_id)
+                for c in refined_frame_tracked_objects:
+                    refined_detection.append(c.detection_on_frame(video_frame_id))
+            else:  # Get only selected object
+                refined_detection.append(self.refined_tl.current_tracked_object.detection_on_frame(video_frame_id))
+            self.view.refined_video.set_detection_list(refined_detection)
+
         self.view.original_video.set_frame(image)
         self.view.refined_video.set_frame(image)
 
@@ -60,11 +94,17 @@ class ExtractController(QtCore.QObject):
         self.video_thread.jump_frame_slot(self.view.ui.slider.value())
 
     def slider_update(self, position):
+        self.view.ui.slider.setEnabled(not self.is_track_mode())
         self.view.ui.slider.setValue(position)
 
-    def update_frame_count(self, frame_number):
-        self.view.ui.frames_label.setText(str(frame_number) + "/" +
-                                          str(self.home_controller.video.length_frames))
+    def update_labels(self, tracked_frame_id=0):
+        self.view.ui.frames_label.setText("Video Frames: " + str(int(self.video.current_frame_id())) + "/" + str(self.video.length_frames))
+        if self.refined_tl:
+            self.view.ui.objects_label.setText("Objects: " + str(self.refined_tl.index) +
+                                               "/" + str(len(self.refined_tl.tracked_objects)))
+            if self.refined_tl.is_object_selected():
+                self.view.ui.object_frames_label.setText("Tracked Frames: " + str(tracked_frame_id) + "/" +
+                                                  str(self.refined_tl.current_tracked_object.number_of_frames()))
 
     def play(self):
         if self.video_thread.playing:
@@ -73,6 +113,20 @@ class ExtractController(QtCore.QObject):
             self.video_thread.play()
             if self.edit_mode:  # Edit mode cannot be used while the video is being played
                 self.edit_mode_change()
+
+    def previous_obj(self):
+        new_object = self.refined_tl.get_previous_object()
+        if new_object:
+            self.video_thread.set_frames_sequence(new_object.frames())
+        self.video_thread.next_frame()
+        self.update_labels(1)
+
+    def next_obj(self):
+        new_object = self.refined_tl.get_next_object()
+        if new_object:
+            self.video_thread.set_frames_sequence(new_object.frames())
+        self.video_thread.next_frame()
+        self.update_labels(1)
 
     def edit_mode_change(self):
         self.edit_mode = not self.edit_mode
@@ -84,10 +138,17 @@ class ExtractController(QtCore.QObject):
             self.view.ui.edit_mode_bnt.setText("Edit Mode (OFF)")
             self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#BABABA;")
 
-        for recognition in self.view.original_video.scene_recognition:
-            recognition.set_edit_mode(self.edit_mode)
         for recognition in self.view.refined_video.scene_recognition:
             recognition.set_edit_mode(self.edit_mode)
+
+    def is_track_mode(self):
+        if self.refined_tl:
+            if self.refined_tl.is_object_selected():
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def load_options(self):
         # Clear Scroll Area (Options Area)
@@ -106,49 +167,76 @@ class ExtractController(QtCore.QObject):
 
 
 class VideoThread(QtCore.QThread):
-    changePixmap = QtCore.Signal(QtGui.QPixmap, int)
+    changeFrame = QtCore.Signal(Frame, int)
     changeState = QtCore.Signal(bool)
 
-    def __init__(self, video=None):
+    def __init__(self, controller, video=None):
         super(VideoThread, self).__init__()
+        self.controller = controller
         self.video = video
         self.playing = False
-        self.current_frame = 0
+
+        self.video_frames_sequence = []
+        self.object_frames_sequence = []
+        self.last_frame_id = 0
+        self.video_pointer = 0
+        self.object_pointer = 0
 
     def set_video(self, video):
         self.video = video
+        self.video_frames_sequence = list(range(1, self.video.length_frames))
 
-    def next_frame_slot(self):
-        # xfce4-taskmanager
-        ret, frame = self.video.cv.read()
-        if ret:
-            image_cv = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame = QtGui.QImage(image_cv.data, image_cv.shape[1], image_cv.shape[0],
-                                  QtGui.QImage.Format_RGB888)
-
-            # Fixing memory leak bug at Pyside QImage constructor
-            ctypes.c_long.from_address(id(image_cv)).value = 1
-
-            self.current_frame = self.video.cv.get(cv2.CAP_PROP_POS_FRAMES)
-            self.changePixmap.emit(QtGui.QPixmap.fromImage(frame), self.current_frame)
-
-    def jump_frame_slot(self, frame_slot):
-        self.video.cv.set(cv2.CAP_PROP_POS_FRAMES, frame_slot)
-        self.next_frame_slot()
-
-    def previous_frame_slot(self):
-        if self.current_frame > 0:
-            self.current_frame -= 2
-        self.jump_frame_slot(self.current_frame)
+    def set_frames_sequence(self, frames):
+        self.object_frames_sequence = frames
+        self.video_pointer = 0
+        self.object_pointer = 0
 
     def play(self):
         self.playing = True
         self.changeState.emit(self.playing)
 
+    def selected_frames_sequence(self):
+        if self.controller.is_track_mode():
+            return self.object_frames_sequence, self.object_pointer
+        else:
+            return self.video_frames_sequence, self.video_pointer
+
+    def next_frame(self):
+        frames_sequence, pointer = self.selected_frames_sequence()
+        if frames_sequence[pointer] == self.last_frame_id + 1:
+            self.changeFrame.emit(self.video.next_frame_slot(), self.object_pointer + 1)
+        else:
+            frame_id = frames_sequence[pointer]
+            self.changeFrame.emit(self.video.jump_frame_slot(frame_id), self.object_pointer + 1)
+
+        self.last_frame_id = frames_sequence[pointer]
+
+        if pointer < len(frames_sequence) - 1:
+            if self.controller.is_track_mode():
+                self.object_pointer += 1
+            else:
+                self.video_pointer += 1
+        else:
+            self.pause()
+
+    def previous_frame(self):
+        frames_sequence, pointer = self.selected_frames_sequence()
+
+        if pointer > 0:
+            pointer -= 1
+            if self.controller.is_track_mode():
+                self.object_pointer -= 1
+            else:
+                self.video_pointer -= 1
+
+        frame_id = frames_sequence[pointer]
+        self.changeFrame.emit(self.video.jump_frame_slot(frame_id), self.object_pointer + 1)
+        self.last_frame_id = frames_sequence[pointer]
+
     def run(self):
         while True:
             while self.playing:
-                self.next_frame_slot()
+                self.next_frame()
                 time.sleep(1/self.video.fps)
             time.sleep(0.1)
 

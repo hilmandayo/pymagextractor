@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1152</width>
-    <height>584</height>
+    <width>1155</width>
+    <height>597</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Extractor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -41,7 +41,7 @@
           <height>511</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout" stretch="7,0,0,2,2">
+        <layout class="QVBoxLayout" name="verticalLayout" stretch="7,0,2,2">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
@@ -67,24 +67,64 @@
           </layout>
          </item>
          <item>
-          <widget class="QLabel" name="objects_label">
-           <property name="text">
-            <string>Objects</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="frames_label">
-           <property name="text">
-            <string>Frames</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="4,3,3,3,4">
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="objects_label">
+             <property name="text">
+              <string>Objects: 0/0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="frames_label">
+             <property name="text">
+              <string>Video Frames: 0/0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="object_frames_label">
+             <property name="text">
+              <string> Tracked Frames: 0/0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>30</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QSlider" name="slider">
@@ -97,7 +137,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,1,1,1,1,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,2,2,2,2,2">
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
@@ -112,12 +152,12 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="next_bnt">
+            <widget class="QPushButton" name="previous_bnt">
              <property name="focusPolicy">
               <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
-              <string>Next</string>
+              <string>Previous</string>
              </property>
             </widget>
            </item>
@@ -132,12 +172,12 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="previous_bnt">
+            <widget class="QPushButton" name="next_bnt">
              <property name="focusPolicy">
               <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
-              <string>Previous</string>
+              <string>Next</string>
              </property>
             </widget>
            </item>
@@ -590,7 +630,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1152</width>
+     <width>1155</width>
      <height>22</height>
     </rect>
    </property>
