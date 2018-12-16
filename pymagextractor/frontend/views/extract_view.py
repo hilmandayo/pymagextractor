@@ -30,10 +30,10 @@ class ExtractView(QtWidgets.QMainWindow):
     def keyPressEvent(self, qKeyEvent):
         if qKeyEvent.key() == QtCore.Qt.Key_S:
             if not self.controller.video_thread.playing:
-                self.controller.video_thread.next_frame_slot()
+                self.controller.video_thread.next_frame()
         elif qKeyEvent.key() == QtCore.Qt.Key_A:
             if not self.controller.video_thread.playing:
-                self.controller.video_thread.previous_frame_slot()
+                self.controller.video_thread.previous_frame()
         elif qKeyEvent.key() == QtCore.Qt.Key_Z:
             self.controller.play()
         else:

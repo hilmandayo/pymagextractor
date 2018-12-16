@@ -10,6 +10,9 @@ class TrackedObject:
     def remove_detection(self, detection):
         self.detections.remove(detection)
 
+    def number_of_frames(self):
+        return len(self.detections)
+
     def frames(self):
         """All the frames that the tracked object appeared"""
         frames_id = []

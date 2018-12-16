@@ -70,7 +70,7 @@ class HomeController:
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
-                                                            "All Files (*);;Python Files (*.py)", options=options)
+                                                            "CSV Files (*.csv)", options=options)
         if file_path:
             self.csv_original_path = file_path
             self.original_track_list = CSVHandler(file_path)
@@ -82,7 +82,7 @@ class HomeController:
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
-                                                             "All Files (*);;Python Files (*.py)", options=options)
+                                                             "CSV Files (*.csv)", options=options)
         if file_path:
             self.csv_refined_path = file_path
             self.refined_track_list = CSVHandler(file_path)
