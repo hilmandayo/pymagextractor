@@ -1,36 +1,39 @@
 class TrackList:
+    NO_SELECTION = -1
+    FIRST_OBJECT = 0
 
     def __init__(self):
         self.tracked_objects = []
-        self.current_tracked_object = None
-        self.index = 0
+        self.index = self.NO_SELECTION  # Tracked objects list index
 
     def add_object(self, new_track_object):
         # TODO: Create exception in case there is a repeated track_id for the Track Object
         self.tracked_objects.append(new_track_object)
 
+    def get_current_object(self):
+        """Get current selected object"""
+        if self.index == self.NO_SELECTION:
+            return None
+        else:
+            return self.tracked_objects[self.index]
+
     def get_next_object(self):
         """Get next tracked object in the list sequence"""
-        if self.index < len(self.tracked_objects):
-            self.current_tracked_object = self.tracked_objects[self.index]
+        if self.index < len(self.tracked_objects)-1:
             self.index += 1
         else:
-            self.index = 0
-            self.current_tracked_object = None
-        return self.current_tracked_object
+            self.index = self.NO_SELECTION
+        return self.get_current_object()
 
     def get_previous_object(self):
         """Get previous tracked object in the list sequence"""
-        if self.index == 1:
-            self.index -= 1
-            self.current_tracked_object = None
-        if self.index == 0:
-            self.index = len(self.tracked_objects)
-            self.current_tracked_object = self.tracked_objects[self.index - 1]
+        if self.index == self.NO_SELECTION:
+            self.index = len(self.tracked_objects) - 1
+        elif self.index == self.FIRST_OBJECT:
+            self.index = self.NO_SELECTION
         else:
             self.index -= 1
-            self.current_tracked_object = self.tracked_objects[self.index - 1]
-        return self.current_tracked_object
+        return self.get_current_object()
 
     def get_all_objects(self, frame_id):
         """Get all the objects that appear on the given frame id"""
@@ -42,4 +45,4 @@ class TrackList:
 
     def is_object_selected(self):
         """If at the moment there is any object selected"""
-        return self.current_tracked_object is not None
+        return self.index != self.NO_SELECTION

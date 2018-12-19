@@ -27,6 +27,9 @@ class Video:
     def frame_size(self):
         return self.width, self.height
 
+    def frames_sequence(self):
+        return list(range(1, self.length_frames))
+
     def current_frame_id(self):
         return self.cv.get(cv2.CAP_PROP_POS_FRAMES)
 
