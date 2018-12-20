@@ -4,7 +4,6 @@ from pymagextractor.backend.models.tracked_object import TrackedObject
 from pymagextractor.backend.models.track_list import TrackList
 
 
-
 def CSVHandler(csv_source):
     """Method to parse a CSV file and create a TrackList"""
     csv = pd.read_csv(csv_source)

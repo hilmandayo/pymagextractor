@@ -79,8 +79,8 @@ class ExtractController(QtCore.QObject):
                 refined_detection.append(self.refined_tl.get_current_object().detection_on_frame(video_frame_id))
             self.view.refined_video.set_detection_list(refined_detection)
 
-        self.view.original_video.jump_to_frame(image)
-        self.view.refined_video.jump_to_frame(image)
+        self.view.original_video.set_frame(image)
+        self.view.refined_video.set_frame(image)
 
     @QtCore.Slot(bool)
     def update_button(self, playing):
@@ -119,7 +119,7 @@ class ExtractController(QtCore.QObject):
         new_object = self.refined_tl.get_previous_object()
         if new_object:
             frames_sequence = new_object.frames_sequence()
-        else:
+        else:  # When object number is zero show complete video
             frames_sequence = self.video.frames_sequence()
 
         self.video_thread.set_frames_sequence(frames_sequence)
@@ -131,9 +131,8 @@ class ExtractController(QtCore.QObject):
         new_object = self.refined_tl.get_next_object()
         if new_object:
             frames_sequence = new_object.frames_sequence()
-        else:
+        else:  # When object number is zero show complete video
             frames_sequence = self.video.frames_sequence()
-            self.view.ui.object_frames_label.setText("Tracked Frames: 0/0")
 
         self.video_thread.set_frames_sequence(frames_sequence)
         self.video_thread.next_frame()
