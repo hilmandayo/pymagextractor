@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as etree
-from models.object import Object
-from models.view import View
+from pymagextractor.backend.models.object import Object
+from pymagextractor.backend.models.view import View
 
 
 class OptionsDB:

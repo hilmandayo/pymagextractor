@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from views.view_view import ViewView
-from models.view import View
+from pymagextractor.frontend.views.view_view import ViewView
+from pymagextractor.backend.models.view import View
 
 
 class ViewController:

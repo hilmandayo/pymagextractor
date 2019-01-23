@@ -1,5 +1,5 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-from frontend.new_view import Ui_Form
+from PySide2 import QtCore, QtWidgets
+from pymagextractor.frontend.qt_windows.new_view import Ui_Form
 
 
 class ViewView(QtWidgets.QMainWindow):

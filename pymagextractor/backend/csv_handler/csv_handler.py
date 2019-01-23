@@ -4,7 +4,7 @@ import pandas as pd
 
 class CSVRefinedTrackedObjects:
     """A class that will handle the CSV result of a refined tracked detected objects.
-
+0
     Attributes
     __________
 
