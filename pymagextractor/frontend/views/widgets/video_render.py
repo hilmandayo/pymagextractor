@@ -19,7 +19,8 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.setScene(self.scene)
 
         # Frame
-        self.frame = None
+        self.original_frame = None
+        self.rescaled_frame = None
         self.scene_frame = QtWidgets.QGraphicsPixmapItem()
 
         # Current Detection Selection
@@ -42,13 +43,14 @@ class VideoRender(QtWidgets.QGraphicsView):
 
     def set_frame(self, original_frame):
         """Set frame to be shown and resize the frame and widget"""
+        self.original_frame = original_frame
         # Resize frame
-        self.frame = original_frame.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
+        self.rescaled_frame = self.original_frame.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
 
-        # Resize render widget
+        # Adjust render widget dimensions depending on the video
         if not self.size_adjusted:
-            self.ratio = self.frame.size().height()/original_frame.size().height()
-            self.resize(self.frame.size())
+            self.ratio = self.rescaled_frame.size().height() / self.original_frame.size().height()
+            self.resize(self.rescaled_frame.size())
             self.size_adjusted = True
 
         self.update_frame()
@@ -57,8 +59,8 @@ class VideoRender(QtWidgets.QGraphicsView):
         """"Update the frame and all the detection squares"""
         self.scene.clear()
         # Display image/frame
-        if self.frame:
-            self.scene_frame = QtWidgets.QGraphicsPixmapItem(self.frame)
+        if self.rescaled_frame:
+            self.scene_frame = QtWidgets.QGraphicsPixmapItem(self.rescaled_frame)
             self.scene.addItem(self.scene_frame)
             self.fitInView(self.scene_frame)
         # Draw new detection square
@@ -78,6 +80,15 @@ class VideoRender(QtWidgets.QGraphicsView):
     def set_detection_list(self, set_of_elements):
         """Set the position of all the recognition squares"""
         self.detection = set_of_elements
+
+    def save_frame_selection(self):
+        """Crop frame and save in a file"""
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file_name, type = QtWidgets.QFileDialog.getSaveFileName(self.main_window, "QFileDialog.getSaveFileName()", "",
+                                                                ".jpg;;.png", options=options)
+
+        self.original_frame.copy(QtCore.QRect(self.init_point/self.ratio, self.end_point/self.ratio)).save(file_name + type)
 
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
@@ -108,11 +119,14 @@ class VideoRender(QtWidgets.QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
+        # Save selection into a image
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
             save_action = menu.addAction("Save")
             menu.addAction(save_action)
-            menu.exec_(QtGui.QCursor.pos())
+            action = menu.exec_(QtGui.QCursor.pos())
+            if action == save_action:
+                self.save_frame_selection()
             self.drawing = False
             self.update_frame()
 
