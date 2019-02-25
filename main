@@ -3,7 +3,6 @@
 import sys
 from pymagextractor.frontend.controllers.home_controller import HomeController
 
-
 if __name__ == '__main__':
     c = HomeController()
     sys.exit(c.run())
