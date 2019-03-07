@@ -14,11 +14,11 @@ class TrackedObject:
         self.detections = []
 
     def add_detection(self, detection):
-        """Add a Detection Object in detection list"""
+        """Add a `Detection` object in detection list"""
         self.detections.append(detection)
 
     def remove_detection(self, detection):
-        """Remove a Detection Object from detection list"""
+        """Remove a `Detection` object from detection list"""
         self.detections.remove(detection)
 
     def number_of_frames(self):

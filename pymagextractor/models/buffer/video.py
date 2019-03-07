@@ -38,6 +38,7 @@ class Video(BufferMaster):
 
 
 # This is the previous class.
+# Let it here for possible future references.
 class _Video:
 
     def __init__(self):

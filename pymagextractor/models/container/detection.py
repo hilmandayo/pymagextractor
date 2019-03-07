@@ -14,4 +14,4 @@ class Detection:
         return self.x1, self.y1, self.x2, self.y2
 
     def rect(self, ratio):
-        return self.x1*ratio, self.y1*ratio, (self.x2-self.x1)*ratio, (self.y2-self.y1)*ratio
+        return self.x1 * ratio, self.y1 * ratio, (self.x2 - self.x1) * ratio, (self.y2 - self.y1) * ratio

@@ -1,7 +1,6 @@
 """Implementation of TrackList class."""
 
 
-# TODO: Rename to TrackedList?
 class TrackList:
     """stores all of the detection information from a single (possibly CSV) file.
 

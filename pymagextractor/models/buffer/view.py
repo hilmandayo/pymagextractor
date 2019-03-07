@@ -1,6 +1,5 @@
 # TODO: What is view?
 class View:
-
     def __init__(self, t_object):
         self.belong = t_object
         self.name = ""
