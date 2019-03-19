@@ -1,5 +1,9 @@
 # TODO: What is view?
-class View:
+"""Represent the image of one of the views of an object saved. For example there is an object you want to save: a car,
+so for the car there are many views, front view, back view, side view e etc"""
+
+
+class ObjectView:
     def __init__(self, t_object):
         self.belong = t_object
         self.name = ""

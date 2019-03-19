@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets
-from pymagextractor.frontend.qt_windows.object_info import Ui_Form
+from pymagextractor.gui.qt_windows.object_info import Ui_Form
 
 
 class ObjectView(QtWidgets.QMainWindow):

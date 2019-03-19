@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets
-from pymagextractor.frontend.qt_windows.home import Ui_HomeWindow
+from pymagextractor.gui.qt_windows.home import Ui_HomeWindow
 
 
 class HomeView(QtWidgets.QMainWindow):

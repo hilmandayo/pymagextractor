@@ -1,12 +1,12 @@
 import sys
 from PySide2 import QtCore, QtGui, QtWidgets
-from pymagextractor.frontend.views.home_view import HomeView
-from pymagextractor.frontend.controllers.extract_controller import ExtractController
-from pymagextractor.frontend.controllers.object_controller import ObjectController
-from pymagextractor.backend.models.video import Video
-from pymagextractor.backend.models.optionsDB import OptionsDB
-from pymagextractor.backend.models.track_list import TrackList
-from pymagextractor.backend.models.csv_handler import CSVHandler
+from pymagextractor.gui.views.home_view import HomeView
+from pymagextractor.gui.controllers.extract_controller import ExtractController
+from pymagextractor.gui.controllers.object_controller import ObjectController
+from pymagextractor.models.buffer.video import Video
+from pymagextractor.models.config.optionsDB import OptionsDB
+from pymagextractor.models.container.track_list import TrackList
+from pymagextractor.models.csv_handler import CSVHandler
 
 
 class HomeController:

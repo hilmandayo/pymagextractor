@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-import pymagextractor.frontend.views.widgets.graphics_rect_item as CustomWidget
+import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 
 
 class VideoRender(QtWidgets.QGraphicsView):

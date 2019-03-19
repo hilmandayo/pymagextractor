@@ -2,8 +2,8 @@
 
 
 from PySide2 import QtGui
-from buffermaster import BufferMaster
-from frame import Frame
+from pymagextractor.models.buffer.buffermaster import BufferMaster
+from pymagextractor.models.buffer.frame import Frame
 import ctypes as ctypes
 import cv2
 

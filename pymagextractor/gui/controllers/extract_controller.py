@@ -1,8 +1,8 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from pymagextractor.frontend.views.extract_view import ExtractView
+from pymagextractor.gui.views.extract_view import ExtractView
 from PySide2.QtWidgets import QStyle
 import cv2, time
-from pymagextractor.backend.models.frame import Frame
+from pymagextractor.models.buffer.frame import Frame
 
 
 class ExtractController(QtCore.QObject):

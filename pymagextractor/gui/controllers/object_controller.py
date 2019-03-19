@@ -1,8 +1,8 @@
 import sys
 from PySide2 import QtCore, QtGui, QtWidgets
-from pymagextractor.frontend.views.object_view import ObjectView
-from pymagextractor.backend.models.object import Object
-from pymagextractor.frontend.controllers.view_controller import ViewController
+from pymagextractor.gui.views.object_view import ObjectView
+from pymagextractor.models.container.object import Object
+from pymagextractor.gui.controllers.view_controller import ViewController
 
 
 class ObjectController:

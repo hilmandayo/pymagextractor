@@ -1,8 +1,8 @@
 # Maybe make this a module full of certain types of format to tracked object?
 import pandas as pd
-from pymagextractor.backend.models.detection import Detection
-from pymagextractor.backend.models.tracked_object import TrackedObject
-from pymagextractor.backend.models.track_list import TrackList
+from pymagextractor.models.container.detection import Detection
+from pymagextractor.models.container.tracked_object import TrackedObject
+from pymagextractor.models.container.track_list import TrackList
 
 
 # TODO: Model a test unit func based on this converter.

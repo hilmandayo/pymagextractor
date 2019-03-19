@@ -1,7 +1,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from pymagextractor.frontend.qt_windows.extract import Ui_MainWindow
+from pymagextractor.gui.qt_windows.extract import Ui_MainWindow
 from PySide2.QtWidgets import QStyle
-import pymagextractor.frontend.views.widgets.video_render as CustomWidget
+import pymagextractor.gui.views.widgets.video_render as CustomWidget
 
 
 class ExtractView(QtWidgets.QMainWindow):

@@ -1,6 +1,6 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-from pymagextractor.frontend.views.view_view import ViewView
-from pymagextractor.backend.models.view import View
+from PySide2 import QtCore, QtWidgets
+from pymagextractor.gui.views.view_view import ViewView
+from pymagextractor.models.container.object_view import ObjectView
 
 
 class ViewController:
@@ -34,7 +34,7 @@ class ViewController:
 
     def run(self, parent_object, view_selected=None):
         """Start window"""
-        self.new_view = View(parent_object)
+        self.new_view = ObjectView(parent_object)
         self.edit_view = view_selected
         if self.edit_view:
             self.new_view.name = self.edit_view.name

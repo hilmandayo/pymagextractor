@@ -1,7 +1,7 @@
 # TODO: implement an easier toml file
 import xml.etree.ElementTree as etree
-from pymagextractor.backend.models.object import Object
-from pymagextractor.backend.models.view import View
+from pymagextractor.models.container.object import Object
+from pymagextractor.models.container.object_view import ObjectView
 
 
 class OptionsDB:
@@ -54,7 +54,7 @@ class OptionsDB:
             new_object = Object()
             new_object.name = parsed_object.get('name')
             for parsed_view in parsed_object.findall("view"):
-                new_view = View(new_object)
+                new_view = ObjectView(new_object)
                 name = parsed_view.get('name')
                 path = parsed_view.find('path').text
                 new_view.name = name
