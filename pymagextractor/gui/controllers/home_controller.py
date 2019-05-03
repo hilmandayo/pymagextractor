@@ -16,7 +16,7 @@ class HomeController:
         # List of models
 
 
-        # TODO: Commenting out below approach for a moment.
+        # TODO: Try different approach.
         # self.video = Video()
         self.video = None
         self.optionsDB = OptionsDB()
@@ -67,7 +67,7 @@ class HomeController:
         if file_path:
             # self.video.set_path(file_path)
 
-            # TODO: New approach.
+            # TODO: Try different approach.
             self.video = Video(file_path)
 
         self.update()
@@ -133,7 +133,7 @@ class HomeController:
             self.view.ui.object_list.addItem(object.name)
 
     def update_files_browser(self):
-        # TODO: Commenting out below approach for a moment.
+        # TODO: Try different approach.
         if self.video and self.video.path:
             self.view.ui.video_browser.setText(self.video.path)
         if self.csv_original_path:

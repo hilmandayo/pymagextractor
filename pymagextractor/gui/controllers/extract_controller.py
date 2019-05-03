@@ -12,7 +12,7 @@ class ExtractController(QtCore.QObject):
         self.home_controller = home_controller
         self.video_thread = VideoThread(self)
         self.view = ExtractView(self)
-        # TODO: Commenting out below approach for a moment.
+        # TODO: Try different approach.
         # self.video = self.home_controller.video
         self.original_tl = None
         self.refined_tl = None
