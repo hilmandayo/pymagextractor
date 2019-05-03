@@ -14,7 +14,11 @@ class HomeController:
     def __init__(self):
         self.app = QtWidgets.QApplication(sys.argv)
         # List of models
-        self.video = Video()
+
+
+        # TODO: Commenting out below approach for a moment.
+        # self.video = Video()
+        self.video = None
         self.optionsDB = OptionsDB()
 
         self.csv_original_path = None
@@ -61,7 +65,10 @@ class HomeController:
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                             "All Files (*);;Python Files (*.py)", options=options)
         if file_path:
-            self.video.set_path(file_path)
+            # self.video.set_path(file_path)
+
+            # TODO: New approach.
+            self.video = Video(file_path)
 
         self.update()
 
@@ -126,18 +133,16 @@ class HomeController:
             self.view.ui.object_list.addItem(object.name)
 
     def update_files_browser(self):
-        if self.video.path:
+        # TODO: Commenting out below approach for a moment.
+        if self.video and self.video.path:
             self.view.ui.video_browser.setText(self.video.path)
         if self.csv_original_path:
             self.view.ui.csv_original_browser.setText(self.csv_original_path)
         if self.csv_refined_path:
             self.view.ui.csv_refined_browser.setText(self.csv_refined_path)
-        if self.video.path and (self.csv_original_path or self.csv_refined_path):
+
+        if (self.video and self.video.path) and (self.csv_original_path or self.csv_refined_path):
             self.view.ui.start_bnt.setEnabled(True)
 
     def on_listview(self, index):
         self.object_controller.run(self.optionsDB.object_list[index.row()])
-
-
-
-

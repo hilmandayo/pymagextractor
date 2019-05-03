@@ -15,7 +15,7 @@ class Video(BufferMaster):
 
     def next_frame_slot(self):
         # xfce4-taskmanager
-        ret, frame = self._video.read()
+        ret, frame = self._buffer.read()
         if ret:
             # TODO: Implement an algorithm to handle a thread version of images list.
             image_cv = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -27,7 +27,7 @@ class Video(BufferMaster):
             return Frame(self.current_frame_id, QtGui.QPixmap.fromImage(frame))
 
     def jump_frame_slot(self, frame_slot):
-        self._video.set(cv2.CAP_PROP_POS_FRAMES, frame_slot - 1)
+        self._buffer.set(cv2.CAP_PROP_POS_FRAMES, frame_slot - 1)
         return self.next_frame_slot()
 
     def previous_frame_slot(self):
@@ -35,6 +35,10 @@ class Video(BufferMaster):
             return self.jump_frame_slot(self.current_frame_id - 2)
         else:
             return self.jump_frame_slot(self.current_frame_id)
+
+    @property
+    def frames_sequence(self):
+        return list(range(1, self.n_frames))
 
 
 # This is the previous class.
@@ -89,5 +93,3 @@ class _Video:
             return self.jump_frame_slot(self.current_frame_id() - 2)
         else:
             return self.jump_frame_slot(self.current_frame_id())
-
-

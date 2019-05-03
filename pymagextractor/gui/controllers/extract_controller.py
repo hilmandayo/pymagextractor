@@ -12,7 +12,8 @@ class ExtractController(QtCore.QObject):
         self.home_controller = home_controller
         self.video_thread = VideoThread(self)
         self.view = ExtractView(self)
-        self.video = self.home_controller.video
+        # TODO: Commenting out below approach for a moment.
+        # self.video = self.home_controller.video
         self.original_tl = None
         self.refined_tl = None
 
@@ -38,11 +39,11 @@ class ExtractController(QtCore.QObject):
         self.view.ui.next_bnt.setEnabled(self.refined_tl is not None)
 
         self.load_options()
-        self.view.ui.slider.setRange(0, self.video.length_frames-1)
+        self.view.ui.slider.setRange(0, self.video.n_frames-1)
         self.update_labels()
 
         self.video_thread.set_video(self.video)
-        self.video_thread.set_frames_sequence(self.video.frames_sequence())
+        self.video_thread.set_frames_sequence(self.video.frames_sequence)
 
         self.view.refined_video.init()
         self.view.original_video.init()
@@ -99,7 +100,7 @@ class ExtractController(QtCore.QObject):
         self.view.ui.slider.setValue(position)
 
     def update_labels(self, tracked_frame_id=0):
-        self.view.ui.frames_label.setText("Video Frames: " + str(int(self.video.current_frame_id())) + "/" + str(self.video.length_frames))
+        self.view.ui.frames_label.setText("Video Frames: " + str(int(self.video.current_frame_id)) + "/" + str(self.video.n_frames))
         if self.refined_tl:
             self.view.ui.objects_label.setText("Objects: " + str(self.refined_tl.index + 1) +
                                                "/" + str(len(self.refined_tl.tracked_objects)))
@@ -120,7 +121,7 @@ class ExtractController(QtCore.QObject):
         if new_object:
             frames_sequence = new_object.frames_sequence()
         else:  # When object number is zero show complete video
-            frames_sequence = self.video.frames_sequence()
+            frames_sequence = self.video.frames_sequence
 
         self.video_thread.set_frames_sequence(frames_sequence)
         self.video_thread.next_frame()
@@ -132,7 +133,7 @@ class ExtractController(QtCore.QObject):
         if new_object:
             frames_sequence = new_object.frames_sequence()
         else:  # When object number is zero show complete video
-            frames_sequence = self.video.frames_sequence()
+            frames_sequence = self.video.frames_sequence
 
         self.video_thread.set_frames_sequence(frames_sequence)
         self.video_thread.next_frame()

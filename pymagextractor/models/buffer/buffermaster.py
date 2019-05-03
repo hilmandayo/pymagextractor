@@ -99,11 +99,17 @@ class BufferMaster:
         self._buffer_name = _buff[:_buff.rfind('.')]
         self._buffer_format = _buff[:_buff.rfind('.') + 1:]
         self._n_frames = int(self._buffer.get(cv2.CAP_PROP_FRAME_COUNT))
+        self._fps = self._buffer.get(cv2.CAP_PROP_FPS)
 
     @property
     def path(self):
         """Return the absolute path to the source video file."""
         return self._abs_path
+
+    @property
+    def fps(self):
+        """Return the fps of the source video file."""
+        return self._fps
 
     @property
     def parent_path(self):
@@ -133,7 +139,7 @@ class BufferMaster:
     @property
     def current_frame_id(self):
         """Return the current ID of the video frame."""
-        return self._buffer.get(cv2.CAP_PROP_POS_FRAMES)
+        return int(self._buffer.get(cv2.CAP_PROP_POS_FRAMES))
 
     def exit(self):
         """Release all the resources."""
