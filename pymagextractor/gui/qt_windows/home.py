@@ -273,4 +273,3 @@ if __name__ == "__main__":
     ui.setupUi(HomeWindow)
     HomeWindow.show()
     sys.exit(app.exec_())
-
