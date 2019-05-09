@@ -91,3 +91,4 @@ test.py
 .idea
 # emacs user
 .projectile
+*.org
