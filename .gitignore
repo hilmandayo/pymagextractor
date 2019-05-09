@@ -80,9 +80,14 @@ Icon
 data/configs/
 data/saves/
 
+
 # Some extra cleaning.
 An_example_animation_made_with_Pivot.gif
 *.xml
 venv/
 test.py
 /test*
+# pycharm user
+.idea
+# emacs user
+.projectile
