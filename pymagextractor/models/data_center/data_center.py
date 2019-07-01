@@ -11,7 +11,7 @@ class DataCenter:
         if not self._db.exists():
             self._db.mkdir()
 
-        self._data_dir = self._db / "data"
+        self._data_dir = self._db / "data_ids"
         if not self._data_dir.exists():
             self._data_dir.mkdir()
 
