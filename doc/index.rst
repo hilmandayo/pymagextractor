@@ -10,6 +10,9 @@ Welcome to Pymagextractor's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Pymagextractor Usage
+   Models API
+
 
 
 Indices and tables
