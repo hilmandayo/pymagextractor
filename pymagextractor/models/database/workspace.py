@@ -1,5 +1,5 @@
 from pymagextractor.models.utils import create_dirs
-from . import DataID
+from .dataid import DataID
 import pathlib
 import toml
 
@@ -8,7 +8,7 @@ class WorkSpace:
     def __init__(self, workspace, annotations):
         self._workspace_dir = pathlib.Path(workspace)
         self._anns_file_path = annotations
-        # Make this better
+        # TODO: Make this better
         assert self._workspace_dir.exists()
 
     def __getitem__(self, data_id):
@@ -33,17 +33,28 @@ class WorkSpace:
         return self._workspace_dir.name
 
     # TODO: implement appropriate annotations stuff here
-    # @property
-    # def annotations(self):
-    #     with open(self._anns_file) as f:
-    #         anns = toml.load(f)
+    def anns_settings_get(self, name=None):
+        try:
+            with open(self._anns_file_path) as f:
+                anns =  toml.load(f)
+        except FileNotFoundError:
+                return None
 
-    #     return anns.get(self.workspace, None)
+        if name is None:
+            return anns
+        elif isinstance(name, str):
+            return anns.get(name, None)
+        else:
+            return None
 
-    # def save_annotations(self, ann):
-    #     with open(self._anns_file) as f:
-    #         anns = toml.load(f)
+    def anns_settings_update(self, name, annotations_setting):
+        with open(self._anns_file_path) as f:
+                anns =  toml.load(f)
+                anns[name] = annotations_setting
+        with open(self._anns_file_path, "w") as f:
+                toml.dump(anns, f)
 
-    #     with open(self._anns_file, "w") as f:
-    #         anns[self.workspace] = ann
-    #         toml.dump(anns, f)
+
+    @property
+    def anns_settings_list(self):
+        return [i for i in self.anns_settings_get().keys()]

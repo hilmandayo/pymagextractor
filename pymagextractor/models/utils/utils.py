@@ -17,4 +17,4 @@ def create_dirs(dirs):
         _dirs.append(d)
 
     for d in _dirs:
-        d.mkdir()
+        d.mkdir(exist_ok=True)

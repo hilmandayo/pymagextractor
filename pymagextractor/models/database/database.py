@@ -29,10 +29,12 @@ class DataBase:
     def workspaces(self):
         return list(i.name for i in self._workspaces_dir.iterdir())
 
-    def __getitem__(self, key):
+    def __getitem__(self, workspace):
         d = dict([(i.name, i) for i in self._workspaces_dir.iterdir()])
-        if key in d.keys():
-            return WorkSpace(str(d[key]))
+        if workspace in d.keys():
+            return WorkSpace(
+                str(d[workspace]), str(self._settings_anns_dir / f"{workspace}.toml")
+                )
         else:
             # TODO: make this better
             raise ValueError

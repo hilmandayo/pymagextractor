@@ -1,47 +1,25 @@
+from pymagextractor.models.utils import create_dirs
 from copy import deepcopy
 import pathlib
 import toml
 
-class AnnotationsSetting:
-    def __init__(self, annotations_file, save_folder):
-        self._path = pathlib.Path(annotations_file)
-        if not self._path.exists():
-            self._path.write_text("")
-            self._anns = {}
-        else:
-            with open(str(self._path)) as f:
-                self._anns = toml.load(f)
 
-    @property
-    def annotations(self):
-        return [k for k, v in self._anns.items()]
-
-    def __getitem__(self, key):
-        # TODO: make this better
-        try:
-            return AnnotationSetting(key, deepcopy(self._anns[key]))
-        except KeyError:
-            raise KeyError
-
-    def update(self, annotation):
-        self._anns[annotation.name] = annotation.values
-
-
-    def save(self):
-        with open(str(self._path), "w") as f:
-            toml.dump(self._anns, f)
-
-
-
-class AnnotationSetting:
-    def __init__(self, name: str, annotation: dict):
-        self._ann = annotation
+class Annotations:
+    def __init__(self, name: str, annotations_setting: dict, annotations_dir: str):
         self._name = name
+        self._anns_setting = annotations_setting
+        self._anns_dir = annotations_dir
+
+        dirs = []
+        for k, v in self._anns_setting.items():
+            dirs.append(self._anns_dir / k)
+        create_dirs(dirs)
+
 
     def __str__(self):
         s = "Object: '{}'\nViews: {}\n"
         ret = ""
-        for k, v in self._ann.items():
+        for k, v in self._anns_setting.items():
             ret += s.format(k, v)
         return ret.strip()
 
@@ -51,69 +29,52 @@ class AnnotationSetting:
 
     @property
     def values(self):
-        return self._ann
+        return self._anns_setting
 
-    def add(self, key, values):
-        # TODO: Repair this... what if None is passed?
-        v = self._ann.get(key, None)
-        if v is None:
-            v = []
-            self._ann[key] = v
-        if isinstance(values, str):
-            v.append(values)
-        elif isinstance(values, list):
-            v.extend(values)
+    def save(self, object_, view, frame_id, object_id, x1, y1, x2, y2):
+        file_ = self._anns_dir / object_ / f"bb_{view}.csv"
+        with open(file_, "a") as f:
+            w = f"{view}, {frame_id}, {object_id}, {x1}, {y1}, {x2}, {y2}\n"
+            f.write(w)
 
-    def remove(self, key, values=None):
-        # TODO: Repair this...
-        if values is None:
-            self._ann.pop(key)
-        else:
-            if isinstance(values, str):
-                self._ann[key].remove(values)
-            elif isinstance(values, list):
-                for v in values:
-                    self._ann[key].remove(v)
-            else:
-                raise ValueError
 
-class DataCenter:
-    def __init__(self, data_base_path):
-        self._db = pathlib.Path(data_base_path)
-        self._create_dirs_structure()
+# class DataCenter:
+#     def __init__(self, data_base_path):
+#         self._db = pathlib.Path(data_base_path)
+#         self._create_dirs_structure()
 
-    def _create_dirs_structure(self):
-        if not self._db.exists():
-            self._db.mkdir()
+#     def _create_dirs_structure(self):
+#         if not self._db.exists():
+#             self._db.mkdir()
 
-        self._data_dir = self._db / "data"
-        if not self._data_dir.exists():
-            self._data_dir.mkdir()
+#         self._data_dir = self._db / "data"
+#         if not self._data_dir.exists():
+#             self._data_dir.mkdir()
 
-        self._anns = self._db / "annotations"
-        if not self._anns.exists():
-            self._anns.mkdir()
+#         self._anns = self._db / "annotations"
+#         if not self._anns.exists():
+#             self._anns.mkdir()
 
-        self._settings = self._db / ".settings"
-        if not self._settings.exists():
-            self._settings.mkdir()
+#         self._settings = self._db / ".settings"
+#         if not self._settings.exists():
+#             self._settings.mkdir()
 
-    @property
-    def data_center(self):
-        return self._db
+#     @property
+#     def data_center(self):
+#         return self._db
 
-    @property
-    def data_ids(self):
-        return [i.name for i in self._data_dir.iterdir()]
+#     @property
+#     def data_ids(self):
+#         return [i.name for i in self._data_dir.iterdir()]
 
-    def __getitem__(self, key):
-        # TODO: filter for hidden dirs
-        d = dict([(i.name, i) for i in self._data_dir.iterdir()])
-        if key in d.keys():
-            return DataID(d[key])
-        else:
-            # TODO: make this better
-            raise ValueError
+#     def __getitem__(self, key):
+#         # TODO: filter for hidden dirs
+#         d = dict([(i.name, i) for i in self._data_dir.iterdir()])
+#         if key in d.keys():
+#             return DataID(d[key])
+#         else:
+#             # TODO: make this better
+#             raise ValueError
 
 
 # TODO: Track all of the existing annotations and the one that
