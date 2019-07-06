@@ -1,30 +1,4 @@
-from copy import deepcopy
-import pathlib
-import toml
-
-class AnnotationsSetting:
-    def __init__(self, annotations_file):
-        self._path = pathlib.Path(annotations_file)
-        if not self._path.exists():
-            self._path.write_text("")
-            self._anns = {}
-        else:
-            with open(str(self._path)) as f:
-                self._anns = toml.load(f)
-
-    @property
-    def annotations(self):
-        return [k for k, v in self._anns.items()]
-
-    def __getitem__(self, key):
-        # TODO: make this better
-        try:
-            return AnnotationSetting(key, deepcopy(self._anns[key]))
-        except KeyError:
-            raise KeyError
-
-    def update(self, annotation):
-        self._anns[annotation.name] = annotation.values
+notation.values
 
 
     def save(self):
