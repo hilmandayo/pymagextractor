@@ -14,6 +14,7 @@ def create_dirs(dirs):
         else:
             # TODO: make a better error report
             raise ValueError
+        _dirs.append(d)
 
     for d in _dirs:
         d.mkdir()

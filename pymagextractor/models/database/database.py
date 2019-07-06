@@ -1,5 +1,5 @@
-from utils import create_dirs
-from workspace import WorkSpace
+from pymagextractor.models.utils import create_dirs
+from .workspace import WorkSpace
 import pathlib
 import cv2
 
@@ -16,6 +16,9 @@ class DataBase:
 
         self._settings_dir = self._db_dir / "settings"
         dirs.append(self._settings_dir)
+
+        self._settings_anns_dir = self._settings_dir / "workspaces_annotations"
+        dirs.append(self._settings_anns_dir)
 
         create_dirs(dirs)
 
@@ -37,9 +40,11 @@ class DataBase:
     def new_workspace(self, name: str):
         ws = self._workspaces_dir / name
         create_dirs(ws)
-        return WorkSpace(str(ws))
 
+        ws_anns = self._settings_anns_dir / (name + ".toml")
+        ws_anns.write_text("")
 
+        return WorkSpace(str(ws), str(ws_anns))
 
 
 #     def _create_annotation_setting(self):

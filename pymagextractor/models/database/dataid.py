@@ -1,12 +1,18 @@
-class DataID:
-    def __init__(self, data_id):
-        self._data_dir = data_id
-        self._ann_dir = data_id.parent.parent / "annotations" / self._data_dir.name
-        self._create_corresponding_annotations_dir()
+from pymagextractor.models.utils import create_dirs
+import pathlib
 
-    def _create_corresponding_annotations_dir(self):
-        if not self._ann_dir.exists():
-            self._ann_dir.mkdir()
+
+class DataID:
+    def __init__(self, data_id: str):
+        self._data_id_dir = pathlib.Path(data_id)
+        dirs = []
+
+        self._data_dir = self._data_id_dir / "data"
+        dirs.append(self._data_dir)
+        self._ann_dir = self._data_id_dir / "annotations"
+        dirs.append(self._ann_dir)
+
+        create_dirs(dirs)
 
     def _set_annotation_setting(self, ann_setting):
         self._ann_setting = {}
