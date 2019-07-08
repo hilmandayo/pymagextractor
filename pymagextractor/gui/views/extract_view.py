@@ -1,3 +1,12 @@
+'''
+Initialize what's needed in the gui widget for the Extract window.
+
+Azu note:
+Any code change is not needed here.
+To modify any looks to the Extract window GUI, please edit extract_controller.py
+To modify any words for the wigets in Extract window GUI, please edit extract.py
+'''
+
 from PySide2 import QtCore, QtGui, QtWidgets
 from pymagextractor.gui.qt_windows.extract import Ui_MainWindow
 from PySide2.QtWidgets import QStyle

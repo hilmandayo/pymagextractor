@@ -81,6 +81,7 @@ Icon
 # Dirs that should be created when the app is run.
 data/configs/
 data/saves/
+data/test/
 
 
 # Some extra cleaning.

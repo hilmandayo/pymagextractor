@@ -1,5 +1,13 @@
+''''
+Most of what we the widgets or GUI related to home(extract) can be edited in this file
+'''
+
 import sys
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtWidgets import (QApplication, QComboBox, QDialog, QFileDialog, QLineEdit,
+                               QGraphicsColorizeEffect, QGroupBox, QLabel, QMainWindow,
+                               QPlainTextEdit, QPushButton, QStackedWidget, QTabWidget, QTextEdit)
+from PySide2.QtGui import QIcon, QColor
+from PySide2.QtCore import Qt, QEvent, QPoint, QSize, QSettings
 from pymagextractor.gui.views.home_view import HomeView
 from pymagextractor.gui.controllers.extract_controller import ExtractController
 from pymagextractor.gui.controllers.object_controller import ObjectController
@@ -12,7 +20,7 @@ from pymagextractor.models.csv_handler import CSVHandler
 class HomeController:
 
     def __init__(self):
-        self.app = QtWidgets.QApplication(sys.argv)
+        self.app = QApplication(sys.argv)
         # List of models
 
 
@@ -60,9 +68,9 @@ class HomeController:
 
     def search_video(self):
         """Find video path"""
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                             "All Files (*);;Python Files (*.py)", options=options)
         if file_path:
             # self.video.set_path(file_path)
@@ -74,9 +82,9 @@ class HomeController:
 
     def search_csv_original(self):
         """Find csv original path"""
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                             "CSV Files (*.csv)", options=options)
         if file_path:
             self.csv_original_path = file_path
@@ -86,9 +94,9 @@ class HomeController:
 
     def search_csv_refined(self):
         """Find csv refined path"""
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                              "CSV Files (*.csv)", options=options)
         if file_path:
             self.csv_refined_path = file_path
@@ -106,9 +114,9 @@ class HomeController:
 
     def save_options(self):
         """Save objects on a xml file"""
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_name, _ = QtWidgets.QFileDialog.getSaveFileName(self.view, "QFileDialog.getSaveFileName()", "",
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_name, _ = QFileDialog.getSaveFileName(self.view, "QFileDialog.getSaveFileName()", "",
                                                             "XML files (*.xml)", options=options)
         if file_name:
             if not (".xml" in file_name):
@@ -117,9 +125,9 @@ class HomeController:
 
     def load_options(self):
         """Load a xml file to a list of objects"""
-        options = QtWidgets.QFileDialog.Options()
-        options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
                                                              "XML files (*.xml)", options=options)
         if file_path:
             self.optionsDB.load_db(file_path)
