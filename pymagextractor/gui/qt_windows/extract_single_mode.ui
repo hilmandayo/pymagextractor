@@ -27,7 +27,7 @@
      <item>
       <widget class="QGroupBox" name="extractor_box">
        <property name="title">
-        <string>Dual Mode</string>
+        <string>Single Mode</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -48,16 +48,6 @@
             <widget class="QGroupBox" name="original_box">
              <property name="title">
               <string>Original Video</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="refined_box">
-             <property name="title">
-              <string>Refined Video</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

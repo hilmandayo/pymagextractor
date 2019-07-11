@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'pymagextractor/frontend/qt_windows/extract.ui',
-# licensing of 'pymagextractor/frontend/qt_windows/extract.ui' applies.
+# Form implementation generated from reading ui file 'extract.ui',
+# licensing of 'extract.ui' applies.
 #
-# Created: Mon Dec 17 01:26:52 2018
-#      by: pyside2-uic  running on PySide2 5.11.2
+# Created: Mon Jul  8 18:29:40 2019
+#      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -243,7 +243,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.extractor_box)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1155, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1155, 19))
         self.menubar.setObjectName("menubar")
         self.menuAbout = QtWidgets.QMenu(self.menubar)
         self.menuAbout.setObjectName("menuAbout")
@@ -277,7 +277,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "Extractor", None, -1))
-        self.extractor_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Extractor", None, -1))
+        self.extractor_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Dual Mode", None, -1))
         self.original_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Original Video", None, -1))
         self.refined_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Refined Video", None, -1))
         self.objects_label.setText(QtWidgets.QApplication.translate("MainWindow", "Objects: 0/0", None, -1))
