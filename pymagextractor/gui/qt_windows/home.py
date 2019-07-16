@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'home.ui',
 # licensing of 'home.ui' applies.
 #
-# Created: Tue Jul 16 14:50:44 2019
+# Created: Tue Jul 16 15:11:48 2019
 #      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,10 +33,10 @@ class Ui_HomeWindow(object):
         self.ws_new_lbl.setTextFormat(QtCore.Qt.AutoText)
         self.ws_new_lbl.setWordWrap(False)
         self.ws_new_lbl.setObjectName("ws_new_lbl")
-        self.ws_new_folder_path = QtWidgets.QLineEdit(self.workspace_tab)
-        self.ws_new_folder_path.setGeometry(QtCore.QRect(10, 85, 281, 31))
-        self.ws_new_folder_path.setReadOnly(True)
-        self.ws_new_folder_path.setObjectName("ws_new_folder_path")
+        self.ws_database_path = QtWidgets.QLineEdit(self.workspace_tab)
+        self.ws_database_path.setGeometry(QtCore.QRect(10, 85, 281, 31))
+        self.ws_database_path.setReadOnly(True)
+        self.ws_database_path.setObjectName("ws_database_path")
         self.ws_new_search_btn = QtWidgets.QPushButton(self.workspace_tab)
         self.ws_new_search_btn.setGeometry(QtCore.QRect(300, 85, 80, 31))
         icon = QtGui.QIcon()
@@ -771,7 +771,7 @@ class Ui_HomeWindow(object):
     def retranslateUi(self, HomeWindow):
         HomeWindow.setWindowTitle(QtWidgets.QApplication.translate("HomeWindow", "Pymagextractor", None, -1))
         self.ws_new_lbl.setText(QtWidgets.QApplication.translate("HomeWindow", "Create new workspace", None, -1))
-        self.ws_new_folder_path.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Select a folder", None, -1))
+        self.ws_database_path.setPlaceholderText(QtWidgets.QApplication.translate("HomeWindow", "Select your database folder", None, -1))
         self.ws_new_search_btn.setText(QtWidgets.QApplication.translate("HomeWindow", " Search", None, -1))
         self.ws_new_create_btn.setText(QtWidgets.QApplication.translate("HomeWindow", "Create workspace", None, -1))
         self.ws_select_available_lbl.setText(QtWidgets.QApplication.translate("HomeWindow", "Select available workspace", None, -1))

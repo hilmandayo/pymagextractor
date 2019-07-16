@@ -1,4 +1,4 @@
-[paths]
-1 = "/home/zulfaqar/develop/pymagextractor/data/workspace_test"
-azu = "/home/zulfaqar/develop/pymagextractor/pymagextractor"
-hilman = "/home/zulfaqar/develop/pymagextractor/pymagextractor"
+database_dir
+
+[workspace]
+

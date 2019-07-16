@@ -72,7 +72,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="ws_new_folder_path">
+     <widget class="QLineEdit" name="ws_database_path">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -85,7 +85,7 @@
        <bool>true</bool>
       </property>
       <property name="placeholderText">
-       <string>Select a folder</string>
+       <string>Select your database folder</string>
       </property>
      </widget>
      <widget class="QPushButton" name="ws_new_search_btn">

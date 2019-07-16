@@ -15,7 +15,7 @@ from pymagextractor.models.buffer.video import Video
 from pymagextractor.models.config.optionsDB import OptionsDB
 from pymagextractor.models.container.track_list import TrackList
 from pymagextractor.models.csv_handler import CSVHandler
-from pymagextractor.models.database.workspace import WorkSpace
+from pymagextractor.models.database import DataBase
 import toml
 
 
@@ -34,8 +34,10 @@ class HomeController:
         self.csv_original_path = None
         self.csv_refined_path = None
 
+
         self.workspace_list = toml.load(open('.workspace_list.toml'))
-        self.workspace_path = None
+        self.database = None
+        self.database_path = None
         self.annotation_file_path = None
         self.workspace_folder = None
         self.workspace_new_name = None
@@ -97,13 +99,14 @@ class HomeController:
     def get_new_workspace_path(self):
         """Find new workspace directory path"""
         folder_path = QFileDialog.getExistingDirectory()
-
-        self.workspace_path = folder_path
-        self.annotation_file_path = self.workspace_path
+        self.database_path = folder_path
+        self.database = DataBase(self.database_path)
+        self.workspace_list['database_dir'] = str(self.database_path)
+        toml.dump(self.workspace_list, open('.workspace_list.toml', mode='w'))
         self.update_workspace_path()
 
     def update_workspace_path(self):
-        self.view.ui.ws_new_folder_path.setText(self.workspace_path)
+        self.view.ui.ws_database_path.setText(self.database_path)
         self.view.ui.ws_new_create_btn.setEnabled(True)
     
     def get_new_workspace_name(self):
@@ -115,11 +118,11 @@ class HomeController:
         '''
         create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
         '''
-        self.workspace_folder = WorkSpace(self.workspace_path, self.annotation_file_path)   
         self.workspace_new_name = self.view.ui.ws_new_name.text()
-        self.workspace_list['paths'][self.workspace_new_name] = self.workspace_path
+        self.workspace = self.database.new_workspace(self.workspace_new_name)
+        self.workspace_list['workspace'][str(self.workspace_new_name)] = self.database_path + "/workspaces/" + str(self.workspace_new_name)
         toml.dump(self.workspace_list, open('.workspace_list.toml', mode='w'))
-
+        
     
     def search_csv_original(self):
         """Find csv original path"""
