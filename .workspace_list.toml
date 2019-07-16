@@ -1,4 +1,5 @@
-database_dir
+[database_dir]
+[database_dir.path]
 
 [workspace]
-
+name = []

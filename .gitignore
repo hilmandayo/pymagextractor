@@ -95,3 +95,6 @@ test.py
 # emacs user
 .projectile
 *.org
+.workspace_list.toml
+data/
+read_toml.py

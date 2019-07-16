@@ -35,12 +35,13 @@ class HomeController:
         self.csv_refined_path = None
 
 
-        self.workspace_list = toml.load(open('.workspace_list.toml'))
+        self.load_workspace_list = toml.load(open('.workspace_list.toml'))
         self.database = None
         self.database_path = None
         self.annotation_file_path = None
         self.workspace_folder = None
         self.workspace_new_name = None
+        self.workspace_list = self.load_workspace_list['workspace']['name']
 
         self.original_track_list = None
         self.refined_track_list = None
@@ -101,8 +102,8 @@ class HomeController:
         folder_path = QFileDialog.getExistingDirectory()
         self.database_path = folder_path
         self.database = DataBase(self.database_path)
-        self.workspace_list['database_dir'] = str(self.database_path)
-        toml.dump(self.workspace_list, open('.workspace_list.toml', mode='w'))
+        self.load_workspace_list['database_dir']['path'] = str(self.database_path)
+        toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
         self.update_workspace_path()
 
     def update_workspace_path(self):
@@ -120,8 +121,9 @@ class HomeController:
         '''
         self.workspace_new_name = self.view.ui.ws_new_name.text()
         self.workspace = self.database.new_workspace(self.workspace_new_name)
-        self.workspace_list['workspace'][str(self.workspace_new_name)] = self.database_path + "/workspaces/" + str(self.workspace_new_name)
-        toml.dump(self.workspace_list, open('.workspace_list.toml', mode='w'))
+        self.load_workspace_list['workspace']['name'].append(str(self.workspace_new_name))
+        toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
+        print(self.workspace_list)
         
     
     def search_csv_original(self):
