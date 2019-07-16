@@ -1,5 +1,5 @@
 [database_dir]
-[database_dir.path]
+path = "empty"
 
 [workspace]
 name = []

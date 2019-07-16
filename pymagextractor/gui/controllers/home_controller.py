@@ -42,6 +42,7 @@ class HomeController:
         self.workspace_folder = None
         self.workspace_new_name = None
         self.workspace_list = self.load_workspace_list['workspace']['name']
+        self.selected_workspace = None
 
         self.original_track_list = None
         self.refined_track_list = None
@@ -54,6 +55,7 @@ class HomeController:
         self.object_controller = ObjectController(self)
         
         self.init()
+        self.update_ws_list()
         self.update()
 
     def init(self):
@@ -99,33 +101,41 @@ class HomeController:
     
     def get_new_workspace_path(self):
         """Find new workspace directory path"""
-        folder_path = QFileDialog.getExistingDirectory()
-        self.database_path = folder_path
-        self.database = DataBase(self.database_path)
-        self.load_workspace_list['database_dir']['path'] = str(self.database_path)
-        toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
-        self.update_workspace_path()
+        if self.load_workspace_list['database_dir']['path'] == "empty":
+            folder_path = QFileDialog.getExistingDirectory()
+            self.database_path = folder_path
+            self.database = DataBase(self.database_path)
+            self.load_workspace_list['database_dir']['path'] = str(self.database_path)
+            toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
+            self.update_workspace_path()
+        else:
+            self.database_path = self.load_workspace_list['database_dir']['path']
+            self.database = DataBase(self.database_path)
+            self.update_workspace_path()
 
     def update_workspace_path(self):
         self.view.ui.ws_database_path.setText(self.database_path)
         self.view.ui.ws_new_create_btn.setEnabled(True)
     
-    def get_new_workspace_name(self):
-        text, result = QInputDialog.getText(self, 'Input Dialog', 'Enter workspace name:')
-        if result == True:
-            self.workspace_new_name = str(text)
 
     def create_new_workspace(self):
         '''
         create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
         '''
         self.workspace_new_name = self.view.ui.ws_new_name.text()
-        self.workspace = self.database.new_workspace(self.workspace_new_name)
+        self.selected_workspace = self.database.new_workspace(self.workspace_new_name)
         self.load_workspace_list['workspace']['name'].append(str(self.workspace_new_name))
         toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
+        self.update_ws_list()
         print(self.workspace_list)
-        
+
+    def update_ws_list(self):
+        self.view.ui.ws_select_ws_list.clear()
+        for i, ws_name in enumerate(self.workspace_list):
+            self.view.ui.ws_select_ws_list.addItem(str(ws_name))        
     
+    #End workspace config
+
     def search_csv_original(self):
         """Find csv original path"""
         options = QFileDialog.Options()
