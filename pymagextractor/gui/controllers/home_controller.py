@@ -5,7 +5,7 @@ Most of what we the widgets or GUI related to home(extract) can be edited in thi
 import sys
 from PySide2.QtWidgets import (QApplication, QComboBox, QDialog, QFileDialog, QLineEdit,
                                QGraphicsColorizeEffect, QGroupBox, QLabel, QMainWindow,
-                               QPlainTextEdit, QPushButton, QStackedWidget, QTabWidget, QTextEdit)
+                               QPlainTextEdit, QPushButton, QStackedWidget, QTabWidget, QTextEdit, QInputDialog)
 from PySide2.QtGui import QIcon, QColor
 from PySide2.QtCore import Qt, QEvent, QPoint, QSize, QSettings
 from pymagextractor.gui.views.home_view import HomeView
@@ -15,6 +15,8 @@ from pymagextractor.models.buffer.video import Video
 from pymagextractor.models.config.optionsDB import OptionsDB
 from pymagextractor.models.container.track_list import TrackList
 from pymagextractor.models.csv_handler import CSVHandler
+from pymagextractor.models.database.workspace import WorkSpace
+import toml
 
 
 class HomeController:
@@ -32,6 +34,12 @@ class HomeController:
         self.csv_original_path = None
         self.csv_refined_path = None
 
+        self.workspace_list = toml.load(open('.workspace_list.toml'))
+        self.workspace_path = None
+        self.annotation_file_path = None
+        self.workspace_folder = None
+        self.workspace_new_name = None
+
         self.original_track_list = None
         self.refined_track_list = None
 
@@ -41,7 +49,7 @@ class HomeController:
         # List of controllers
         self.extractor_controller = ExtractController(self)
         self.object_controller = ObjectController(self)
-
+        
         self.init()
         self.update()
 
@@ -55,6 +63,11 @@ class HomeController:
         self.view.ui.object_list.clicked.connect(self.on_listview)
         self.view.ui.save_bnt.clicked.connect(self.save_options)
         self.view.ui.load_bnt.clicked.connect(self.load_options)
+        
+        """Workspace-tab buttons connection"""
+        self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
+        self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
+        self.view.ui.ws_new_name.text()
 
     def update(self):
         """Update for every time the controller is called"""
@@ -79,7 +92,35 @@ class HomeController:
             self.video = Video(file_path)
 
         self.update()
+    
+    
+    def get_new_workspace_path(self):
+        """Find new workspace directory path"""
+        folder_path = QFileDialog.getExistingDirectory()
 
+        self.workspace_path = folder_path
+        self.annotation_file_path = self.workspace_path
+        self.update_workspace_path()
+
+    def update_workspace_path(self):
+        self.view.ui.ws_new_folder_path.setText(self.workspace_path)
+        self.view.ui.ws_new_create_btn.setEnabled(True)
+    
+    def get_new_workspace_name(self):
+        text, result = QInputDialog.getText(self, 'Input Dialog', 'Enter workspace name:')
+        if result == True:
+            self.workspace_new_name = str(text)
+
+    def create_new_workspace(self):
+        '''
+        create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
+        '''
+        self.workspace_folder = WorkSpace(self.workspace_path, self.annotation_file_path)   
+        self.workspace_new_name = self.view.ui.ws_new_name.text()
+        self.workspace_list['paths'][self.workspace_new_name] = self.workspace_path
+        toml.dump(self.workspace_list, open('.workspace_list.toml', mode='w'))
+
+    
     def search_csv_original(self):
         """Find csv original path"""
         options = QFileDialog.Options()

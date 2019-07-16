@@ -42,13 +42,13 @@
      <bool>true</bool>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="workspace_tab">
      <attribute name="title">
       <string>Workspace</string>
      </attribute>
-     <widget class="QLabel" name="ws_label_create">
+     <widget class="QLabel" name="ws_new_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -72,11 +72,11 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="ws_select_a_folder">
+     <widget class="QLineEdit" name="ws_new_folder_path">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>85</y>
         <width>281</width>
         <height>31</height>
        </rect>
@@ -88,11 +88,11 @@
        <string>Select a folder</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="search_bnt_2">
+     <widget class="QPushButton" name="ws_new_search_btn">
       <property name="geometry">
        <rect>
         <x>300</x>
-        <y>50</y>
+        <y>85</y>
         <width>80</width>
         <height>31</height>
        </rect>
@@ -105,14 +105,14 @@
         <normaloff>:/images/icon/search_icon.png</normaloff>:/images/icon/search_icon.png</iconset>
       </property>
      </widget>
-     <widget class="QPushButton" name="ws_generate">
+     <widget class="QPushButton" name="ws_new_create_btn">
       <property name="enabled">
        <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>90</y>
+        <y>120</y>
         <width>131</width>
         <height>51</height>
        </rect>
@@ -556,7 +556,7 @@
        <string>Create workspace</string>
       </property>
      </widget>
-     <widget class="QListWidget" name="ws_select_list">
+     <widget class="QListWidget" name="ws_select_ws_list">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -569,7 +569,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="ws_label_create_2">
+     <widget class="QLabel" name="ws_select_available_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -593,7 +593,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="ws_generate_2">
+     <widget class="QPushButton" name="ws_select_ws_btn">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1041,7 +1041,23 @@
        </font>
       </property>
       <property name="text">
-       <string>Select</string>
+       <string>Select Workspace</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ws_new_name">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>281</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>IBeamCursor</cursorShape>
+      </property>
+      <property name="placeholderText">
+       <string>Name of your workspace</string>
       </property>
      </widget>
     </widget>
@@ -1049,7 +1065,7 @@
      <attribute name="title">
       <string>Data Center</string>
      </attribute>
-     <widget class="QLabel" name="ws_label_create_3">
+     <widget class="QLabel" name="dc_create_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1073,7 +1089,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="search_original_bnt_2">
+     <widget class="QPushButton" name="dc_search_orig_csv_btn">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -1086,7 +1102,7 @@
        <string>Search</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="csv_original_browser_2">
+     <widget class="QLineEdit" name="dc_search_refnd_csv_path">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1102,7 +1118,7 @@
        <string>Original CSV for the video </string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="video_browser_2">
+     <widget class="QLineEdit" name="dc_search_video_path">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1118,7 +1134,7 @@
        <string>Choose a video </string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="csv_refined_browser_2">
+     <widget class="QLineEdit" name="dc_search_orig_csv_path">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1134,7 +1150,7 @@
        <string>Refined CSV for the video </string>
       </property>
      </widget>
-     <widget class="QPushButton" name="search_bnt_3">
+     <widget class="QPushButton" name="dc_search_video_btn">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -1147,7 +1163,7 @@
        <string>Search</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="search_refined_bnt_2">
+     <widget class="QPushButton" name="dc_search_refnd_csv_btn">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -1160,7 +1176,7 @@
        <string>Search</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="ws_generate_3">
+     <widget class="QPushButton" name="dc_create_dir_btn">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1611,7 +1627,7 @@
        <string>Create folder</string>
       </property>
      </widget>
-     <widget class="QLabel" name="ws_label_create_4">
+     <widget class="QLabel" name="dc_available_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1635,7 +1651,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="dc_available_combo">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1645,7 +1661,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="search_bnt_4">
+     <widget class="QPushButton" name="dc_available_open_btn">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -1658,7 +1674,7 @@
        <string>Open</string>
       </property>
      </widget>
-     <widget class="QListView" name="listView">
+     <widget class="QListView" name="dc_available_list">
       <property name="geometry">
        <rect>
         <x>10</x>

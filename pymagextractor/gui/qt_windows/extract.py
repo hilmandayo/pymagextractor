@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'extract.ui',
 # licensing of 'extract.ui' applies.
 #
-# Created: Mon Jul  8 18:29:40 2019
+# Created: Thu Jul 11 18:02:23 2019
 #      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
