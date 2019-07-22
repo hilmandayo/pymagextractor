@@ -16,6 +16,7 @@ from pymagextractor.models.config.optionsDB import OptionsDB
 from pymagextractor.models.container.track_list import TrackList
 from pymagextractor.models.csv_handler import CSVHandler
 from pymagextractor.models.database import DataBase
+from pymagextractor.toml._toml import TomlHandler
 import toml
 
 
@@ -34,15 +35,22 @@ class HomeController:
         self.csv_original_path = None
         self.csv_refined_path = None
 
-
+        #Workspaces-tab
         self.load_workspace_list = toml.load(open('.workspace_list.toml'))
         self.database = None
-        self.database_path = None
-        self.annotation_file_path = None
+        try:
+            self.database_path = self.load_workspace_list['database_dir']['path']
+        except KeyError:
+            self.database_path = None
         self.workspace_folder = None
         self.workspace_new_name = None
         self.workspace_list = self.load_workspace_list['workspace']['name']
         self.selected_workspace = None
+
+
+        #Annotations-tab
+        self.anns = TomlHandler()
+        self.annotation_file_path = None
 
         self.original_track_list = None
         self.refined_track_list = None
@@ -73,6 +81,10 @@ class HomeController:
         self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
         self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
         self.view.ui.ws_new_name.text()
+        self.view.ui.ws_select_ws_list.itemSelectionChanged.connect(self.select_workspace_from_list)
+        self.view.ui.ws_select_ws_btn.clicked.connect(self.confirm_workspace_selection)
+        """Annotations-tab buttons connection"""
+        
 
     def update(self):
         """Update for every time the controller is called"""
@@ -134,8 +146,39 @@ class HomeController:
         for i, ws_name in enumerate(self.workspace_list):
             self.view.ui.ws_select_ws_list.addItem(str(ws_name))        
     
+    def select_workspace_from_list(self):
+        self.view.ui.ws_select_ws_btn.setEnabled(True)        
+
+    def confirm_workspace_selection(self):
+        self.selected_workspace = self.view.ui.ws_select_ws_list.currentItem().text()
+        self.update_annotation_ws()
+        self.annotation_file_path = self.database_path + "/settings/workspaces_annotations/" + self.selected_workspace + ".toml"
+
     #End workspace config
 
+
+
+    #Start annotations config
+    def update_annotations_list(self):
+        self.view.ui.ann_lists.clear()
+        arrow = u"\u2192"
+        for i, name in enumerate(self.anns.anns['annotations']):
+            for j, ann_object in enumerate(name['object_id']):
+                self.view.ui.ann_lists.addItem(ann_object)
+                for k, ann_view in enumerate(name[ann_object]):
+                    self.view.ui.ann_lists.addItem(str([arrow, ann_view]))
+
+    def update_annotation_ws(self):
+        self.anns._workspace = self.view.ui.ann_cur_ws.setText(self.selected_workspace)
+        self.anns._filename = self.annotation_file_path
+        self.anns.check_if_exist()
+        print(self.anns.anns)
+        self.update_annotations_list()
+    
+
+
+
+    #End annotations config
     def search_csv_original(self):
         """Find csv original path"""
         options = QFileDialog.Options()

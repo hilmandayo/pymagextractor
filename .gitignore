@@ -98,3 +98,5 @@ test.py
 .workspace_list.toml
 data/
 read_toml.py
+*.ipynb
+azu_ann.toml

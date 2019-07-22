@@ -1,5 +1,5 @@
 [database_dir]
-path = "empty"
+path = "/home/zulfaqar/develop/pymagextractor/data/workspace_test"
 
 [workspace]
-name = []
+name = [ "aaaa", "bbbb", "cccc", "dddd",]
