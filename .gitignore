@@ -100,3 +100,4 @@ data/
 read_toml.py
 *.ipynb
 azu_ann.toml
+pymagextractor/toml/.ipynb_checkpoints/

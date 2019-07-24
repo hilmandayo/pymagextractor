@@ -1,6 +1,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
-
+import pymagextractor.models.buffer.frame as Frame
+import pandas as pd
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -34,6 +35,24 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.detection_objects = []  # List of GraphicsRectItem objects
         self.brush_detection = QtGui.QBrush(QtGui.QColor(100, 10, 10, 120))
 
+        # Saved
+        self.save_action = None
+        self.current_frame_number = None
+        # self.saved_object = {'frame_number':[], 'track_id':[], 'init_point':{'x':[], 'y':[]}, 'end_point':{'x':[], 'y':[]}, 'scene':[], 'object':[], 'view':[]}
+        self.current_selected_track_id = None
+        self.current_selected_scene = None
+        self.current_selected_object = None
+        self.current_selected_view = None
+        self.write_to_csv = pd.DataFrame({'frame_id':[], 
+                                          'track_id':[],
+                                          'x1':[], 
+                                          'y1':[], 
+                                          'x2':[], 
+                                          'y2':[], 
+                                          'scene':[], 
+                                          'object':[], 
+                                          'view':[]})
+        
         self.init()
 
     def init(self):
@@ -110,8 +129,9 @@ class VideoRender(QtWidgets.QGraphicsView):
         super().mouseReleaseEvent(event)
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
-            save_action = menu.addAction("Save")
-            menu.addAction(save_action)
+            self.save_action = menu.addAction("Save")
+            # menu.addAction(save_action)
+            self.save_action.triggered.connect(self.save_callback)
             menu.exec_(QtGui.QCursor.pos())
             self.drawing = False
             self.update_frame()
@@ -124,3 +144,28 @@ class VideoRender(QtWidgets.QGraphicsView):
     def leaveEvent(self, event):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
+    
+    def save_callback(self):
+        x1 = self.init_point.x()
+        y1 = self.init_point.y()
+        x2 = self.end_point.x()
+        y2 = self.end_point.y()
+        frame = self.current_frame_number
+        track = self.current_selected_track_id
+        scene = self.current_selected_scene
+        obj = self.current_selected_object
+        view = self.current_selected_view
+
+        # self.saved_object['init_point']['x'].append(x1)
+        # self.saved_object['init_point']['y'].append(y1)
+        # self.saved_object['end_point']['x'].append(x2)
+        # self.saved_object['end_point']['y'].append(y2)
+        # self.saved_object['frame_number'].append(frame)
+        # self.saved_object['track_id'].append(track)
+        '''
+        append file in Pandas DATAFRAME
+        '''
+        new = pd.DataFrame({'frame_id':[frame], 'track_id':[track], 'x1':[int(x1)], 'y1':[int(y1)], 'x2':[x2], 'y2':[y2], 'scene':[scene], 'object':[obj], 'view':[view]})
+        self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
+        
+        self.write_to_csv.to_csv('/home/zulfaqar/develop/pymagextractor/data/workspace_test/workspaces/aaaa/aaaa.csv', index = False)

@@ -11,6 +11,7 @@ from PySide2.QtCore import Qt, QEvent, QPoint, QSize, QSettings
 from pymagextractor.gui.views.home_view import HomeView
 from pymagextractor.gui.controllers.extract_controller import ExtractController
 from pymagextractor.gui.controllers.object_controller import ObjectController
+from pymagextractor.gui.controllers.image_extract_controller import ImageExtractController
 from pymagextractor.models.buffer.video import Video
 from pymagextractor.models.config.optionsDB import OptionsDB
 from pymagextractor.models.container.track_list import TrackList
@@ -49,17 +50,18 @@ class HomeController:
 
 
         #Annotations-tab
-        self.anns = TomlHandler()
+        self.anns = None
         self.annotation_file_path = None
-
-        self.original_track_list = None
-        self.refined_track_list = None
+        self.scene = []
+        self.object = []
+        self.view = {'object':[], 'view':[], 'shortcut':[]}
 
         # View
         self.view = HomeView(self)
 
         # List of controllers
         self.extractor_controller = ExtractController(self)
+        self.image_extract_controller = ImageExtractController(self)
         self.object_controller = ObjectController(self)
         
         self.init()
@@ -68,15 +70,14 @@ class HomeController:
 
     def init(self):
         """Initial setup for connecting all events"""
-        self.view.ui.search_bnt.clicked.connect(self.search_video)
-        self.view.ui.search_original_bnt.clicked.connect(self.search_csv_original)
-        self.view.ui.search_refined_bnt.clicked.connect(self.search_csv_refined)
-        self.view.ui.start_bnt.clicked.connect(self.start)
-        self.view.ui.add_bnt.clicked.connect(self.add_object)
-        self.view.ui.object_list.clicked.connect(self.on_listview)
-        self.view.ui.save_bnt.clicked.connect(self.save_options)
-        self.view.ui.load_bnt.clicked.connect(self.load_options)
-        
+        self.view.ui.extract_search_video_bnt.clicked.connect(self.search_video)
+        self.view.ui.extract_search_original_bnt.clicked.connect(self.search_csv_original)
+        self.view.ui.extract_search_refined_bnt.clicked.connect(self.search_csv_refined)
+        self.view.ui.extract_start_bnt.clicked.connect(self.start)
+        self.view.ui.extract_img_extractor_btn.clicked.connect(self.start_image_extractor)
+        self.view.ui.extract_launch_single_mode_btn.clicked.connect(self.start)
+        self.view.ui.extract_launch_dual_mode_btn.clicked.connect(self.start)
+
         """Workspace-tab buttons connection"""
         self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
         self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
@@ -88,7 +89,7 @@ class HomeController:
 
     def update(self):
         """Update for every time the controller is called"""
-        self.update_object_list()
+        # self.update_object_list()
         self.update_files_browser()
 
     def run(self):
@@ -142,41 +143,58 @@ class HomeController:
         print(self.workspace_list)
 
     def update_ws_list(self):
+        '''
+        Refreshes available workspace list
+        '''
         self.view.ui.ws_select_ws_list.clear()
         for i, ws_name in enumerate(self.workspace_list):
             self.view.ui.ws_select_ws_list.addItem(str(ws_name))        
     
     def select_workspace_from_list(self):
+        '''
+        ```Select Workspace``` button only will work if one of the item in the list is selected.
+        '''
         self.view.ui.ws_select_ws_btn.setEnabled(True)        
 
     def confirm_workspace_selection(self):
+        '''
+        Confirm selection of previous available workspace.
+        New annotation instances will be created each time ```Select Workspace``` button is selected.
+        '''
         self.selected_workspace = self.view.ui.ws_select_ws_list.currentItem().text()
-        self.update_annotation_ws()
         self.annotation_file_path = self.database_path + "/settings/workspaces_annotations/" + self.selected_workspace + ".toml"
-
+        self.anns = TomlHandler()
+        self.update_annotation_ws()
     #End workspace config
-
-
 
     #Start annotations config
     def update_annotations_list(self):
+        '''
+        List out all available notations. 
+        If notation not exist, a default one will be written first.
+        '''
         self.view.ui.ann_lists.clear()
         arrow = u"\u2192"
         for i, name in enumerate(self.anns.anns['annotations']):
+            self.scene.append(name)
+            self.image_extract_controller.add_scene_list = self.scene
             for j, ann_object in enumerate(name['object_id']):
-                self.view.ui.ann_lists.addItem(ann_object)
+                self.view.ui.ann_lists.addItem(str([name['scene'], ann_object]))
                 for k, ann_view in enumerate(name[ann_object]):
                     self.view.ui.ann_lists.addItem(str([arrow, ann_view]))
 
     def update_annotation_ws(self):
+        '''
+        Update some information in the Annotation-tab
+        '''
         self.anns._workspace = self.view.ui.ann_cur_ws.setText(self.selected_workspace)
         self.anns._filename = self.annotation_file_path
+        print(self.anns._filename)
         self.anns.check_if_exist()
-        print(self.anns.anns)
         self.update_annotations_list()
     
-
-
+    def add_view_to_object(self):
+        print('Here here')
 
     #End annotations config
     def search_csv_original(self):
@@ -202,6 +220,10 @@ class HomeController:
             self.refined_track_list = CSVHandler(file_path)
 
         self.update()
+
+    def start_image_extractor(self):
+        """Open video display window"""
+        self.image_extract_controller.run()
 
     def start(self):
         """Open video display window"""
@@ -242,14 +264,24 @@ class HomeController:
     def update_files_browser(self):
         # TODO: Try different approach.
         if self.video and self.video.path:
-            self.view.ui.video_browser.setText(self.video.path)
+            self.view.ui.extract_video_browser.setText(self.video.path)
         if self.csv_original_path:
-            self.view.ui.csv_original_browser.setText(self.csv_original_path)
+            self.view.ui.extract_csv_original_browser.setText(self.csv_original_path)
         if self.csv_refined_path:
-            self.view.ui.csv_refined_browser.setText(self.csv_refined_path)
+            self.view.ui.extract_csv_refined_browser.setText(self.csv_refined_path)
 
+        '''
+        If only video is available, only ```Image Extraction``` is allowed.
+        If video and only one csv is available, ```Image Extraction``` and ```Single Mode`` is allowed
+        If video and two csv is available, all mode is allowed.
+        '''
+
+        if (self.video and self.video.path):
+            self.view.ui.extract_img_extractor_btn.setEnabled(True)
         if (self.video and self.video.path) and (self.csv_original_path or self.csv_refined_path):
-            self.view.ui.start_bnt.setEnabled(True)
+            self.view.ui.extract_launch_single_mode_btn.setEnabled(True)
+        if (self.video and self.video.path) and (self.csv_original_path and self.csv_refined_path):
+            self.view.ui.extract_launch_dual_mode_btn.setEnabled(True)
 
     def on_listview(self, index):
         self.object_controller.run(self.optionsDB.object_list[index.row()])

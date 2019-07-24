@@ -33,6 +33,7 @@ class TomlHandler:
         self._workspace = None
         self._filename = None
         self.anns = {'annotations':[]}
+        self.clear_object = {'annotations' : []}
         self.anns_object = {'scene' : None, 'object_id' : []}
         self.clear_object = {'scene' : None, 'object_id' : []}
         self.temp_object_id = None
@@ -68,12 +69,18 @@ class TomlHandler:
         If file not avaiable, create a default variable
         '''
         try:
-            self.get_toml_filename()
+            # self.get_toml_filename()
             load_ = toml.load(self._filename)
-            self.anns = load_
+            try:
+                test_if_annotation_available = load_['annotations']
+                self.anns = load_
+            except KeyError:
+                self.create_new_variable()
+            
         except FileNotFoundError:
+            print("File not found")
             self.create_new_variable()
-    
+            
     def get_scene(self, scene_name):
         self.anns_object['scene'] = scene_name
     
@@ -90,6 +97,7 @@ class TomlHandler:
     
     def reset_annotation_object(self):
         self.anns_object = self.clear_object
+        print("cleared")
         
     def save_annotation_to_file(self):
         toml.dump(self.anns, open(self._filename, 'w'))
