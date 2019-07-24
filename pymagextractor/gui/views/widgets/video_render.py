@@ -34,7 +34,7 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.detection = []
         self.detection_objects = []  # List of GraphicsRectItem objects
         self.brush_detection = QtGui.QBrush(QtGui.QColor(100, 10, 10, 120))
-
+        
         # Saved
         self.save_action = None
         self.current_frame_number = None
@@ -52,9 +52,10 @@ class VideoRender(QtWidgets.QGraphicsView):
                                           'scene':[], 
                                           'object':[], 
                                           'view':[]})
-        
+        self.ws_ = None
+        self.ws_path_ = None
+        self.csv_filename = None
         self.init()
-
     def init(self):
         self.size_adjusted = False
         self.ratio = 1
@@ -155,17 +156,31 @@ class VideoRender(QtWidgets.QGraphicsView):
         scene = self.current_selected_scene
         obj = self.current_selected_object
         view = self.current_selected_view
-
+        # print(self.ws_path_ + '/workspaces/' + self.ws_ + f'/orig_{self.ws_}.csv')
+        # print('/home/zulfaqar/develop/pymagextractor/data/workspace_test/workspaces/aaaa/aaaa.csv')
         # self.saved_object['init_point']['x'].append(x1)
         # self.saved_object['init_point']['y'].append(y1)
         # self.saved_object['end_point']['x'].append(x2)
         # self.saved_object['end_point']['y'].append(y2)
         # self.saved_object['frame_number'].append(frame)
         # self.saved_object['track_id'].append(track)
+        # self.get_csv()
         '''
         append file in Pandas DATAFRAME
         '''
+        self.get_csv()
+        print(self.csv_filename)
         new = pd.DataFrame({'frame_id':[frame], 'track_id':[track], 'x1':[int(x1)], 'y1':[int(y1)], 'x2':[x2], 'y2':[y2], 'scene':[scene], 'object':[obj], 'view':[view]})
         self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
-        
-        self.write_to_csv.to_csv('/home/zulfaqar/develop/pymagextractor/data/workspace_test/workspaces/aaaa/aaaa.csv', index = False)
+        self.write_to_csv.to_csv(self.csv_filename, index = False)
+    
+    def get_csv(self):
+        self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/orig_{self.ws_}.csv'
+        # print(self.csv_filename)
+        try:
+            df = pd.read_csv(self.csv_filename,
+                             usecols=['frame_id', 'track_id', 'x1', 'y1', 'x2', 'y2', 'scene', 'object', 'view'])
+            self.write_to_csv = df
+            print(self.write_to_csv)
+        except FileNotFoundError:
+            pass

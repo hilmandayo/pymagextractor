@@ -25,7 +25,7 @@ class ImageExtractView(QtWidgets.QMainWindow):
         self.widget = QtWidgets.QWidget()
         # self.ui.scroll_area.setWidget(self.widget)
         self.layout_SArea = QtWidgets.QVBoxLayout(self.widget)
-
+        
         self.image_viewer = CustomWidget.VideoRender(self)
         self.original_layout = QtWidgets.QVBoxLayout()
         self.original_layout.addWidget(self.image_viewer)

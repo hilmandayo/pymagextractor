@@ -17,7 +17,6 @@ class ImageExtractController(QtCore.QObject):
         self.video_thread = VideoThread(self)
         self.view = ImageExtractView(self)
         self.original_tl = None
-
         # Modes
         self.edit_mode = False
 
@@ -45,7 +44,8 @@ class ImageExtractController(QtCore.QObject):
         self.view.ui.add_view_list.clicked.connect(self.get_selected_view)
         self.view.ui.add_scene_list.clicked.connect(self.get_selected_scene)
         self.view.ui.add_view_btn.clicked.connect(self.add_view)
-
+        self.ws = None
+        self.ws_path = None
     def init(self):
         self.video = self.home_controller.video
         self.update_track_id_list()         #update track id list at each initialization
@@ -150,6 +150,8 @@ class ImageExtractController(QtCore.QObject):
         '''
         update the list of scenes in object dock
         '''
+        self.view.image_viewer.ws_ = self.ws
+        self.view.image_viewer.ws_path_ = self.ws_path
         self.view.ui.add_scene_list.clear()
         for i, sce in enumerate(self.add_scene_list):
             self.view.ui.add_scene_list.addItem(str(sce['scene']))

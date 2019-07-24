@@ -162,6 +162,8 @@ class HomeController:
         New annotation instances will be created each time ```Select Workspace``` button is selected.
         '''
         self.selected_workspace = self.view.ui.ws_select_ws_list.currentItem().text()
+        self.image_extract_controller.ws = self.selected_workspace
+        self.image_extract_controller.ws_path = self.database_path
         self.annotation_file_path = self.database_path + "/settings/workspaces_annotations/" + self.selected_workspace + ".toml"
         self.anns = TomlHandler()
         self.update_annotation_ws()
@@ -188,6 +190,7 @@ class HomeController:
         Update some information in the Annotation-tab
         '''
         self.anns._workspace = self.view.ui.ann_cur_ws.setText(self.selected_workspace)
+        # self.image_extract_controller.view.image_viewer.ws_ = self.anns._workspace
         self.anns._filename = self.annotation_file_path
         print(self.anns._filename)
         self.anns.check_if_exist()
