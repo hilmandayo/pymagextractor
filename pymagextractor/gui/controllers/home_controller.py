@@ -18,6 +18,7 @@ from pymagextractor.models.container.track_list import TrackList
 from pymagextractor.models.csv_handler import CSVHandler
 from pymagextractor.models.database import DataBase
 from pymagextractor.toml._toml import TomlHandler
+from pathlib import Path
 import toml
 
 
@@ -108,7 +109,9 @@ class HomeController:
 
             # TODO: Try different approach.
             self.video = Video(file_path)
-
+        p = Path(file_path)
+        self.video_name = p.stem
+        self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
         self.update()
     
     

@@ -46,6 +46,7 @@ class ImageExtractController(QtCore.QObject):
         self.view.ui.add_view_btn.clicked.connect(self.add_view)
         self.ws = None
         self.ws_path = None
+
     def init(self):
         self.video = self.home_controller.video
         self.update_track_id_list()         #update track id list at each initialization

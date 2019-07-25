@@ -14,3 +14,9 @@ After complete UI editing, the python file needs to be generated using
 At the moment only ```Workspace``` tab and ```Extractor``` tab is usable.
 
 In ```Extractor``` tab only ```image extractor``` is functionable.
+
+### Prerequisites
+
+- Ubuntu/Debian
+
+```pip install pyside2 toml pandas opencv-python```

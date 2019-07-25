@@ -55,6 +55,7 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.ws_ = None
         self.ws_path_ = None
         self.csv_filename = None
+        self.video_filename_ = None
         self.init()
     def init(self):
         self.size_adjusted = False
@@ -176,11 +177,29 @@ class VideoRender(QtWidgets.QGraphicsView):
         print(self.write_to_csv)
 
     def get_csv(self):
-        self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/orig_{self.ws_}.csv'
+        self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/{self.video_filename_}_{self.ws_}.csv'
         # print(self.csv_filename)
         try:
+            self.write_to_csv = pd.DataFrame({'frame_id':[], 
+                                          'track_id':[],
+                                          'x1':[], 
+                                          'y1':[], 
+                                          'x2':[], 
+                                          'y2':[], 
+                                          'scene':[], 
+                                          'object':[], 
+                                          'view':[]})
+                                          
             df = pd.read_csv(self.csv_filename,
-                             usecols=['frame_id', 'track_id', 'x1', 'y1', 'x2', 'y2', 'scene', 'object', 'view'])
+                             usecols=['frame_id',
+                                      'track_id',
+                                      'x1',
+                                      'y1',
+                                      'x2',
+                                      'y2',
+                                      'scene',
+                                      'object',
+                                      'view'])
             self.write_to_csv = df
             # print(self.write_to_csv)
         except FileNotFoundError:
