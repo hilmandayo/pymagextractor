@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>HomeWindow</class>
  <widget class="QMainWindow" name="HomeWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,7 +48,7 @@
      <bool>true</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>true</bool>
@@ -116,7 +119,7 @@
        <string> Search</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="rc/resources.qrc">
         <normaloff>:/images/icon/search_icon.png</normaloff>:/images/icon/search_icon.png</iconset>
       </property>
      </widget>
@@ -2643,6 +2646,9 @@
      </widget>
     </widget>
     <widget class="QWidget" name="data_tab">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <attribute name="title">
       <string>Data Center</string>
      </attribute>
@@ -4153,6 +4159,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="extract_adv_setting_bnt">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>40</x>

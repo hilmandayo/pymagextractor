@@ -173,7 +173,8 @@ class VideoRender(QtWidgets.QGraphicsView):
         new = pd.DataFrame({'frame_id':[frame], 'track_id':[track], 'x1':[int(x1)], 'y1':[int(y1)], 'x2':[x2], 'y2':[y2], 'scene':[scene], 'object':[obj], 'view':[view]})
         self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
         self.write_to_csv.to_csv(self.csv_filename, index = False)
-    
+        print(self.write_to_csv)
+
     def get_csv(self):
         self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/orig_{self.ws_}.csv'
         # print(self.csv_filename)
@@ -181,6 +182,6 @@ class VideoRender(QtWidgets.QGraphicsView):
             df = pd.read_csv(self.csv_filename,
                              usecols=['frame_id', 'track_id', 'x1', 'y1', 'x2', 'y2', 'scene', 'object', 'view'])
             self.write_to_csv = df
-            print(self.write_to_csv)
+            # print(self.write_to_csv)
         except FileNotFoundError:
             pass

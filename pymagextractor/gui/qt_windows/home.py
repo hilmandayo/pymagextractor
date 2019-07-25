@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'home.ui',
 # licensing of 'home.ui' applies.
 #
-# Created: Mon Jul 22 16:10:09 2019
+# Created: Thu Jul 25 14:57:37 2019
 #      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,6 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_HomeWindow(object):
     def setupUi(self, HomeWindow):
         HomeWindow.setObjectName("HomeWindow")
+        HomeWindow.setEnabled(True)
         HomeWindow.resize(398, 565)
         HomeWindow.setMinimumSize(QtCore.QSize(398, 565))
         HomeWindow.setMaximumSize(QtCore.QSize(398, 565))
@@ -886,6 +887,7 @@ class Ui_HomeWindow(object):
         self.label_6.setObjectName("label_6")
         self.tabWidget.addTab(self.annotations_tab, "")
         self.data_tab = QtWidgets.QWidget()
+        self.data_tab.setEnabled(False)
         self.data_tab.setObjectName("data_tab")
         self.dc_create_lbl = QtWidgets.QLabel(self.data_tab)
         self.dc_create_lbl.setGeometry(QtCore.QRect(10, 30, 201, 16))
@@ -1376,6 +1378,7 @@ class Ui_HomeWindow(object):
         self.extract_launch_single_mode_btn.setPalette(palette)
         self.extract_launch_single_mode_btn.setObjectName("extract_launch_single_mode_btn")
         self.extract_adv_setting_bnt = QtWidgets.QPushButton(self.extractor_tab)
+        self.extract_adv_setting_bnt.setEnabled(False)
         self.extract_adv_setting_bnt.setGeometry(QtCore.QRect(40, 190, 131, 29))
         self.extract_adv_setting_bnt.setObjectName("extract_adv_setting_bnt")
         self.extract_start_bnt = QtWidgets.QPushButton(self.extractor_tab)
@@ -1695,7 +1698,7 @@ class Ui_HomeWindow(object):
         self.menubar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(HomeWindow)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(HomeWindow)
 
     def retranslateUi(self, HomeWindow):
@@ -1741,7 +1744,6 @@ class Ui_HomeWindow(object):
         self.extract_img_extractor_btn.setText(QtWidgets.QApplication.translate("HomeWindow", "Image Extractor", None, -1))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.extractor_tab), QtWidgets.QApplication.translate("HomeWindow", "Extractor", None, -1))
         self.menuAbout.setTitle(QtWidgets.QApplication.translate("HomeWindow", "About", None, -1))
-
 
 if __name__ == "__main__":
     import sys
