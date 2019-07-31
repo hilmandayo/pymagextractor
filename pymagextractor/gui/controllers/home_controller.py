@@ -27,7 +27,7 @@ class HomeController:
     def __init__(self):
         self.app = QApplication(sys.argv)
         # List of models
-
+        self.debug = True
 
         # TODO: Try different approach.
         # self.video = Video()
@@ -37,16 +37,18 @@ class HomeController:
         self.csv_original_path = None
         self.csv_refined_path = None
 
+        self.db_filename = 'db_path_list.toml'
+        self.new_database_path = None
+        self.db_path_list ={'database_paths' : {'list':[],
+                                                'last_opened': None}}
+
         #Workspaces-tab
-        self.load_workspace_list = toml.load(open('.workspace_list.toml'))
         self.database = None
-        try:
-            self.database_path = self.load_workspace_list['database_dir']['path']
-        except KeyError:
-            self.database_path = None
+        self.database_path = None
+        self.database_info = None
         self.workspace_folder = None
         self.workspace_new_name = None
-        self.workspace_list = self.load_workspace_list['workspace']['name']
+        self.workspace_list = None
         self.selected_workspace = None
 
 
@@ -64,9 +66,16 @@ class HomeController:
         self.extractor_controller = ExtractController(self)
         self.image_extract_controller = ImageExtractController(self)
         self.object_controller = ObjectController(self)
-        
+        try:
+            self.get_database_info()
+        except:
+            pass
+
         self.init()
-        self.update_ws_list()
+        try:
+            self.update_ws_list()
+        except:
+            pass
         self.update()
 
     def init(self):
@@ -79,71 +88,87 @@ class HomeController:
         self.view.ui.extract_launch_single_mode_btn.clicked.connect(self.start)
         self.view.ui.extract_launch_dual_mode_btn.clicked.connect(self.start)
 
+        """Db paths"""
+        self.get_available_database()
+        self.enable_create_ws_button()
+        self.view.ui.ws_new_name.textChanged.connect(self.new_ws_name_is_available)
+        self.view.ui.ws_database_path.textChanged.connect(self.db_path_is_available)
+        
+        
         """Workspace-tab buttons connection"""
         self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
         self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
         self.view.ui.ws_new_name.text()
         self.view.ui.ws_select_ws_list.itemSelectionChanged.connect(self.select_workspace_from_list)
         self.view.ui.ws_select_ws_btn.clicked.connect(self.confirm_workspace_selection)
+        
         """Annotations-tab buttons connection"""
         
+    def get_available_database(self):
+        '''
+        If the user is opening for the first time, a return None.
 
-    def update(self):
-        """Update for every time the controller is called"""
-        # self.update_object_list()
-        self.update_files_browser()
+        If the user is opening the program for the second time, load the opened
+        database path in the font combo box
+        '''
+        try:
+            self.db_path_list = toml.load(open(self.db_filename))
+        
+        except FileNotFoundError:
+            pass
 
-    def run(self):
-        """Open home window"""
-        self.view.show()
-        return self.app.exec_()
+        if self.debug:
+            try:
+                print(self.db_path_list['database_paths']) #kurogane1031 kurogane1031 kurogane1031
+            except KeyError:
+                print('your db file is corrupted. Delete it')
 
-    def search_video(self):
-        """Find video path"""
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
-                                                            "All Files (*);;Python Files (*.py)", options=options)
-        if file_path:
-            # self.video.set_path(file_path)
+    def update_db_path_list(self):
+        '''
+        If there is any new database path specified by the user, the database path 
+        is updated.
+        '''
+        self.db_path_list['database_paths']['list'].append(self.new_database_path)
+        toml.dump(self.db_path_list, open(self.db_filename, mode='w'))
 
-            # TODO: Try different approach.
-            self.video = Video(file_path)
-        p = Path(file_path)
-        self.video_name = p.stem
-        self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
-        self.update()
-    
-    
     def get_new_workspace_path(self):
         """Find new workspace directory path"""
-        if self.load_workspace_list['database_dir']['path'] == "empty":
-            folder_path = QFileDialog.getExistingDirectory()
-            self.database_path = folder_path
-            self.database = DataBase(self.database_path)
-            self.load_workspace_list['database_dir']['path'] = str(self.database_path)
-            toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
-            self.update_workspace_path()
-        else:
-            self.database_path = self.load_workspace_list['database_dir']['path']
-            self.database = DataBase(self.database_path)
-            self.update_workspace_path()
+        folder_path = QFileDialog.getExistingDirectory()
+        self.database_path = folder_path
+        self.database = DataBase(self.database_path)
+        self.workspace_list = self.database.db_info['workspaces']
+        self.update_workspace_path()
+        self.update_ws_list()
+
+    def new_ws_name_is_available(self):
+        '''
+        check if ```name of workspace``` is available or not.
+        '''
+        self.workspace_new_name = self.view.ui.ws_new_name.text()
+        self.enable_create_ws_button()
+
+    def db_path_is_available(self):
+        '''
+        check if the database path is specified or not.
+        '''
+        self.db_path_list['database_paths']['last_opened'] = self.view.ui.ws_database_path.setText(self.database_path)
+        print(self.db_path_list['database_paths']['last_opened'])
+        self.enable_create_ws_button()
 
     def update_workspace_path(self):
         self.view.ui.ws_database_path.setText(self.database_path)
-        self.view.ui.ws_new_create_btn.setEnabled(True)
-    
+
+    def enable_create_ws_button(self):
+        if (self.workspace_new_name and self.database_path):
+            self.view.ui.ws_new_create_btn.setEnabled(True)
 
     def create_new_workspace(self):
         '''
         create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
         '''
-        self.workspace_new_name = self.view.ui.ws_new_name.text()
+        self.update_db_path_list()
         self.selected_workspace = self.database.new_workspace(self.workspace_new_name)
-        self.load_workspace_list['workspace']['name'].append(str(self.workspace_new_name))
-        toml.dump(self.load_workspace_list, open('.workspace_list.toml', mode='w'))
         self.update_ws_list()
-        print(self.workspace_list)
 
     def update_ws_list(self):
         '''
@@ -171,6 +196,34 @@ class HomeController:
         self.anns = TomlHandler()
         self.update_annotation_ws()
     #End workspace config
+
+
+    def update(self):
+        """Update for every time the controller is called"""
+        # self.update_object_list()
+        self.update_files_browser()
+
+    def run(self):
+        """Open home window"""
+        self.view.show()
+        return self.app.exec_()
+
+    def search_video(self):
+        """Find video path"""
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+                                                            "All Files (*);;Python Files (*.py)", options=options)
+        if file_path:
+            # self.video.set_path(file_path)
+
+            # TODO: Try different approach.
+            self.video = Video(file_path)
+        p = Path(file_path)
+        self.video_name = p.stem
+        self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
+        self.update()    
+
 
     #Start annotations config
     def update_annotations_list(self):

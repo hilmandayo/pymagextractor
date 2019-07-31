@@ -171,7 +171,16 @@ class VideoRender(QtWidgets.QGraphicsView):
         '''
         self.get_csv()
         print(self.csv_filename)
-        new = pd.DataFrame({'frame_id':[frame], 'track_id':[track], 'x1':[int(x1)], 'y1':[int(y1)], 'x2':[x2], 'y2':[y2], 'scene':[scene], 'object':[obj], 'view':[view]})
+        new = pd.DataFrame({'frame_id':[frame], 
+                            'track_id':[track], 
+                            'x1':[int(x1)], 
+                            'y1':[int(y1)], 
+                            'x2':[x2], 
+                            'y2':[y2], 
+                            'scene':[scene], 
+                            'object':[obj], 
+                            'view':[view]})
+                            
         self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
         self.write_to_csv.to_csv(self.csv_filename, index = False)
         print(self.write_to_csv)

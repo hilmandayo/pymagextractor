@@ -95,9 +95,10 @@ test.py
 # emacs user
 .projectile
 *.org
-.workspace_list.toml
+.*
 data/
 read_toml.py
 *.ipynb
 azu_ann.toml
 pymagextractor/toml/.ipynb_checkpoints/
+db_path_list.toml

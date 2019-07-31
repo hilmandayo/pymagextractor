@@ -1,8 +1,9 @@
 from pymagextractor.models.utils import create_dirs
 from .workspace import WorkSpace
 import pathlib
+import toml
 import cv2
-
+import datetime
 
 class DataBase:
     def __init__(self, data_base_path):
@@ -19,9 +20,11 @@ class DataBase:
 
         self._settings_anns_dir = self._settings_dir / "workspaces_annotations"
         dirs.append(self._settings_anns_dir)
-
+        
+        self.db_info = None
         create_dirs(dirs)
-
+        self.get_db_information(is_debug = True)
+        
     def __len__(self):
         return len(list(db._workspaces_dir.iterdir()))
 
@@ -46,7 +49,39 @@ class DataBase:
         ws_anns = self._settings_anns_dir / (name + ".toml")
         ws_anns.write_text("")
 
+        self.db_info['workspaces'].append(name)
         return WorkSpace(str(ws), str(ws_anns))
+
+    def get_db_information(self, is_debug = True):
+        '''
+        If the database is already exist, the function will try to retrieve its information.
+        If the information of the database does not exist, a new information file will be written.
+        '''
+        db_info_file = self._db_dir / 'db_info.toml'
+
+        if db_info_file.is_file():
+            print('db information found')
+            self.db_info = toml.load(open(db_info_file))
+            self.db_info['workspaces'] = self.is_ws_dir_exist()
+            self.db_info['date']['modified'] = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+            toml.dump(self.db_info, open(db_info_file, mode='w'))
+        else:
+            print('db file not found')
+            self.db_info = {'path':str(self._db_dir),
+                       'date':{'created' :datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+                               'modified':datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')},
+                       'workspaces':self.is_ws_dir_exist(),
+                       'last_opened_workspace':[]}
+            toml.dump(self.db_info, open(db_info_file, mode='w'))
+        
+        if is_debug:
+            print(self.db_info)
+
+    def is_ws_dir_exist(self):
+        '''
+        refreshes the workspace list everytime database is called.
+        '''
+        return [f.name for f in self._workspaces_dir.iterdir() if f.is_dir()]
 
 
 #     def _create_annotation_setting(self):
