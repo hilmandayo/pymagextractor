@@ -129,6 +129,7 @@ class HomeController:
         is updated.
         '''
         self.db_path_list['database_paths']['list'].append(self.new_database_path)
+        self.db_path_list['database_paths']['last_opened'] = self.new_database_path
         toml.dump(self.db_path_list, open(self.db_filename, mode='w'))
 
     def get_new_workspace_path(self):
@@ -151,8 +152,8 @@ class HomeController:
         '''
         check if the database path is specified or not.
         '''
-        self.db_path_list['database_paths']['last_opened'] = self.view.ui.ws_database_path.setText(self.database_path)
-        print(self.db_path_list['database_paths']['last_opened'])
+        self.new_database_path = self.view.ui.ws_database_path.setText(self.database_path)
+        print(self.new_database_path)
         self.enable_create_ws_button()
 
     def update_workspace_path(self):
@@ -166,6 +167,7 @@ class HomeController:
         '''
         create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
         '''
+        self.new_database_path = self.view.ui.ws_database_path.text()
         self.update_db_path_list()
         self.selected_workspace = self.database.new_workspace(self.workspace_new_name)
         self.update_ws_list()
