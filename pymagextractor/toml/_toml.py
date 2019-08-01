@@ -45,22 +45,56 @@ class TomlHandler:
         '''
         write some default scene, objects and view
         '''
-        default = {
-            "scene" : "itolab",
-            "object_id": ["azu",
-                          "hilman",
-                          "abe",],
-            "azu": 
-                [["front", "a"],
-                 ["back", "s"]],
-            "hilman":
-                [["front", "z"],
-                 ["back", "x"]],
-            "abe":
-                [["front", "z"],
-                 ["back", "x"]],
-        }
+        # default = {
+        #     "scene" : "itolab",
+        #     "object_id": ["azu",
+        #                   "hilman",
+        #                   "abe",],
+        #     "azu": 
+        #         [["front", "a"],
+        #          ["back", "s"]],
+        #     "hilman":
+        #         [["front", "z"],
+        #          ["back", "x"]],
+        #     "abe":
+        #         [["front", "z"],
+        #          ["back", "x"]],
+        # } #deprecriate
         
+        default = {
+            "scene" : "road_scene",
+            "object_id": ["red_traffic_light",
+                          "yellow_traffic_light",
+                          "stop_sign",
+                          "green_traffic_light",
+                          "tomare_paint",],
+            "red_traffic_light": 
+                [["far", "a"],
+                 ["middle", "a"],
+                 ["close", "a"],
+                 ["other", "s"]],
+            "yellow_traffic_light":
+                [["far", "a"],
+                 ["middle", "a"],
+                 ["close", "a"],
+                 ["other", "s"]],
+            "stop_sign":
+                [["far", "a"],
+                 ["middle", "a"],
+                 ["close", "a"],
+                 ["other", "s"]],
+            "green_traffic_light":
+                [["far", "a"],
+                 ["middle", "a"],
+                 ["close", "a"],
+                 ["other", "s"]],
+            "tomare_paint":
+                [["far", "a"],
+                 ["middle", "a"],
+                 ["close", "a"],
+                 ["other", "s"]],
+        }
+
         self.anns['annotations'].append(default)
     
     def check_if_exist(self):
