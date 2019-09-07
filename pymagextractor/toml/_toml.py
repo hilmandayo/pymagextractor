@@ -66,7 +66,9 @@ class TomlHandler:
             "object_id": ["red_traffic_light",
                           "yellow_traffic_light",
                           "stop_sign",
-                          "green_traffic_light",
+                          "left_green_arrow",
+                          "forward_green_arrow",
+                          "right_green_arrow",
                           "tomare_paint",],
             "red_traffic_light":
                 [["far", "a"],
