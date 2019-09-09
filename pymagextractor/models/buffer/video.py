@@ -15,16 +15,15 @@ class Video(BufferMaster):
 
     def next_frame_slot(self):
         # xfce4-taskmanager
-        ret, frame = self._buffer.read()
-        if ret:
-            # TODO: Implement an algorithm to handle a thread version of images list.
-            image_cv = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame = QtGui.QImage(image_cv.data, image_cv.shape[1], image_cv.shape[0],
-                                  QtGui.QImage.Format_RGB888)
+        # ret, frame = self._buffer.read()
+        image_cv = self.next_frame(rgb=True)
+        # TODO: Implement an algorithm to handle a thread version of images list.
+        frame = QtGui.QImage(image_cv.data, image_cv.shape[1], image_cv.shape[0],
+                                QtGui.QImage.Format_RGB888)
 
-            # Fixing memory leak bug at Pyside QImage constructor
-            ctypes.c_long.from_address(id(image_cv)).value = 1
-            return Frame(self.current_frame_id, QtGui.QPixmap.fromImage(frame))
+        # Fixing memory leak bug at Pyside QImage constructor
+        ctypes.c_long.from_address(id(image_cv)).value = 1
+        return Frame(self.current_frame_id, QtGui.QPixmap.fromImage(frame))
 
     def jump_frame_slot(self, frame_slot):
         self._buffer.set(cv2.CAP_PROP_POS_FRAMES, frame_slot - 1)
