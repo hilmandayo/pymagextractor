@@ -98,6 +98,7 @@ class ExtractController(QtCore.QObject):
         self.view.ui.slider.setValue(position)
 
     def update_labels(self, tracked_frame_id=0):
+        # TODO: Handle the exception by `self.video.current_frame_id`
         self.view.ui.frames_label.setText("Video Frames: " + str(int(self.video.current_frame_id)) + "/" + str(self.video.n_frames))
         if self.refined_tl:
             self.view.ui.objects_label.setText("Objects: " + str(self.refined_tl.index + 1) +

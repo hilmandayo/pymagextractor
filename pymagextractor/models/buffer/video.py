@@ -16,7 +16,7 @@ class Video(BufferMaster):
     def next_frame_slot(self):
         # xfce4-taskmanager
         # ret, frame = self._buffer.read()
-        image_cv = self.next_frame(rgb=True)
+        image_cv = self.read(rgb=True)
         # TODO: Implement an algorithm to handle a thread version of images list.
         frame = QtGui.QImage(image_cv.data, image_cv.shape[1], image_cv.shape[0],
                                 QtGui.QImage.Format_RGB888)

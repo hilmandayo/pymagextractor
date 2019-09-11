@@ -65,8 +65,8 @@ class BufferMaster:
 
         # Setting the width and height of the video and
         # instantiate the `self._width` and `self._height` accordingly.
-        orig_width = self._buffer.get(cv2.CAP_PROP_FRAME_WIDTH)
-        orig_height = self._buffer.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        orig_width = int(self._buffer.get(cv2.CAP_PROP_FRAME_WIDTH))
+        orig_height = int(self._buffer.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
         # We are trying to determine the `width` and `height value`
         if aspect_ratio:
@@ -106,9 +106,16 @@ class BufferMaster:
                 height = orig_height
             elif height:
                 width = orig_width
+            else:
+                # No reshaping whatsoever
+                height = orig_height
+                width = orig_width
 
+        self.orig_width = orig_width
+        self.orig_height = orig_height
         self._width = width
         self._height = height
+
         # Instantiate other internal variables.
         self._abs_path = str(src_path.absolute())
         self._parent_path = str(src_path.absolute().parent)
@@ -118,11 +125,13 @@ class BufferMaster:
         self._n_frames = int(self._buffer.get(cv2.CAP_PROP_FRAME_COUNT))
         self._fps = self._buffer.get(cv2.CAP_PROP_FPS)
 
-    @property
-    def next_frame(self, rgb=False):
+    def read(self, rgb=False):
+        """Read, resize and change the color orientation as needed."""
         ret, frame = self._buffer.read()
         if ret:
-            frame = cv2.resize(frame, (self._width, self._height))
+            frame = cv2.resize(
+                frame, (self._width, self._height), interpolation=cv2.INTER_AREA
+                               )
             if rgb: frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             return frame
         else:
@@ -156,8 +165,13 @@ class BufferMaster:
 
     @property
     def dims(self):
-        """Return the tuple `(w, h)` of current dimensions of the video."""
+        """Return the tuple `(w, h)` of current dimensions of the buffer."""
         return (self._width, self._height)
+
+    @property
+    def orig_dims(self):
+        """Return the tuple `(w, h)` of original dimensions of the buffer."""
+        return (self.orig_width, self.orig_height)
 
     @property
     def n_frames(self):

@@ -101,8 +101,14 @@ class ImageExtractController(QtCore.QObject):
         self.view.ui.slider.setValue(position)
 
     def update_labels(self, tracked_frame_id=0):
-        self.view.ui.frames_label.setText("Video Frames: " + str(int(self.video.current_frame_id)) + "/" + str(self.video.n_frames))
-        self.view.image_viewer.current_frame_number = self.video.current_frame_id
+        try:
+            frame_id = str(int(self.video.current_frame_id))
+        except:  # TODO: Specify the exception, after backend decided the proper exception
+            frame_id = "-"
+
+        self.view.ui.frames_label.setText(
+            "Video Frames: " + frame_id + "/" + str(self.video.n_frames))
+        self.view.image_viewer.current_frame_number = frame_id
 
     def play(self):
         if self.video_thread.playing:
@@ -131,8 +137,8 @@ class ImageExtractController(QtCore.QObject):
         size_of_view_list = len(self.add_scene_list)
         cur_scene = self.view.ui.add_scene_list.currentRow() #should return an index integer
         cur_obj = self.view.ui.add_object_list.currentItem().text() #should return the object name
-        
-        self.add_scene_list[cur_scene][cur_obj].append(self.view.ui.add_view.text())        
+
+        self.add_scene_list[cur_scene][cur_obj].append(self.view.ui.add_view.text())
         self.update_view_list()
 
     def update_track_id_list(self):
@@ -156,7 +162,7 @@ class ImageExtractController(QtCore.QObject):
         self.view.ui.add_scene_list.clear()
         for i, sce in enumerate(self.add_scene_list):
             self.view.ui.add_scene_list.addItem(str(sce['scene']))
-        
+
         '''
         autoselect the newly added scene
         '''
@@ -168,7 +174,7 @@ class ImageExtractController(QtCore.QObject):
 
         self.selected_scene = self.view.ui.add_scene_list.currentItem().text()
         self.view.image_viewer.current_selected_scene = self.selected_scene
-    
+
     def update_object_list(self, init = 0):
         '''
         update the list of objects in object dock
@@ -177,24 +183,24 @@ class ImageExtractController(QtCore.QObject):
         cur = self.view.ui.add_scene_list.currentRow()
         for i, obj in enumerate(self.add_scene_list[cur]['object_id']):
             self.view.ui.add_object_list.addItem(str(obj))
-    
+
         if init==0:
             self.view.ui.add_object_list.setCurrentRow(0)
         else:
             self.view.ui.add_object_list.setCurrentRow(i)
 
         self.selected_object = self.view.ui.add_object_list.currentItem().text()
-        self.view.image_viewer.current_selected_object = self.selected_object        
+        self.view.image_viewer.current_selected_object = self.selected_object
 
     def update_view_list(self, init = 0):
         '''
         update the list of views in object dock
         '''
         self.view.ui.add_view_list.clear()
-        
+
         cur_scene = self.view.ui.add_scene_list.currentRow() #should return an index integer
         cur_obj = self.view.ui.add_object_list.currentItem().text() #should return the object name
-        
+
         for i, view in enumerate(self.add_scene_list[cur_scene][cur_obj]):
             self.view.ui.add_view_list.addItem(str(view[0]))
 
@@ -202,7 +208,7 @@ class ImageExtractController(QtCore.QObject):
             self.view.ui.add_view_list.setCurrentRow(0)
         else:
             self.view.ui.add_view_list.setCurrentRow(i)
-        
+
         self.selected_view = self.view.ui.add_view_list.currentItem().text()
         self.view.image_viewer.current_selected_view = self.selected_view
 

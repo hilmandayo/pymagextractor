@@ -93,17 +93,17 @@ class HomeController:
         self.enable_create_ws_button()
         self.view.ui.ws_new_name.textChanged.connect(self.new_ws_name_is_available)
         self.view.ui.ws_database_path.textChanged.connect(self.db_path_is_available)
-        
-        
+
+
         """Workspace-tab buttons connection"""
         self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
         self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
         self.view.ui.ws_new_name.text()
         self.view.ui.ws_select_ws_list.itemSelectionChanged.connect(self.select_workspace_from_list)
         self.view.ui.ws_select_ws_btn.clicked.connect(self.confirm_workspace_selection)
-        
+
         """Annotations-tab buttons connection"""
-        
+
     def get_available_database(self):
         '''
         If the user is opening for the first time, a return None.
@@ -113,7 +113,7 @@ class HomeController:
         '''
         try:
             self.db_path_list = toml.load(open(self.db_filename))
-        
+
         except FileNotFoundError:
             pass
 
@@ -125,7 +125,7 @@ class HomeController:
 
     def update_db_path_list(self):
         '''
-        If there is any new database path specified by the user, the database path 
+        If there is any new database path specified by the user, the database path
         is updated.
         '''
         self.db_path_list['database_paths']['list'].append(self.new_database_path)
@@ -178,13 +178,13 @@ class HomeController:
         '''
         self.view.ui.ws_select_ws_list.clear()
         for i, ws_name in enumerate(self.workspace_list):
-            self.view.ui.ws_select_ws_list.addItem(str(ws_name))        
-    
+            self.view.ui.ws_select_ws_list.addItem(str(ws_name))
+
     def select_workspace_from_list(self):
         '''
         ```Select Workspace``` button only will work if one of the item in the list is selected.
         '''
-        self.view.ui.ws_select_ws_btn.setEnabled(True)        
+        self.view.ui.ws_select_ws_btn.setEnabled(True)
 
     def confirm_workspace_selection(self):
         '''
@@ -220,17 +220,17 @@ class HomeController:
             # self.video.set_path(file_path)
 
             # TODO: Try different approach.
-            self.video = Video(file_path)
+            self.video = Video(file_path, width=640, height=520)
         p = Path(file_path)
         self.video_name = p.stem
         self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
-        self.update()    
+        self.update()
 
 
     #Start annotations config
     def update_annotations_list(self):
         '''
-        List out all available notations. 
+        List out all available notations.
         If notation not exist, a default one will be written first.
         '''
         self.view.ui.ann_lists.clear()
@@ -253,7 +253,7 @@ class HomeController:
         print(self.anns._filename)
         self.anns.check_if_exist()
         self.update_annotations_list()
-    
+
     def add_view_to_object(self):
         print('Here here')
 
