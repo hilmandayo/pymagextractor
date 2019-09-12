@@ -220,7 +220,7 @@ class HomeController:
             # self.video.set_path(file_path)
 
             # TODO: Try different approach.
-            self.video = Video(file_path, width=640, height=520)
+            self.video = Video(file_path, width=640, height=500)
         p = Path(file_path)
         self.video_name = p.stem
         self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name

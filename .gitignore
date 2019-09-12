@@ -101,4 +101,10 @@ read_toml.py
 *.ipynb
 azu_ann.toml
 pymagextractor/toml/.ipynb_checkpoints/
+
+# internal file use (temp?)
 db_path_list.toml
+db_info.toml
+
+# lsp
+.mypy_cache

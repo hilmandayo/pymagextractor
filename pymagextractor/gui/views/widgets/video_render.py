@@ -34,7 +34,7 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.detection = []
         self.detection_objects = []  # List of GraphicsRectItem objects
         self.brush_detection = QtGui.QBrush(QtGui.QColor(100, 10, 10, 120))
-        
+
         # Saved
         self.save_action = None
         self.current_frame_number = None
@@ -43,14 +43,14 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.current_selected_scene = None
         self.current_selected_object = None
         self.current_selected_view = None
-        self.write_to_csv = pd.DataFrame({'frame_id':[], 
+        self.write_to_csv = pd.DataFrame({'frame_id':[],
                                           'track_id':[],
-                                          'x1':[], 
-                                          'y1':[], 
-                                          'x2':[], 
-                                          'y2':[], 
-                                          'scene':[], 
-                                          'object':[], 
+                                          'x1':[],
+                                          'y1':[],
+                                          'x2':[],
+                                          'y2':[],
+                                          'scene':[],
+                                          'object':[],
                                           'view':[]})
         self.ws_ = None
         self.ws_path_ = None
@@ -64,7 +64,10 @@ class VideoRender(QtWidgets.QGraphicsView):
     def set_frame(self, original_frame):
         """Set frame to be shown and resize the frame and widget"""
         # Resize frame
-        self.frame = original_frame.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
+        # self.frame = original_frame.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
+        # Change by HILMAN. This is temporary. It is the same with the size of video
+        # defined in `home_controller.py`
+        self.frame = original_frame.scaled(640, 500)
 
         # Resize render widget
         if not self.size_adjusted:
@@ -146,7 +149,7 @@ class VideoRender(QtWidgets.QGraphicsView):
     def leaveEvent(self, event):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
-    
+
     def save_callback(self):
         x1 = self.init_point.x()
         y1 = self.init_point.y()
@@ -171,16 +174,16 @@ class VideoRender(QtWidgets.QGraphicsView):
         '''
         self.get_csv()
         print(self.csv_filename)
-        new = pd.DataFrame({'frame_id':[frame], 
-                            'track_id':[track], 
-                            'x1':[int(x1)], 
-                            'y1':[int(y1)], 
-                            'x2':[x2], 
-                            'y2':[y2], 
-                            'scene':[scene], 
-                            'object':[obj], 
+        new = pd.DataFrame({'frame_id':[frame],
+                            'track_id':[track],
+                            'x1':[int(x1)],
+                            'y1':[int(y1)],
+                            'x2':[x2],
+                            'y2':[y2],
+                            'scene':[scene],
+                            'object':[obj],
                             'view':[view]})
-                            
+
         self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
         self.write_to_csv.to_csv(self.csv_filename, index = False)
         print(self.write_to_csv)
@@ -189,16 +192,16 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/{self.video_filename_}_{self.ws_}.csv'
         # print(self.csv_filename)
         try:
-            self.write_to_csv = pd.DataFrame({'frame_id':[], 
+            self.write_to_csv = pd.DataFrame({'frame_id':[],
                                           'track_id':[],
-                                          'x1':[], 
-                                          'y1':[], 
-                                          'x2':[], 
-                                          'y2':[], 
-                                          'scene':[], 
-                                          'object':[], 
+                                          'x1':[],
+                                          'y1':[],
+                                          'x2':[],
+                                          'y2':[],
+                                          'scene':[],
+                                          'object':[],
                                           'view':[]})
-                                          
+
             df = pd.read_csv(self.csv_filename,
                              usecols=['frame_id',
                                       'track_id',
