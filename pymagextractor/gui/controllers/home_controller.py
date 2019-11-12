@@ -6,7 +6,7 @@ import sys
 from PySide2.QtWidgets import (QApplication, QComboBox, QDialog, QFileDialog, QLineEdit,
                                QGraphicsColorizeEffect, QGroupBox, QLabel, QMainWindow,
                                QPlainTextEdit, QPushButton, QStackedWidget, QTabWidget, QTextEdit, QInputDialog)
-from PySide2.QtGui import QIcon, QColor
+from PySide2.QtGui import QIcon, QColor, QScreen
 from PySide2.QtCore import Qt, QEvent, QPoint, QSize, QSettings
 from pymagextractor.gui.views.home_view import HomeView
 from pymagextractor.gui.controllers.extract_controller import ExtractController
@@ -41,8 +41,8 @@ class HomeController:
         self.new_database_path = None
         self.db_path_list ={'database_paths' : {'list':[],
                                                 'last_opened': None}}
-
-        #Workspaces-tab
+        self.screen = {'width':0, 'height':0}
+        #Workspaces-tab 
         self.database = None
         self.database_path = None
         self.database_info = None
@@ -58,7 +58,7 @@ class HomeController:
         self.scene = []
         self.object = []
         self.view = {'object':[], 'view':[], 'shortcut':[]}
-
+        
         # View
         self.view = HomeView(self)
 
@@ -101,7 +101,7 @@ class HomeController:
         self.view.ui.ws_new_name.text()
         self.view.ui.ws_select_ws_list.itemSelectionChanged.connect(self.select_workspace_from_list)
         self.view.ui.ws_select_ws_btn.clicked.connect(self.confirm_workspace_selection)
-
+        print(self.app.desktop().availableGeometry())
         """Annotations-tab buttons connection"""
 
     def get_available_database(self):
