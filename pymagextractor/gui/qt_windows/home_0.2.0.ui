@@ -2595,7 +2595,7 @@
           <height>191</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_5">
+        <layout class="QGridLayout" name="mode_selection_button_layout">
          <item row="4" column="0">
           <widget class="QPushButton" name="extract_img_extractor_btn">
            <property name="enabled">

@@ -39,8 +39,7 @@ class HomeController:
 
         self.db_filename = 'db_path_list.toml'
         self.new_database_path = None
-        self.db_path_list ={'database_paths' : {'list':[],
-                                                'last_opened': None}}
+        self.db_path_list =toml.load(open(self.db_filename))
         self.screen = {'width':0, 'height':0}
         #Workspaces-tab 
         self.database = None
@@ -72,10 +71,7 @@ class HomeController:
             pass
 
         self.init()
-        try:
-            self.update_ws_list()
-        except:
-            pass
+
         self.update()
 
     def init(self):
@@ -89,20 +85,28 @@ class HomeController:
         self.view.ui.extract_launch_dual_mode_btn.clicked.connect(self.start)
 
         """Db paths"""
-        self.get_available_database()
+        self.view.ui.ws_database_path.setText(self.db_path_list['database_paths']['last_opened'])
+        self.database_path = self.view.ui.ws_database_path.text()
+        self.database = DataBase(self.database_path)
+        self.database.get_db_information()
         self.enable_create_ws_button()
         self.view.ui.ws_new_name.textChanged.connect(self.new_ws_name_is_available)
         self.view.ui.ws_database_path.textChanged.connect(self.db_path_is_available)
 
 
         """Workspace-tab buttons connection"""
-        self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
-        self.view.ui.ws_new_create_btn.clicked.connect(self.create_new_workspace)
+        # self.view.ui.ws_new_search_btn.clicked.connect(self.get_new_workspace_path)
+        self.view.ui.ws_btn_new_create.clicked.connect(self.create_new_workspace)
         self.view.ui.ws_new_name.text()
         self.view.ui.ws_select_ws_list.itemSelectionChanged.connect(self.select_workspace_from_list)
-        self.view.ui.ws_select_ws_btn.clicked.connect(self.confirm_workspace_selection)
+        self.view.ui.ws_btn_select_ws.clicked.connect(self.confirm_workspace_selection)
         print(self.app.desktop().availableGeometry())
         """Annotations-tab buttons connection"""
+        try:
+            self.workspace_list = self.database.db_info['workspaces']
+            self.update_ws_list()
+        except:
+            pass
 
     def get_available_database(self):
         '''
@@ -113,7 +117,7 @@ class HomeController:
         '''
         try:
             self.db_path_list = toml.load(open(self.db_filename))
-
+            
         except FileNotFoundError:
             pass
 
@@ -134,10 +138,8 @@ class HomeController:
 
     def get_new_workspace_path(self):
         """Find new workspace directory path"""
-        folder_path = QFileDialog.getExistingDirectory()
-        self.database_path = folder_path
-        self.database = DataBase(self.database_path)
         self.workspace_list = self.database.db_info['workspaces']
+        print(self.workspace_list)
         self.update_workspace_path()
         self.update_ws_list()
 
@@ -160,15 +162,15 @@ class HomeController:
         self.view.ui.ws_database_path.setText(self.database_path)
 
     def enable_create_ws_button(self):
-        if (self.workspace_new_name and self.database_path):
-            self.view.ui.ws_new_create_btn.setEnabled(True)
+        if (self.workspace_new_name):
+            self.view.ui.ws_btn_new_create.setEnabled(True)
 
     def create_new_workspace(self):
         '''
         create the folder, copy the annotation list, and write the path into ".workspace_list.toml"
         '''
         self.new_database_path = self.view.ui.ws_database_path.text()
-        self.update_db_path_list()
+        # self.update_db_path_list()
         self.selected_workspace = self.database.new_workspace(self.workspace_new_name)
         self.update_ws_list()
 
@@ -184,7 +186,7 @@ class HomeController:
         '''
         ```Select Workspace``` button only will work if one of the item in the list is selected.
         '''
-        self.view.ui.ws_select_ws_btn.setEnabled(True)
+        self.view.ui.ws_btn_select_ws.setEnabled(True)
 
     def confirm_workspace_selection(self):
         '''
@@ -192,6 +194,8 @@ class HomeController:
         New annotation instances will be created each time ```Select Workspace``` button is selected.
         '''
         self.selected_workspace = self.view.ui.ws_select_ws_list.currentItem().text()
+        print(self.selected_workspace)
+        print(self.database_path)
         self.image_extract_controller.ws = self.selected_workspace
         self.image_extract_controller.ws_path = self.database_path
         self.annotation_file_path = self.database_path + "/settings/workspaces_annotations/" + self.selected_workspace + ".toml"

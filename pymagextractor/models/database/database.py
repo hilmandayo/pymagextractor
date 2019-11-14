@@ -21,9 +21,10 @@ class DataBase:
         self._settings_anns_dir = self._settings_dir / "workspaces_annotations"
         dirs.append(self._settings_anns_dir)
         
-        self.db_info = None
+        # self.get_db_information(is_debug = True)
+        # self.db_info = None
         create_dirs(dirs)
-        self.get_db_information(is_debug = True)
+        
         
     def __len__(self):
         return len(list(db._workspaces_dir.iterdir()))
