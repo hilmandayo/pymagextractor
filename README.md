@@ -3,7 +3,7 @@
 This branch is only used for ```ui_design```.
 
 To clone this branch, use the following
-```git clone -b ui_design https://github.com/hilman-dayo/pymagextractor.git```
+```git clone -b develop https://github.com/hilman-dayo/pymagextractor.git```
 
 
 The UI is designed using ```Qt Designer```.
