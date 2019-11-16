@@ -2,6 +2,14 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
+from sandbox.data_handler import *
+from sandbox.sessions import *
+
+FOLLOW = TokuteiObject(normalize=[400, 400])
+TOKUTEI = TokuteiObject(normalize=[400, 400])
+
+NFOLLOW = []
+NTOKUTEI = []
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -135,8 +143,14 @@ class VideoRender(QtWidgets.QGraphicsView):
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
             self.save_action = menu.addAction("Save")
+            self.actions = {}
+            NFOLLOW.append(None)
+            for k, v in ACTIONS.items():
+                self.actions[k] = menu.addMenu(k).addAction(str(len(NFOLLOW))).triggered.connect(self.upon_bb_selection(k))
+
             # menu.addAction(save_action)
-            self.save_action.triggered.connect(self.save_callback)
+
+            ret = self.save_action.triggered.connect(self.save_callback)
             menu.exec_(QtGui.QCursor.pos())
             self.drawing = False
             self.update_frame()
@@ -149,6 +163,23 @@ class VideoRender(QtWidgets.QGraphicsView):
     def leaveEvent(self, event):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
+
+    def upon_bb_selection(self, session):
+        # let say we got the tokuteiobject
+        assert isinstance(session, str)
+        def ubbc():
+            if session == "Tokutei Object":
+                EX.upon_bb_selection(
+                    self.current_selected_track_id,
+                    self.current_frame_number,
+                    self.init_point.x(),
+                    self.init_point.y(),
+                    self.end_point.x(),
+                    self.end_point.y(),
+                    )
+
+        return ubbc
+
 
     def save_callback(self):
         x1 = self.init_point.x()

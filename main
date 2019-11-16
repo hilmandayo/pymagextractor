@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
-import sys
+from pathlib import Path
+import sys; sys.path.append(str(Path.home() / "MY_DRIVE/PROJECTS/pymagextractor/"))
 from pymagextractor.gui.controllers.home_controller import HomeController
 from pymagextractor.gui.controllers.init_db_path_controller import InitDatabasePathController
 import toml
@@ -13,7 +14,7 @@ if __name__ == '__main__':
         print("File foound")
         c = HomeController()
         sys.exit(c.run())
-        
+
         if debug:
             try:
                 print(self.db_path_list['database_paths']) #kurogane1031 kurogane1031 kurogane1031
@@ -27,5 +28,3 @@ if __name__ == '__main__':
 
     except:
         print("something wrong")
-    
-    
