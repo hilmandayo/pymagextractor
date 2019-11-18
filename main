@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 from pathlib import Path
-import sys; sys.path.append(str(Path.home() / "MY_DRIVE/PROJECTS/pymagextractor/"))
+import sys
 from pymagextractor.gui.controllers.home_controller import HomeController
 from pymagextractor.gui.controllers.init_db_path_controller import InitDatabasePathController
 import toml

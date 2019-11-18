@@ -5,11 +5,16 @@ import pandas as pd
 from sandbox.data_handler import *
 from sandbox.sessions import *
 
-FOLLOW = TokuteiObject(normalize=[400, 400])
-TOKUTEI = TokuteiObject(normalize=[400, 400])
+# NFOLLOW = [
+#     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),
+#     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),]
+SAVED = {"tokutei":{}}
+NTOKUTEI = None
 
-NFOLLOW = []
-NTOKUTEI = []
+tokutei_data_handler = DataHandler("tokutei", "/tmp/dummy.csv")
+tokutei_data_handler.add_handler(FrameID("frame_id"))
+tokutei_data_handler.add_handler(TrackID("track_id"))
+tokutei_data_handler.add_handler(Coordinates("coords"))
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -83,6 +88,14 @@ class VideoRender(QtWidgets.QGraphicsView):
             self.resize(self.frame.size())
             self.size_adjusted = True
 
+        # for ii in NFOLLOW:
+        #     ii.next(
+        #             self.current_frame_number,
+        #             self.init_point.x(),
+        #             self.init_point.y(),
+        #             self.end_point.x(),
+        #             self.end_point.y(),
+        #         )
         self.update_frame()
 
     def update_frame(self):
@@ -142,15 +155,23 @@ class VideoRender(QtWidgets.QGraphicsView):
         super().mouseReleaseEvent(event)
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
-            self.save_action = menu.addAction("Save")
+            # self.save_action = menu.addAction("Save")
+            self.save_action = menu.addAction("Save All")
             self.actions = {}
-            NFOLLOW.append(None)
             for k, v in ACTIONS.items():
-                self.actions[k] = menu.addMenu(k).addAction(str(len(NFOLLOW))).triggered.connect(self.upon_bb_selection(k))
+                self.actions[k] = menu.addMenu(k)
+                if k == "Tokutei Object":
+                    self.actions[k].addAction(f"Tokutei Object (New)").triggered.connect(self.upon_bb_selection(k))
+                    for ii, vv in SAVED["tokutei"].items():
+                        self.actions[k].addAction(f"Tokutei Object ({ii})").triggered.connect(self.upon_bb_selection(k, ii))
+                # elif k == "Follow":
+                #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
+                #     for i, obj in enumerate(NFOLLOW):
+                #         self.actions[k].addAction(f"Follow ({i})").triggered.connect(self.upon_bb_selection(k, i))
 
             # menu.addAction(save_action)
 
-            ret = self.save_action.triggered.connect(self.save_callback)
+            self.save_action.triggered.connect(self.save_all)
             menu.exec_(QtGui.QCursor.pos())
             self.drawing = False
             self.update_frame()
@@ -164,19 +185,31 @@ class VideoRender(QtWidgets.QGraphicsView):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
 
-    def upon_bb_selection(self, session):
+    def upon_bb_selection(self, session, idx=None):
         # let say we got the tokuteiobject
-        assert isinstance(session, str)
         def ubbc():
+            global NTOKUTEI
+            nonlocal idx
             if session == "Tokutei Object":
-                EX.upon_bb_selection(
-                    self.current_selected_track_id,
+                if idx is None:
+                    if NTOKUTEI is None:
+                        NTOKUTEI = 0
+                    else:
+                        NTOKUTEI += 1
+
+                    idx = NTOKUTEI
+                    SAVED["tokutei"][idx] = (TokuteiObject(data_handler=tokutei_data_handler, normalize=[640, 500]))
+
+                SAVED["tokutei"][idx].upon_bb_selection(
+                    NTOKUTEI,
                     self.current_frame_number,
                     self.init_point.x(),
                     self.init_point.y(),
                     self.end_point.x(),
                     self.end_point.y(),
                     )
+                if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier:
+                    del SAVED["tokutei"][idx]
 
         return ubbc
 
@@ -218,6 +251,11 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.write_to_csv = self.write_to_csv.append(new, ignore_index=True)
         self.write_to_csv.to_csv(self.csv_filename, index = False)
         print(self.write_to_csv)
+
+    def save_all(self):
+        print("here")
+        tokutei_data_handler.save()
+
 
     def get_csv(self):
         self.csv_filename = str(self.ws_path_) + '/workspaces/' + str(self.ws_) + f'/{self.video_filename_}_{self.ws_}.csv'
