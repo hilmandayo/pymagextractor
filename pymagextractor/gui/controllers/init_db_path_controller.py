@@ -28,17 +28,17 @@ class InitDatabasePathController:
         self.view.ui.db_btn_generate.clicked.connect(self.create_db_file)
 
     def search_path(self):
-        
+
         self.path_to_db = QFileDialog.getExistingDirectory()
         self.view.ui.db_box_path.setText(self.path_to_db)
         self.view.ui.db_box_path.textChanged.connect(self.view.ui.db_btn_generate.setEnabled(True))
-        
+
     def create_db_file(self):
         self.db_path_list['database_paths']['list'].append(self.path_to_db)
-        self.db_path_list['database_paths']['last_opened'] = self.path_to_db 
+        self.db_path_list['database_paths']['last_opened'] = self.path_to_db
         self.create_db_folders()
         toml.dump(self.db_path_list, open(self.db_filename, mode='w'))
-        
+
 
     def create_db_folders(self):
         print("hwhwhwhwhwhwhwhwhwhw")

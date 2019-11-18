@@ -2,8 +2,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
-from sandbox.data_handler import *
-from sandbox.sessions import *
+from data_handler import *
+from sessions import *
 
 # NFOLLOW = [
 #     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),
