@@ -2,8 +2,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
-from data_handler import *
-from sessions import *
+from pymagextractor.models.data_handlers import *
+from pymagextractor.models.sessions import *
 
 # NFOLLOW = [
 #     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),
@@ -12,9 +12,9 @@ SAVED = {"tokutei":{}}
 NTOKUTEI = None
 
 tokutei_data_handler = DataHandler("tokutei", "/tmp/dummy.csv")
-tokutei_data_handler.add_handler(FrameID("frame_id"))
-tokutei_data_handler.add_handler(TrackID("track_id"))
-tokutei_data_handler.add_handler(Coordinates("coords"))
+tokutei_data_handler.add_handlers(FrameID("frame_id"))
+tokutei_data_handler.add_handlers(TrackID("track_id"))
+tokutei_data_handler.add_handlers(Coordinates("coords"))
 
 class VideoRender(QtWidgets.QGraphicsView):
 

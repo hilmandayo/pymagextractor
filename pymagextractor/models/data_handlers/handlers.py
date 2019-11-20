@@ -1,75 +1,78 @@
 class Handler:
     def __init__(self):
-        pass
+        self.name = None    # if used as button, will use this
+        self.ref = None     # name for indexing internally
+        self.keys = None
+        self.data = []
+
 
 class TrackID(Handler):
-    def __init__(self, name, *keys):
-        self.name = name
-        self.data = None
+    def __init__(self):
+        super().__init__()
+        self.ref = "track_id"
 
     def add(self, track_id):
-        if self.data:
-            self.data["track_id"].append(track_id)
-        else:
-            self.data = {
-                "track_id": [track_id],
-            }
+        self.data.append(track_id)
 
 class FrameID(Handler):
-    def __init__(self, name, *keys):
-        self.name = name
-        self.data = None
+    def __init__(self):
+        super().__init__()
+        self.ref = "frame_id"
 
     def add(self, frame_id):
-        if self.data:
-            self.data["frame_id"].append(frame_id)
-        else:
-            self.data = {
-                "frame_id": [frame_id],
-            }
-
-class Coordinates(Handler):
-    def __init__(self, name, *keys):
-        self.keys = keys
-        self.name = name
-        self.data = None
-
-    def add(self, x1, y1, x2, y2):
-        if self.data:
-            self.data["x1"].append(x1)
-            self.data["y1"].append(y1)
-            self.data["x2"].append(x2)
-            self.data["y2"].append(y2)
-        else:
-            self.data = {
-                "x1": [x1],
-                "y1": [y1],
-                "x2": [x2],
-                "y2": [y2],
-            }
-
-class Object(Handler):
-    def __init__(self, name, *keys):
-        self.keys = keys
-        self.name = name
-
-    def add(self, *objects):
-        for o in objects:
-            if self.data:
-                self.data[o] = [o]
-            else:
-                self.data[o].append(o)
+        self.data.append(frame_id)
 
 
-class Tags(Handler):
-    def __init__(self, name, *keys):
-        self.keys = keys
-        self.name = name
+class X1(Handler):
+    def __init__(self):
+        super().__init__()
+        self.ref = "x1"
 
-    def add(self, track_id):
-        if self.data:
-            self.data["track_id"].append(track_id)
-        else:
-            self.data = {
-                "track_id": [track_id],
-            }
+    def add(self, x1):
+        self.data.append(x1)
+
+class X2(Handler):
+    def __init__(self):
+        super().__init__()
+        self.ref = "x2"
+
+    def add(self, x2):
+        self.data.append(x2)
+
+class Y1(Handler):
+    def __init__(self):
+        super().__init__()
+        self.ref = "y1"
+
+    def add(self, y1):
+        self.data.append(y1)
+
+class Y2(Handler):
+    def __init__(self):
+        super().__init__()
+        self.ref = "y2"
+
+    def add(self, y2):
+        self.data.append(y2)
+
+
+class ObjectClass(Handler):
+    def __init__(self):
+        super().__init__()
+        self.name = "Object Class"
+        self.ref = "object"
+        self.keys = "left up right".split()
+
+    def add(self, obj):
+        self.data.append(obj)
+
+
+class Size(Handler):
+    def __init__(self):
+        super().__init__()
+        self.name = "Size"
+        self.ref = "size"
+        self.keys = "big medium small".split()
+
+    def add(self, size):
+        self.data.append(size)
