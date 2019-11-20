@@ -6,10 +6,11 @@ from .sessions import BBClick
 class TokuteiObject(BBClick):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = "Tokutei"
+        self.name = "Tokutei Object"
         self._finish = False
 
     def upon_bb_selection(self, track_id, frame_id, x1, y1, x2, y2, delete=False):
+        self.track_id = track_id
         if self.normalize:
             x1 = x1 / self.normalize[0]
             x2 = x2 / self.normalize[0]
@@ -42,3 +43,6 @@ class TokuteiObject(BBClick):
 
     def finish(self):
         self._finish = True
+
+    def load(self):
+        pass

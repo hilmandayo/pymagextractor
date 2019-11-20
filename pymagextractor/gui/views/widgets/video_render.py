@@ -2,19 +2,10 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
-from pymagextractor.models.data_handlers import *
-from pymagextractor.models.sessions import *
+import pymagextractor.models.data_handlers as dh
+import pymagextractor.models.sessions as sess
 
-# NFOLLOW = [
-#     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),
-#     Follow(30, 30, 40, 40, 10, normalize=[400, 400]),]
-SAVED = {"tokutei":{}}
-NTOKUTEI = None
-
-tokutei_data_handler = DataHandler("tokutei", "/tmp/dummy.csv")
-tokutei_data_handler.add_handlers(FrameID("frame_id"))
-tokutei_data_handler.add_handlers(TrackID("track_id"))
-tokutei_data_handler.add_handlers(Coordinates("coords"))
+SAVED = {}
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -156,18 +147,18 @@ class VideoRender(QtWidgets.QGraphicsView):
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
             # self.save_action = menu.addAction("Save")
-            self.save_action = menu.addAction("Save All")
+            self.save_action = menu.addAction("Print CSV")
             self.actions = {}
             for k, v in ACTIONS.items():
                 self.actions[k] = menu.addMenu(k)
-                if k == "Tokutei Object":
-                    self.actions[k].addAction(f"Tokutei Object (New)").triggered.connect(self.upon_bb_selection(k))
-                    for ii, vv in SAVED["tokutei"].items():
-                        self.actions[k].addAction(f"Tokutei Object ({ii})").triggered.connect(self.upon_bb_selection(k, ii))
-                # elif k == "Follow":
-                #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
-                #     for i, obj in enumerate(NFOLLOW):
-                #         self.actions[k].addAction(f"Follow ({i})").triggered.connect(self.upon_bb_selection(k, i))
+
+                self.actions[k].addAction(f"{k} (New)").triggered.connect(self.upon_bb_selection(k))
+                for ii, vv in [for s in SAVED["tokutei"].items()]:
+                    self.actions[k].addAction(f"Tokutei Object ({ii})").triggered.connect(self.upon_bb_selection(k, ii))
+            # elif k == "Follow":
+            #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
+            #     for i, obj in enumerate(NFOLLOW):
+            #         self.actions[k].addAction(f"Follow ({i})").triggered.connect(self.upon_bb_selection(k, i))
 
             # menu.addAction(save_action)
 

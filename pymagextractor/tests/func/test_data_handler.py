@@ -10,6 +10,7 @@ def one_default_data_handlers():
         data_handlers.handlers.X1(), data_handlers.handlers.Y1(),
         data_handlers.handlers.X2(), data_handlers.handlers.Y2(),
         )
+    dh.load_data()
     return dh
 
 def test_add_handlers(one_default_data_handlers):
