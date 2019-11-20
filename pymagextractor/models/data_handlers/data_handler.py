@@ -19,12 +19,12 @@ class DataHandler:
     def __init__(self, input_file):
         self.handlers = {}
         self.input_file = Path(input_file)
+        self.data = {}
 
     def add_handlers(self, *handlers):
         for handler in handlers:
             self.handlers[handler.ref] = handler
 
-        self.data = {}
         self.components = []
         for h in handlers:
             self.components.append(h.ref)
@@ -50,7 +50,6 @@ class DataHandler:
     def save(self):
         new = {}
         for k, v in self.data.items():
-            print(k, v)
             # print("here ")
             # print(len(list(v.values())[0]))
             v["track_id"] = [k for i in range(len(list(v.values())[0]))]
@@ -60,36 +59,47 @@ class DataHandler:
                 r.extend(vv)
                 new[kk] = r
 
-        print(new)
         pd.DataFrame(new).to_csv(self.input_file, index=False)
 
     def __iter__(self):
         self.idx += 1
 
     def load_data(self):
-        assert self.input_file.exists()
+        if not self.input_file.exists(): return
 
-        ret = pd.read_csv(self.input_file, index_col=0)
+        try:
+            ret = pd.read_csv(self.input_file)
+        except pd.errors.EmptyDataError:
+            return
+
         track_ids = ret["track_id"]
 
-        for idx in ret.index:
+        for idx, ii in zip(ret.index, track_ids):
             gg = ret.iloc[idx]
-            print(gg)
-        #     temp = {}
-        #     for k, v in gg.iteritems():
-        #         if k == "track_id":
-        #             t_r = int(v)
-        #         else:
-        #             r = temp.get(k, None)
-        #             if r is None:
-        #                 r = []
-        #                 temp[k] = r
-        #             r.append(v)
-        #     self.data[t_r] = temp
+            temp = self.data.get(int(ii), None)
+            if temp is None:
+                temp = {}
+                self.data[ii] = temp
+            for k, v in gg.iteritems():
+                if k == "track_id":
+                    continue
+                else:
+                    r = temp.get(k, None)
+                    if r is None:
+                        r = []
+                        temp[k] = r
+                    r.append(v)
 
-        # print(self.data)
 
     def load_object(self):
         # let say the name of the csv itself have the name of the instance...
 
-        sess.TokuteiObject()
+        retval = []
+        for k, v in self.data.items():
+            obj = sess.TokuteiObject()
+            obj.load(int(k))
+            retval.append(obj)
+
+        retval = None if len(retval) == 0 else retval
+
+        return retval

@@ -4,8 +4,28 @@ import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
 import pymagextractor.models.data_handlers as dh
 import pymagextractor.models.sessions as sess
+import bisect
 
-SAVED = {}
+SAVED = {}  # the key is the name in ACTIONS
+DHS = {}
+ACTIONS = sess.ACTIONS
+for k in ACTIONS.keys():
+    SAVED[k] = []
+    my_dh = dh.DataHandler(f"/tmp/{k.replace(' ', '_')}.csv")
+    my_dh.load_data()
+    retval = my_dh.load_object()
+
+    # TODO: automate below if loaded
+    my_dh.add_handlers(
+    dh.handlers.TrackID(), dh.handlers.FrameID(),
+    dh.handlers.X1(), dh.handlers.Y1(),
+    dh.handlers.X2(), dh.handlers.Y2(),
+        )
+
+    if not retval is None:
+        SAVED[k] = retval
+    DHS[k] = my_dh
+
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -149,12 +169,12 @@ class VideoRender(QtWidgets.QGraphicsView):
             # self.save_action = menu.addAction("Save")
             self.save_action = menu.addAction("Print CSV")
             self.actions = {}
-            for k, v in ACTIONS.items():
+            for k, v in ACTIONS.items(): # the ACTIONS is the one added by user
                 self.actions[k] = menu.addMenu(k)
 
                 self.actions[k].addAction(f"{k} (New)").triggered.connect(self.upon_bb_selection(k))
-                for ii, vv in [for s in SAVED["tokutei"].items()]:
-                    self.actions[k].addAction(f"Tokutei Object ({ii})").triggered.connect(self.upon_bb_selection(k, ii))
+                for vv in SAVED[k]:
+                    self.actions[k].addAction(f"Tokutei Object ({vv.track_id})").triggered.connect(self.upon_bb_selection(k, vv.track_id))
             # elif k == "Follow":
             #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
             #     for i, obj in enumerate(NFOLLOW):
@@ -176,31 +196,28 @@ class VideoRender(QtWidgets.QGraphicsView):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
 
-    def upon_bb_selection(self, session, idx=None):
+    def upon_bb_selection(self, session_name, idx=None):
         # let say we got the tokuteiobject
         def ubbc():
-            global NTOKUTEI
+            sessions = SAVED[session_name]
             nonlocal idx
-            if session == "Tokutei Object":
-                if idx is None:
-                    if NTOKUTEI is None:
-                        NTOKUTEI = 0
-                    else:
-                        NTOKUTEI += 1
+            if idx is None:
+                SAVED[session_name].append(sess.TokuteiObject(data_handler=DHS[session_name], normalize=[640, 500]))
+                idx = SAVED[session_name][-1].track_id
 
-                    idx = NTOKUTEI
-                    SAVED["tokutei"][idx] = (TokuteiObject(data_handler=tokutei_data_handler, normalize=[640, 500]))
-
-                SAVED["tokutei"][idx].upon_bb_selection(
-                    NTOKUTEI,
-                    self.current_frame_number,
-                    self.init_point.x(),
-                    self.init_point.y(),
-                    self.end_point.x(),
-                    self.end_point.y(),
-                    )
-                if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier:
-                    del SAVED["tokutei"][idx]
+            idxs = [i.track_id for i in SAVED[session_name]]
+            idx = idxs.index(idx)
+            track_id = idxs[idx]
+            SAVED[session_name][idx].upon_bb_selection(
+                track_id,
+                self.current_frame_number,
+                self.init_point.x(),
+                self.init_point.y(),
+                self.end_point.x(),
+                self.end_point.y(),
+                )
+            if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier:
+                del SAVED["tokutei"][idx]
 
         return ubbc
 
@@ -244,8 +261,8 @@ class VideoRender(QtWidgets.QGraphicsView):
         print(self.write_to_csv)
 
     def save_all(self):
-        print("here")
-        tokutei_data_handler.save()
+        for k, v in DHS.items():
+            v.save()
 
 
     def get_csv(self):

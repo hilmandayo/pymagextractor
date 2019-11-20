@@ -1,16 +1,17 @@
 "Users code"
 
 from .sessions import BBClick
-
+from itertools import count
 
 class TokuteiObject(BBClick):
+    _ids = count(1)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = "Tokutei Object"
+        self.name = "Toked Object"
         self._finish = False
+        self.track_id = next(self._ids)
 
     def upon_bb_selection(self, track_id, frame_id, x1, y1, x2, y2, delete=False):
-        self.track_id = track_id
         if self.normalize:
             x1 = x1 / self.normalize[0]
             x2 = x2 / self.normalize[0]
@@ -20,7 +21,7 @@ class TokuteiObject(BBClick):
         if delete:
             print("Delete")
 
-        self.save(x1, y1, x2, y2, track_id, frame_id)
+        self.save(x1, y1, x2, y2, self.track_id, frame_id)
         return self
         # self.save(x1, y1, x2, y2)
         # if not self._finish:
@@ -34,9 +35,8 @@ class TokuteiObject(BBClick):
 
     def save(self, x1, y1, x2, y2, track_id, frame_id):
         if self.data_handler:
-            self.data_handler.add("track_id", track_id)
-            self.data_handler.add("frame_id", frame_id)
-            self.data_handler.add("coords", x1, y1, x2, y2)
+            self.data_handler.add(track_id=track_id, frame_id=frame_id,
+                                  x1=x1, y1=y1, x2=x2, y2=y2)
 
     def save_on_button_click(self):
         self.save()
@@ -44,5 +44,5 @@ class TokuteiObject(BBClick):
     def finish(self):
         self._finish = True
 
-    def load(self):
-        pass
+    def load(self, track_id):
+        self.track_id = track_id
