@@ -41,7 +41,7 @@ class HomeController:
         self.new_database_path = None
         self.db_path_list =toml.load(open(self.db_filename))
         self.screen = {'width':0, 'height':0}
-        #Workspaces-tab 
+        #Workspaces-tab
         self.database = None
         self.database_path = None
         self.database_info = None
@@ -57,12 +57,12 @@ class HomeController:
         self.scene = []
         self.object = []
         self.view = {'object':[], 'view':[], 'shortcut':[]}
-        
+
         # View
         self.view = HomeView(self)
 
         # List of controllers
-        self.extractor_controller = ExtractController(self)
+        # self.extractor_controller = ExtractController(self)
         self.image_extract_controller = ImageExtractController(self)
         self.object_controller = ObjectController(self)
         try:
@@ -117,7 +117,7 @@ class HomeController:
         '''
         try:
             self.db_path_list = toml.load(open(self.db_filename))
-            
+
         except FileNotFoundError:
             pass
 
@@ -292,7 +292,7 @@ class HomeController:
 
     def start(self):
         """Open video display window"""
-        self.extractor_controller.run()
+        # self.extractor_controller.run()
 
     def add_object(self):
         """Open add object window"""

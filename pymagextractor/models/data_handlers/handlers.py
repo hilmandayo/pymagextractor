@@ -57,22 +57,22 @@ class Y2(Handler):
 
 
 class ObjectClass(Handler):
-    def __init__(self):
+    def __init__(self, *args):
         super().__init__()
         self.name = "Object Class"
         self.ref = "object"
-        self.keys = "left up right".split()
+        self.data = args
 
     def add(self, obj):
         self.data.append(obj)
 
 
-class Size(Handler):
-    def __init__(self):
+class View(Handler):
+    def __init__(self, *args):
         super().__init__()
-        self.name = "Size"
-        self.ref = "size"
-        self.keys = "big medium small".split()
+        self.name = "View"
+        self.ref = "view"
+        self.data = args
 
-    def add(self, size):
+    def add(self, view):
         self.data.append(size)

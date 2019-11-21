@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1155</width>
-    <height>597</height>
+    <width>1148</width>
+    <height>747</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,8 +52,6 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
-             <zorder>image_viewer_2</zorder>
-             <zorder>image_viewer_2</zorder>
             </widget>
            </item>
           </layout>
@@ -596,20 +594,32 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>550</y>
+      <width>941</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="button_grid"/>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1155</width>
-     <height>22</height>
+     <width>1148</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>About</string>
+     <string>Workspaces</string>
     </property>
+    <addaction name="actionBack_to_Workspaces"/>
    </widget>
    <addaction name="menuAbout"/>
   </widget>
@@ -790,6 +800,11 @@
     </widget>
    </widget>
   </widget>
+  <action name="actionBack_to_Workspaces">
+   <property name="text">
+    <string>Back to Workspaces</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

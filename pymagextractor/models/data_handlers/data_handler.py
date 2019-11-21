@@ -47,11 +47,23 @@ class DataHandler:
 
         self.data[kwargs["track_id"]] = ret
 
+    def add_on_button_click(self, **kwargs):
+        # self.handlers[name].add(*args)
+        ret = self.data.get(kwargs["track_id"], None)
+        assert not ret is None
+
+        idx = ret["frame_id"].index(kwargs["frame_id"])
+        t = ret.get(kwargs["type_"], None)
+        if t is None:
+            t = [None for i in range(len(ret["frame_id"]))]
+            ret[kwargs["type_"]] = t
+        t[idx] = kwargs["subtype_"]
+        print("printing ret")
+        print(ret)
+
     def save(self):
         new = {}
         for k, v in self.data.items():
-            # print("here ")
-            # print(len(list(v.values())[0]))
             v["track_id"] = [k for i in range(len(list(v.values())[0]))]
             for kk, vv in v.items():
                 r = new.get(kk, None)
@@ -59,7 +71,8 @@ class DataHandler:
                 r.extend(vv)
                 new[kk] = r
 
-        pd.DataFrame(new).to_csv(self.input_file, index=False)
+        print(new)
+        # pd.DataFrame(new).to_csv(self.input_file, index=False)
 
     def __iter__(self):
         self.idx += 1
@@ -103,3 +116,17 @@ class DataHandler:
         retval = None if len(retval) == 0 else retval
 
         return retval
+
+    def get_objects(self, key, value):
+        assert key is not "track_id"
+
+        retval = []
+        for k, v in self.data.items():
+            if value in v[key]:
+                retval.append(k)
+
+        if retval:
+            assert len(retval) == 1
+            return retval[0]
+
+        return None

@@ -3,8 +3,8 @@
 # Form implementation generated from reading ui file 'view_image_extraction.ui',
 # licensing of 'view_image_extraction.ui' applies.
 #
-# Created: Mon Jul 22 19:28:40 2019
-#      by: pyside2-uic  running on PySide2 5.12.3
+# Created: Thu Nov 21 23:46:25 2019
+#      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1155, 597)
+        MainWindow.resize(1148, 747)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -229,9 +229,15 @@ class Ui_MainWindow(object):
         self.verticalLayout.setStretch(2, 2)
         self.verticalLayout.setStretch(3, 2)
         self.horizontalLayout.addWidget(self.extractor_box)
+        self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 550, 941, 151))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.button_grid = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.button_grid.setContentsMargins(0, 0, 0, 0)
+        self.button_grid.setObjectName("button_grid")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1155, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1148, 19))
         self.menubar.setObjectName("menubar")
         self.menuAbout = QtWidgets.QMenu(self.menubar)
         self.menuAbout.setObjectName("menuAbout")
@@ -290,6 +296,9 @@ class Ui_MainWindow(object):
         self.add_track_id_list.setObjectName("add_track_id_list")
         self.dockWidget_2.setWidget(self.dockWidgetContents_2)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget_2)
+        self.actionBack_to_Workspaces = QtWidgets.QAction(MainWindow)
+        self.actionBack_to_Workspaces.setObjectName("actionBack_to_Workspaces")
+        self.menuAbout.addAction(self.actionBack_to_Workspaces)
         self.menubar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -301,13 +310,14 @@ class Ui_MainWindow(object):
         self.previous_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Previous", None, -1))
         self.next_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Next", None, -1))
         self.edit_mode_bnt.setText(QtWidgets.QApplication.translate("MainWindow", "Edit Mode (OFF)", None, -1))
-        self.menuAbout.setTitle(QtWidgets.QApplication.translate("MainWindow", "About", None, -1))
+        self.menuAbout.setTitle(QtWidgets.QApplication.translate("MainWindow", "Workspaces", None, -1))
         self.dockWidget_2.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "Save Options", None, -1))
         self.add_objects_dock.setTitle(QtWidgets.QApplication.translate("MainWindow", "Objects", None, -1))
         self.add_track_id_btn.setText(QtWidgets.QApplication.translate("MainWindow", "Track ID", None, -1))
         self.add_scene_btn.setText(QtWidgets.QApplication.translate("MainWindow", "Add Scene", None, -1))
         self.add_object_btn.setText(QtWidgets.QApplication.translate("MainWindow", "Add Object", None, -1))
         self.add_view_btn.setText(QtWidgets.QApplication.translate("MainWindow", "Add View", None, -1))
+        self.actionBack_to_Workspaces.setText(QtWidgets.QApplication.translate("MainWindow", "Back to Workspaces", None, -1))
 
 
 if __name__ == "__main__":

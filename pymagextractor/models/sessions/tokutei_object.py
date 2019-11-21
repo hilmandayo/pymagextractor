@@ -10,6 +10,7 @@ class TokuteiObject(BBClick):
         self.name = "Toked Object"
         self._finish = False
         self.track_id = next(self._ids)
+        print(self.track_id)
 
     def upon_bb_selection(self, track_id, frame_id, x1, y1, x2, y2, delete=False):
         if self.normalize:
@@ -38,8 +39,10 @@ class TokuteiObject(BBClick):
             self.data_handler.add(track_id=track_id, frame_id=frame_id,
                                   x1=x1, y1=y1, x2=x2, y2=y2)
 
-    def save_on_button_click(self):
-        self.save()
+    def save_on_button_click(self, frame_id, type_, subtype_):
+        self.data_handler.add_on_button_click(
+            track_id=self.track_id, frame_id=frame_id, type_=type_, subtype_=subtype_
+            )
 
     def finish(self):
         self._finish = True

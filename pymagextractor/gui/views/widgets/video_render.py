@@ -4,27 +4,7 @@ import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
 import pymagextractor.models.data_handlers as dh
 import pymagextractor.models.sessions as sess
-import bisect
 
-SAVED = {}  # the key is the name in ACTIONS
-DHS = {}
-ACTIONS = sess.ACTIONS
-for k in ACTIONS.keys():
-    SAVED[k] = []
-    my_dh = dh.DataHandler(f"/tmp/{k.replace(' ', '_')}.csv")
-    my_dh.load_data()
-    retval = my_dh.load_object()
-
-    # TODO: automate below if loaded
-    my_dh.add_handlers(
-    dh.handlers.TrackID(), dh.handlers.FrameID(),
-    dh.handlers.X1(), dh.handlers.Y1(),
-    dh.handlers.X2(), dh.handlers.Y2(),
-        )
-
-    if not retval is None:
-        SAVED[k] = retval
-    DHS[k] = my_dh
 
 
 class VideoRender(QtWidgets.QGraphicsView):
@@ -81,9 +61,38 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.csv_filename = None
         self.video_filename_ = None
         self.init()
+
+
     def init(self):
         self.size_adjusted = False
         self.ratio = 1
+
+
+        self.SAVED = {}  # the key is the name in self.ACTIONS
+        self.DHS = {}
+        self.ACTIONS = sess.ACTIONS
+        print(self.ACTIONS)
+        for k in self.ACTIONS.keys():
+            self.SAVED[k] = []
+            my_dh = dh.DataHandler(f"/tmp/{k.replace(' ', '_')}.csv")
+            my_dh.load_data()
+            retval = my_dh.load_object()
+
+            # TODO: automate below if loaded
+            my_dh.add_handlers(
+            dh.handlers.TrackID(), dh.handlers.FrameID(),
+            dh.handlers.X1(), dh.handlers.Y1(),
+            dh.handlers.X2(), dh.handlers.Y2(),
+            dh.handlers.ObjectClass("red_traffic_light", "yellow_traffic_light",
+                                    "stop_sign", "left_green_arrow",
+                                    "forward_green_arrow", "right_green_arrow",
+                                    "tomare_paint",),
+            dh.handlers.View("close", "medium", "far")
+            )
+
+            if not retval is None:
+                self.SAVED[k] = retval
+            self.DHS[k] = my_dh
 
     def set_frame(self, original_frame):
         """Set frame to be shown and resize the frame and widget"""
@@ -169,11 +178,11 @@ class VideoRender(QtWidgets.QGraphicsView):
             # self.save_action = menu.addAction("Save")
             self.save_action = menu.addAction("Print CSV")
             self.actions = {}
-            for k, v in ACTIONS.items(): # the ACTIONS is the one added by user
+            for k, v in self.ACTIONS.items(): # the self.ACTIONS is the one added by user
                 self.actions[k] = menu.addMenu(k)
 
                 self.actions[k].addAction(f"{k} (New)").triggered.connect(self.upon_bb_selection(k))
-                for vv in SAVED[k]:
+                for vv in self.SAVED[k]:
                     self.actions[k].addAction(f"Tokutei Object ({vv.track_id})").triggered.connect(self.upon_bb_selection(k, vv.track_id))
             # elif k == "Follow":
             #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
@@ -199,16 +208,16 @@ class VideoRender(QtWidgets.QGraphicsView):
     def upon_bb_selection(self, session_name, idx=None):
         # let say we got the tokuteiobject
         def ubbc():
-            sessions = SAVED[session_name]
+            sessions = self.SAVED[session_name]
             nonlocal idx
             if idx is None:
-                SAVED[session_name].append(sess.TokuteiObject(data_handler=DHS[session_name], normalize=[640, 500]))
-                idx = SAVED[session_name][-1].track_id
+                self.SAVED[session_name].append(sess.TokuteiObject(data_handler=self.DHS[session_name], normalize=[640, 500]))
+                idx = self.SAVED[session_name][-1].track_id
 
-            idxs = [i.track_id for i in SAVED[session_name]]
+            idxs = [i.track_id for i in self.SAVED[session_name]]
             idx = idxs.index(idx)
             track_id = idxs[idx]
-            SAVED[session_name][idx].upon_bb_selection(
+            self.SAVED[session_name][idx].upon_bb_selection(
                 track_id,
                 self.current_frame_number,
                 self.init_point.x(),
@@ -217,7 +226,7 @@ class VideoRender(QtWidgets.QGraphicsView):
                 self.end_point.y(),
                 )
             if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier:
-                del SAVED["tokutei"][idx]
+                del self.SAVED["tokutei"][idx]
 
         return ubbc
 
@@ -261,7 +270,7 @@ class VideoRender(QtWidgets.QGraphicsView):
         print(self.write_to_csv)
 
     def save_all(self):
-        for k, v in DHS.items():
+        for k, v in self.DHS.items():
             v.save()
 
 
