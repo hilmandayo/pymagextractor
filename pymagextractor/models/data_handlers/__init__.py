@@ -3,4 +3,4 @@
 
 
 from .data_handler import DataHandler
-from . import handlers
+from .handler import Handler

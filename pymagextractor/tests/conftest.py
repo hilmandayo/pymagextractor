@@ -1,5 +1,6 @@
 import pathlib
 import pytest
+from pymagextractor.models.data_handlers import Handler, DataHandler
 # Below is meant to be implemented.
 
 # test_original.csv
@@ -68,3 +69,20 @@ def annotations_dir(data_center_dir):
     ann.mkdir()
 
     return ann
+
+@pytest.fixture
+def one_default_data_handler():
+    dh = DataHandler("/tmp/test.csv")
+    track_id = Handler("Track ID", "track_id", False)
+    frame_id = Handler("Track ID", "track_id", False)
+    x1 = Handler("X1", "x1", False)
+    x2 = Handler("X2", "x2", False)
+    y1 = Handler("Y1", "y1", False)
+    y2 = Handler("Y2", "y2", False)
+    dh.add_handlers(
+        data_handler.handlers.TrackID(), data_handler.handlers.FrameID(),
+        data_handler.handlers.X1(), data_handler.handlers.Y1(),
+        data_handler.handlers.X2(), data_handler.handlers.Y2(),
+        )
+    dh.load_data()
+    return dh

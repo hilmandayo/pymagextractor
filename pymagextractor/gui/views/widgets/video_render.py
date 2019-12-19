@@ -67,11 +67,9 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.size_adjusted = False
         self.ratio = 1
 
-
         self.SAVED = {}  # the key is the name in self.ACTIONS
         self.DHS = {}
         self.ACTIONS = sess.ACTIONS
-        print(self.ACTIONS)
         for k in self.ACTIONS.keys():
             self.SAVED[k] = []
             my_dh = dh.DataHandler(f"/tmp/{k.replace(' ', '_')}.csv")

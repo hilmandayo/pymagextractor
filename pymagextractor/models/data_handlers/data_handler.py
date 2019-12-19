@@ -21,10 +21,10 @@ class DataHandler:
         self.input_file = Path(input_file)
         self.data = {}
 
+    # TODO: Repair this according to `hl.*`
     def add_handlers(self, *handlers):
-        for handler in handlers:
-            self.handlers[handler.ref] = handler
-
+        # for handler in handlers:
+        #     self.handlers[handler.ref] = handler
         self.components = []
         for h in handlers:
             self.components.append(h.ref)
