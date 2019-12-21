@@ -1,4 +1,5 @@
-from pymagextractor.models.data_handlers import Handler
+from pymagextractor.models.data_handler import Handler
+import pytest
 
 
 @pytest.mark.parametrize("name, ref, button", [("Track ID", "track_id", None),

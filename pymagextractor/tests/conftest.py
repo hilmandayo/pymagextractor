@@ -1,6 +1,6 @@
 import pathlib
 import pytest
-from pymagextractor.models.data_handlers import Handler, DataHandler
+from pymagextractor.models.data_handler import Handler, DataHandler
 # Below is meant to be implemented.
 
 # test_original.csv
@@ -80,9 +80,13 @@ def one_default_data_handler():
     y1 = Handler("Y1", "y1", False)
     y2 = Handler("Y2", "y2", False)
     dh.add_handlers(
-        data_handler.handlers.TrackID(), data_handler.handlers.FrameID(),
-        data_handler.handlers.X1(), data_handler.handlers.Y1(),
-        data_handler.handlers.X2(), data_handler.handlers.Y2(),
+        track_id, frame_id,
+        x1, y1,
+        x2, y2
         )
-    dh.load_data()
+    # dh.load_data()
     return dh
+
+
+def one_default_data_handler():
+    pass

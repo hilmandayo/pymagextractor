@@ -1,4 +1,4 @@
 """Models"""
 
-from . import data_handlers
+from . import data_handler
 from . import sessions

@@ -1,7 +1,6 @@
 import pytest
-from pymagextractor.models.data_handlers import DataHandler
+from pymagextractor.models.data_handler import Handler, DataHandler
 
 
-def test_member_access():
-    h = handlers.Handler("Default", "default", False)
-    assert (h.name, h.ref, h.button) == ("Default", "default", False)
+def test_member_access(one_default_data_handler):
+    d_hd = one_default_data_handler

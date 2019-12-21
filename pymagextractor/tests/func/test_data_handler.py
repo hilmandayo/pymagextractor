@@ -1,4 +1,4 @@
-from pymagextractor.models import data_handlers
+from pymagextractor.models import data_handler
 import pytest
 
 
