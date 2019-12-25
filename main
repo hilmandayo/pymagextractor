@@ -5,26 +5,25 @@ import sys
 from pymagextractor.gui.controllers.home_controller import HomeController
 from pymagextractor.gui.controllers.init_db_path_controller import InitDatabasePathController
 import toml
+from pathlib import Path
+
 
 debug = False
 
 if __name__ == '__main__':
-    try:
-        db_path_list = toml.load(open('db_path_list.toml'))
-        print("File foound")
-        c = HomeController()
-        sys.exit(c.run())
-
-        if debug:
-            try:
-                print(self.db_path_list['database_paths']) #kurogane1031 kurogane1031 kurogane1031
-            except KeyError:
-                print('your db file is corrupted. Delete it')
-
-    except FileNotFoundError:
-        print("File not found")
+    # TODO: There must be a better way of doing this...
+    db_path_file = Path.home() / ".config" / "pymagextractor" / "db_path"
+    # TODO: In this case, the window will just quit after db is generated.
+    #       There must be a better way.
+    while not db_path_file.exists():
         c = InitDatabasePathController()
         sys.exit(c.run())
 
-    # except:
-    #     print("something wrong")
+    c = HomeController(db_path_file)
+    sys.exit(c.run())
+
+    # if debug:
+    #     try:
+    #         print(self.db_path_list['database_paths']) #kurogane1031 kurogane1031 kurogane1031
+    #     except KeyError:
+    #         print('your db file is corrupted. Delete it')

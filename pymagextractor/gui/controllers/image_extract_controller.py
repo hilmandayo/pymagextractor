@@ -46,7 +46,6 @@ class ImageExtractController(QtCore.QObject):
         self.view.ui.add_view_btn.clicked.connect(self.add_view)
         self.ws = None
         self.ws_path = None
-        print("image extract controller")
 
     def init(self):
         self.video = self.home_controller.video
@@ -59,8 +58,6 @@ class ImageExtractController(QtCore.QObject):
         self.update_labels()
         self.video_thread.set_video(self.video)
         self.video_thread.set_frames_sequence(self.video.frames_sequence)
-        # this will call it two times
-        # self.view.image_viewer.init()
 
 
     def run(self):

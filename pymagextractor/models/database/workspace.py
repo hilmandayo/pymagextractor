@@ -32,6 +32,10 @@ class WorkSpace:
     def workspace(self):
         return self._workspace_dir.name
 
+    @property
+    def workspace_path(self):
+        return str(self._workspace_dir)
+
     # TODO: implement appropriate annotations stuff here
     def anns_settings_get(self, name=None):
         try:

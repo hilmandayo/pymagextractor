@@ -18,3 +18,17 @@ def create_dirs(dirs):
 
     for d in _dirs:
         d.mkdir(exist_ok=True)
+
+
+def row_length(dict_: dict):
+    """Calculate the length of `dict`'s row.
+
+    Given a dict of dict with a fixed length of iterable as its value,
+    return the iterable's length.
+    """
+
+    outer_key = list(dict_.keys())[0]
+    dict_ = dict_[outer_key]
+    inner_key = list(dict_.keys())[0]
+
+    return len(dict_[inner_key])

@@ -1,31 +1,6 @@
 import pathlib
 import pytest
 from pymagextractor.models.data_handler import Handler, DataHandler
-# Below is meant to be implemented.
-
-# test_original.csv
-# frame_id,track_id,x1,y1,x2,y2
-# 8,0,10,10,40,40
-# 9,1,10,10,40,40
-# 9,2,10,10,40,40
-# 10,110,10,40,40
-# 11,1,10,10,40,40
-# 11,2,10,10,40,40
-# 13,2,10,10,40,40
-# 13,3,10,10,40,40
-# 14,4,10,10,40,40
-
-# test_original.csv
-# frame_id,track_id,x1,y1,x2,y2
-# 8,0,10,10,40,40
-# 9,1,10,10,40,40
-# 9,2,10,10,40,40
-# 10,110,10,40,40
-# 11,1,10,10,40,40
-# 11,2,10,10,40,40
-# 13,2,10,10,40,40
-# 13,3,10,10,40,40
-# 14,4,10,10,40,40
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -70,23 +45,43 @@ def annotations_dir(data_center_dir):
 
     return ann
 
-@pytest.fixture
-def one_default_data_handler():
+
+@pytest.fixture(scope="function")
+def empty_data_handler():
+    """Data Handler with no added handler."""
     dh = DataHandler("/tmp/test.csv")
-    track_id = Handler("Track ID", "track_id", False)
-    frame_id = Handler("Track ID", "track_id", False)
+    return dh
+
+
+@pytest.fixture(scope="function")
+def default_data_handler(empty_data_handler):
+    dh = empty_data_handler
+    frame_id = Handler("Frame ID", "frame_id", False)
     x1 = Handler("X1", "x1", False)
     x2 = Handler("X2", "x2", False)
     y1 = Handler("Y1", "y1", False)
     y2 = Handler("Y2", "y2", False)
     dh.add_handlers(
-        track_id, frame_id,
+        frame_id,
         x1, y1,
         x2, y2
         )
-    # dh.load_data()
     return dh
 
 
-def one_default_data_handler():
-    pass
+# TODO: Make the fixture itself is testable?
+@pytest.fixture
+def complicated_data_handler(default_data_handler):
+    dh = default_data_handler
+
+    size_handler = Handler("Size", "size", True, values="small medium big".split())
+    dh.add_handlers(size_handler)
+
+    kwargs1 = {"object_id":4, "frame_id": 10, "x1": 10, "x2": 20, "y1": 30, "y2": 40, "size": "small"}
+    kwargs2 = {"object_id":4, "frame_id": 15, "x1": 13, "x2": 23, "y1": 33, "y2": 43, "size": "medium"}
+    kwargs3 = {"object_id":6, "frame_id": 77, "x1": 89, "x2": 98, "y1": 11, "y2": 18, "size": "big"}
+    dh.add(**kwargs1)
+    dh.add(**kwargs2)
+    dh.add(**kwargs3)
+
+    return dh

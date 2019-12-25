@@ -1,3 +1,8 @@
+"""Sessions Module.
+
+Here, the session that can be used in `Pymagextractor` is defined.
+"""
+
 def normalize_coord(x1, y1, x2, y2, width, height):
     x1 = x1 / width
     x2 = x2 / width
@@ -22,7 +27,6 @@ class Session:
 
 
 
-# per session will define one new csv file
 class BBClick(Session):
     def __init__(self, data_handler=None, normalize=False):
         self.data_handler = data_handler

@@ -1,5 +1,4 @@
 import pytest
-# TODO: handler vs handlers?
 from pymagextractor.models.data_handler import Handler
 
 

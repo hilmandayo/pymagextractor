@@ -20,12 +20,12 @@ class DataBase:
 
         self._settings_anns_dir = self._settings_dir / "workspaces_annotations"
         dirs.append(self._settings_anns_dir)
-        
+
         # self.get_db_information(is_debug = True)
         # self.db_info = None
         create_dirs(dirs)
-        
-        
+
+
     def __len__(self):
         return len(list(db._workspaces_dir.iterdir()))
 
@@ -74,7 +74,7 @@ class DataBase:
                        'workspaces':self.is_ws_dir_exist(),
                        'last_opened_workspace':[]}
             toml.dump(self.db_info, open(db_info_file, mode='w'))
-        
+
         if is_debug:
             print(self.db_info)
 

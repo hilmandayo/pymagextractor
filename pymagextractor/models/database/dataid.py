@@ -21,8 +21,12 @@ class DataID:
     @property
     def buffer(self):
         """Return path to video or file of images within the DataID."""
-        try:
-            buffer = str(next(self._data_dir.glob("*.mp4")))
-        except StopIteration:
-             buffer = None
+        # TODO: Make this being able to work on multiple videos or multiple images
+        # TODO: Make a raised error
+        buffer = self._data_dir / "video.mp4"
         return buffer
+        # try:
+        #     buffer = str(next(self._data_dir.glob("*.mp4")))
+        # except StopIteration:
+        #      buffer = None
+        # return buffer

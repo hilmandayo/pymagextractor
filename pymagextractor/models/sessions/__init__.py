@@ -1,8 +1,8 @@
 from .follow import Follow
-from .tokutei_object import TokuteiObject
+from .object_select import ObjectSelect
 
 
 # We consider python automatically manage
 # to map class to its button name.
-ACTIONS = {"Tokutei Object": TokuteiObject,
-           "Follow": Follow,}
+ACTIONS = {"Object Select": ObjectSelect}
+           # "Follow": Follow,}

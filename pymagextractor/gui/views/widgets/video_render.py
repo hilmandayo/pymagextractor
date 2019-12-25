@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
-import pymagextractor.models.data_handlers as dh
+import pymagextractor.models.data_handler as dh
 import pymagextractor.models.sessions as sess
 
 
@@ -67,30 +67,6 @@ class VideoRender(QtWidgets.QGraphicsView):
         self.size_adjusted = False
         self.ratio = 1
 
-        self.SAVED = {}  # the key is the name in self.ACTIONS
-        self.DHS = {}
-        self.ACTIONS = sess.ACTIONS
-        for k in self.ACTIONS.keys():
-            self.SAVED[k] = []
-            my_dh = dh.DataHandler(f"/tmp/{k.replace(' ', '_')}.csv")
-            my_dh.load_data()
-            retval = my_dh.load_object()
-
-            # TODO: automate below if loaded
-            my_dh.add_handlers(
-            dh.handlers.TrackID(), dh.handlers.FrameID(),
-            dh.handlers.X1(), dh.handlers.Y1(),
-            dh.handlers.X2(), dh.handlers.Y2(),
-            dh.handlers.ObjectClass("red_traffic_light", "yellow_traffic_light",
-                                    "stop_sign", "left_green_arrow",
-                                    "forward_green_arrow", "right_green_arrow",
-                                    "tomare_paint",),
-            dh.handlers.View("close", "medium", "far")
-            )
-
-            if not retval is None:
-                self.SAVED[k] = retval
-            self.DHS[k] = my_dh
 
     def set_frame(self, original_frame):
         """Set frame to be shown and resize the frame and widget"""
@@ -173,6 +149,8 @@ class VideoRender(QtWidgets.QGraphicsView):
         super().mouseReleaseEvent(event)
         if not self.main_window.controller.edit_mode:
             menu = QtWidgets.QMenu(self)
+
+            # === Menu that will come out on the screen after the release of button. ===
             # self.save_action = menu.addAction("Save")
             self.save_action = menu.addAction("Print CSV")
             self.actions = {}

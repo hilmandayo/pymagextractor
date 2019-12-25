@@ -21,10 +21,12 @@ from pymagextractor.toml._toml import TomlHandler
 from pathlib import Path
 import toml
 
+from pymagextractor.models.database import DataID
+
 
 class HomeController:
 
-    def __init__(self):
+    def __init__(self, db_path_file: Path):
         self.app = QApplication(sys.argv)
         # List of models
         self.debug = True
@@ -37,9 +39,10 @@ class HomeController:
         self.csv_original_path = None
         self.csv_refined_path = None
 
-        self.db_filename = 'db_path_list.toml'
+        self.db_path_file = db_path_file
         self.new_database_path = None
-        self.db_path_list =toml.load(open(self.db_filename))
+        # self.db_path_list = toml.load(open(self.db_path_file))
+        self.db_path_list = self.db_path_file.read_text().strip()
         self.screen = {'width':0, 'height':0}
         #Workspaces-tab
         self.database = None
@@ -85,7 +88,8 @@ class HomeController:
         self.view.ui.extract_launch_dual_mode_btn.clicked.connect(self.start)
 
         """Db paths"""
-        self.view.ui.ws_database_path.setText(self.db_path_list['database_paths']['last_opened'])
+        # self.view.ui.ws_database_path.setText(self.db_path_list['database_paths']['last_opened'])
+        self.view.ui.ws_database_path.setText(self.db_path_list)
         self.database_path = self.view.ui.ws_database_path.text()
         self.database = DataBase(self.database_path)
         self.database.get_db_information()
@@ -116,7 +120,7 @@ class HomeController:
         database path in the font combo box
         '''
         try:
-            self.db_path_list = toml.load(open(self.db_filename))
+            self.db_path_list = toml.load(open(self.db_path_file))
 
         except FileNotFoundError:
             pass
@@ -134,7 +138,7 @@ class HomeController:
         '''
         self.db_path_list['database_paths']['list'].append(self.new_database_path)
         self.db_path_list['database_paths']['last_opened'] = self.new_database_path
-        toml.dump(self.db_path_list, open(self.db_filename, mode='w'))
+        toml.dump(self.db_path_list, open(self.db_path_file, mode='w'))
 
     def get_new_workspace_path(self):
         """Find new workspace directory path"""
@@ -216,16 +220,29 @@ class HomeController:
 
     def search_video(self):
         """Find video path"""
+        # XXX: For this time being, it would be the gateway to data id
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
-                                                            "All Files (*);;Python Files (*.py)", options=options)
-        if file_path:
-            # self.video.set_path(file_path)
+        # file_path, _ = QFileDialog.getOpenFileName(self.view, "QFileDialog.getOpenFileName()", "",
+        #                                                     "All Files (*);;Python Files (*.py)", options=options)
 
-            # TODO: Try different approach.
-            self.video = Video(file_path, width=640, height=500)
-        p = Path(file_path)
+        # XXX: This is just on reading...
+        data_id_path = QFileDialog.getExistingDirectory(
+            self.view, "Select Data ID", self.database[self.selected_workspace].workspace_path, options=options)
+
+        # if file_path:
+        #     # self.video.set_path(file_path)
+
+        #     # TODO: Try different approach.
+        #     self.video = Video(file_path, width=640, height=500)
+
+        print(data_id_path)
+        if Path(data_id_path).exists():
+            data_id = DataID(data_id_path)
+            p = data_id.buffer
+            self.video = Video(str(p), width=640, height=500)
+
+        # p = Path(file_path)
         self.video_name = p.stem
         self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
         self.update()
