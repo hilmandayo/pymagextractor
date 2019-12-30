@@ -25,6 +25,25 @@ class Video(BufferMaster):
         ctypes.c_long.from_address(id(image_cv)).value = 1
         return Frame(self.current_frame_id, QtGui.QPixmap.fromImage(frame))
 
+    def _next_frame_slot(self):
+        """Tempory mocking up `next_frame_slot` (need to solve fromImage problem)."""
+        # xfce4-taskmanager
+        # ret, frame = self._buffer.read()
+        image_cv = self.read(rgb=True)
+        # TODO: Implement an algorithm to handle a thread version of images list.
+
+        return Frame(self.current_frame_id, image_cv)
+
+    def _jump_frame_slot(self, frame_slot):
+        self._buffer.set(cv2.CAP_PROP_POS_FRAMES, frame_slot - 1)
+        return self._next_frame_slot()
+
+    def _previous_frame_slot(self):
+        if self.current_frame_id > 0:
+            return self._jump_frame_slot(self.current_frame_id - 2)
+        else:
+            return self._jump_frame_slot(self.current_frame_id)
+
     def jump_frame_slot(self, frame_slot):
         self._buffer.set(cv2.CAP_PROP_POS_FRAMES, frame_slot - 1)
         return self.next_frame_slot()
@@ -38,6 +57,19 @@ class Video(BufferMaster):
     @property
     def frames_sequence(self):
         return list(range(1, self.n_frames))
+
+    def get_image(self, frame_slot):
+        # XXX: Too dangerous to use `jump_frame_slot`
+        try:
+            _current = self.current_frame_id
+        except ValueError:
+            _current = 0
+        self._buffer.set(cv2.CAP_PROP_POS_FRAMES, frame_slot)
+        image_cv = self.read(rgb=True)
+        self._buffer.set(cv2.CAP_PROP_POS_FRAMES, _current)
+
+        return image_cv
+
 
 
 # This is the previous class.

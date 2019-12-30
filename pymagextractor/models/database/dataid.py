@@ -30,3 +30,8 @@ class DataID:
         # except StopIteration:
         #      buffer = None
         # return buffer
+
+    @property
+    def annotations_file(self):
+        dh = self._anns_dir / "annotations.csv"
+        return dh

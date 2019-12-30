@@ -3,9 +3,8 @@ import pymagextractor.gui.views.widgets.graphics_rect_item as CustomWidget
 import pymagextractor.models.buffer.frame as Frame
 import pandas as pd
 import pymagextractor.models.data_handler as dh
-import pymagextractor.models.sessions as sess
-
-
+from functools import partial
+# import pymagextractor.models.sessions as sess  # TEMP: Use `DataHandler` only
 
 class VideoRender(QtWidgets.QGraphicsView):
 
@@ -154,18 +153,16 @@ class VideoRender(QtWidgets.QGraphicsView):
             # self.save_action = menu.addAction("Save")
             self.save_action = menu.addAction("Print CSV")
             self.actions = {}
-            for k, v in self.ACTIONS.items(): # the self.ACTIONS is the one added by user
-                self.actions[k] = menu.addMenu(k)
 
-                self.actions[k].addAction(f"{k} (New)").triggered.connect(self.upon_bb_selection(k))
-                for vv in self.SAVED[k]:
-                    self.actions[k].addAction(f"Tokutei Object ({vv.track_id})").triggered.connect(self.upon_bb_selection(k, vv.track_id))
-            # elif k == "Follow":
-            #     self.actions[k].addAction(f"Follow (New)").triggered.connect(self.upon_bb_selection(k))
-            #     for i, obj in enumerate(NFOLLOW):
-            #         self.actions[k].addAction(f"Follow ({i})").triggered.connect(self.upon_bb_selection(k, i))
+            # for k, v in self.ACTIONS.items(): # the self.ACTIONS is the one added by user
+            #     self.actions[k] = menu.addMenu(k)
 
-            # menu.addAction(save_action)
+            #     self.actions[k].addAction(f"{k} (New)").triggered.connect(self.upon_bb_selection(k))
+            #     for vv in self.SAVED[k]:
+            #         self.actions[k].addAction(f"Tokutei Object ({vv.track_id})").triggered.connect(self.upon_bb_selection(k, vv.track_id))
+            menu.addAction(f"NEW object").triggered.connect(
+                self.upon_bb_selection)
+            # make based on datahandler
 
             self.save_action.triggered.connect(self.save_all)
             menu.exec_(QtGui.QCursor.pos())
@@ -181,7 +178,7 @@ class VideoRender(QtWidgets.QGraphicsView):
         QtWidgets.QApplication.restoreOverrideCursor()
         return super(VideoRender, self).enterEvent(event)
 
-    def upon_bb_selection(self, session_name, idx=None):
+    def upon_bb_selection(self, idx=None):
         # let say we got the tokuteiobject
         def ubbc():
             sessions = self.SAVED[session_name]

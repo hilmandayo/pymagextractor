@@ -17,6 +17,7 @@ from pymagextractor.models.config.optionsDB import OptionsDB
 from pymagextractor.models.container.track_list import TrackList
 from pymagextractor.models.csv_handler import CSVHandler
 from pymagextractor.models.database import DataBase
+from pymagextractor.models.data_handler import DataHandler
 from pymagextractor.toml._toml import TomlHandler
 from pathlib import Path
 import toml
@@ -245,6 +246,9 @@ class HomeController:
         # p = Path(file_path)
         self.video_name = p.stem
         self.image_extract_controller.view.image_viewer.video_filename_ = self.video_name
+        dh = DataHandler(data_id.annotations_file)
+        dh.load_data()
+        self.image_extract_controller.dh = dh
         self.update()
 
 

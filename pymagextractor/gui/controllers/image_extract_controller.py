@@ -1,5 +1,6 @@
 '''
-GUI when user select image extractor mode
+GUI when user select image extractor mode.
+Current main interface.
 '''
 from PySide2 import QtCore, QtGui, QtWidgets
 from pymagextractor.gui.views.image_extract_view import ImageExtractView
@@ -38,26 +39,40 @@ class ImageExtractController(QtCore.QObject):
         self.selected_track_id = None
         self.selected_object = None
         self.selected_view = None
-        self.view.ui.add_track_id_btn.clicked.connect(self.add_track_id)
-        self.view.ui.add_track_id_list.clicked.connect(self.get_selected_track_id)
-        self.view.ui.add_object_list.clicked.connect(self.get_selected_object)
-        self.view.ui.add_view_list.clicked.connect(self.get_selected_view)
-        self.view.ui.add_scene_list.clicked.connect(self.get_selected_scene)
-        self.view.ui.add_view_btn.clicked.connect(self.add_view)
+        # self.view.ui.add_track_id_btn.clicked.connect(self.add_track_id)
+        # self.view.ui.add_track_id_list.clicked.connect(self.get_selected_track_id)
+        # self.view.ui.add_object_list.clicked.connect(self.get_selected_object)
+        # self.view.ui.add_view_list.clicked.connect(self.get_selected_view)
+        # self.view.ui.add_scene_list.clicked.connect(self.get_selected_scene)
+        # self.view.ui.add_view_btn.clicked.connect(self.add_view)
         self.ws = None
         self.ws_path = None
 
+        self.dh = None
+
+
     def init(self):
         self.video = self.home_controller.video
-        self.update_track_id_list()         #update track id list at each initialization
-        self.update_scene_list(init=0)
-        self.update_object_list(init=0)
-        self.update_view_list(init=0)
+        # self.update_track_id_list()         #update track id list at each initialization
+        # self.update_scene_list(init=0)
+        # self.update_object_list(init=0)
+        # self.update_view_list(init=0)
         self.load_options()
         self.view.ui.slider.setRange(0, self.video.n_frames-1)
         self.update_labels()
         self.video_thread.set_video(self.video)
         self.video_thread.set_frames_sequence(self.video.frames_sequence)
+
+        self.view.bb_viewer.set_callback_func(self.jump_to_frame)
+
+        for o_id, data in self.dh.data.items():
+            frame_ids = data["frame_id"]
+            for i, frame_id in enumerate(frame_ids):
+                img = self.video.get_image(frame_id)
+                D = data
+                x1, y1, x2, y2 = D["x1"][i], D["y1"][i], D["x2"][i], D["y2"][i]
+                img = img[y1:y2, x1:x2]
+                self.view.bb_viewer.add_image(img, data, 0)
 
 
     def run(self):
@@ -93,9 +108,12 @@ class ImageExtractController(QtCore.QObject):
             self.view.ui.play_bnt.setIcon(
                 self.view.style().standardIcon(QStyle.SP_MediaPlay))
 
-    def jump_to_frame(self):
+    def jump_to_frame(self, value=None):
         """Set frame number according to the slider's position"""
-        self.video_thread.jump_frame(self.view.ui.slider.value())
+        print(f"called with {value}")
+        if value is None:
+            value = self.view.ui.slider.value()
+        self.video_thread.jump_frame(value)
 
     def slider_update(self, position):
         self.view.ui.slider.setValue(position)
@@ -129,29 +147,29 @@ class ImageExtractController(QtCore.QObject):
             self.view.ui.edit_mode_bnt.setStyleSheet("background-color:#BABABA;")
 
     # start add_objects_dock
-    def add_track_id(self):
-        self.track_id_list.append(self.view.ui.add_track_id.text())
-        self.update_track_id_list()
+    # def add_track_id(self):
+    #     self.track_id_list.append(self.view.ui.add_track_id.text())
+    #     self.update_track_id_list()
 
-    def add_view(self):
-        size_of_view_list = len(self.add_scene_list)
-        cur_scene = self.view.ui.add_scene_list.currentRow() #should return an index integer
-        cur_obj = self.view.ui.add_object_list.currentItem().text() #should return the object name
+    # def add_view(self):
+    #     size_of_view_list = len(self.add_scene_list)
+    #     cur_scene = self.view.ui.add_scene_list.currentRow() #should return an index integer
+    #     cur_obj = self.view.ui.add_object_list.currentItem().text() #should return the object name
 
-        self.add_scene_list[cur_scene][cur_obj].append(self.view.ui.add_view.text())
-        self.update_view_list()
+    #     self.add_scene_list[cur_scene][cur_obj].append(self.view.ui.add_view.text())
+    #     self.update_view_list()
 
-    def update_track_id_list(self):
-        self.view.ui.add_track_id_list.clear()
-        for i, ids in enumerate(self.track_id_list):
-            self.view.ui.add_track_id_list.addItem(str(ids))
+    # def update_track_id_list(self):
+    #     self.view.ui.add_track_id_list.clear()
+    #     for i, ids in enumerate(self.track_id_list):
+    #         self.view.ui.add_track_id_list.addItem(str(ids))
 
-        '''
-        autoselect the newly added track id
-        '''
-        self.view.ui.add_track_id_list.setCurrentRow(i)
-        self.selected_track_id = self.view.ui.add_track_id_list.currentItem().text()
-        self.view.image_viewer.current_selected_track_id = self.selected_track_id
+    #     '''
+    #     autoselect the newly added track id
+    #     '''
+    #     self.view.ui.add_track_id_list.setCurrentRow(i)
+    #     self.selected_track_id = self.view.ui.add_track_id_list.currentItem().text()
+    #     self.view.image_viewer.current_selected_track_id = self.selected_track_id
 
     def update_scene_list(self, init = 0):
         '''
@@ -212,24 +230,24 @@ class ImageExtractController(QtCore.QObject):
         self.selected_view = self.view.ui.add_view_list.currentItem().text()
         self.view.image_viewer.current_selected_view = self.selected_view
 
-    def get_selected_track_id(self):
-        self.selected_track_id = self.view.ui.add_track_id_list.currentItem().text()
-        self.view.image_viewer.current_selected_track_id = self.selected_track_id
+    # def get_selected_track_id(self):
+    #     self.selected_track_id = self.view.ui.add_track_id_list.currentItem().text()
+        # self.view.image_viewer.current_selected_track_id = self.selected_track_id
 
-    def get_selected_scene(self):
-        self.selected_scene = self.view.ui.add_scene_list.currentItem().text()
-        self.view.image_viewer.current_selected_scene = self.selected_scene
-        self.update_object_list()
-        self.update_view_list()
+    # def get_selected_scene(self):
+    #     self.selected_scene = self.view.ui.add_scene_list.currentItem().text()
+    #     self.view.image_viewer.current_selected_scene = self.selected_scene
+    #     self.update_object_list()
+    #     self.update_view_list()
 
-    def get_selected_object(self):
-        self.selected_object = self.view.ui.add_object_list.currentItem().text()
-        self.view.image_viewer.current_selected_object = self.selected_object
-        self.update_view_list()
+    # def get_selected_object(self):
+    #     self.selected_object = self.view.ui.add_object_list.currentItem().text()
+    #     self.view.image_viewer.current_selected_object = self.selected_object
+    #     self.update_view_list()
 
-    def get_selected_view(self):
-        self.selected_view = self.view.ui.add_view_list.currentItem().text()
-        self.view.image_viewer.current_selected_view = self.selected_view
+    # def get_selected_view(self):
+    #     self.selected_view = self.view.ui.add_view_list.currentItem().text()
+    #     self.view.image_viewer.current_selected_view = self.selected_view
 
     # end add_objects_dock
 

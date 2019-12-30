@@ -11,6 +11,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from pymagextractor.gui.qt_windows.image_extraction import Ui_MainWindow
 from PySide2.QtWidgets import QStyle
 import pymagextractor.gui.views.widgets.video_render as CustomWidget
+from pymagextractor.gui.views.widgets.bounding_boxes_viewer import BoundingBoxesViewer
 
 
 class ImageExtractView(QtWidgets.QMainWindow):
@@ -30,6 +31,11 @@ class ImageExtractView(QtWidgets.QMainWindow):
         self.original_layout = QtWidgets.QVBoxLayout()
         self.original_layout.addWidget(self.image_viewer)
         self.ui.image_viewer.setLayout(self.original_layout)
+
+        # XXX: Got this manually...
+        # Turns out, QScrollArea is in a Widget group??? Need to find out how to contained it...
+        self.bb_viewer = BoundingBoxesViewer(self.ui.centralwidget)
+        self.bb_viewer.setGeometry(QtCore.QRect(939, -1, 201, 701))
 
     def keyPressEvent(self, qKeyEvent):
         if qKeyEvent.key() == QtCore.Qt.Key_S:

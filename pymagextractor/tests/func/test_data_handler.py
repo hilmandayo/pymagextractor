@@ -1,4 +1,4 @@
-from pymagextractor.models import data_handler
+from pymagextractor.models.data_handler import DataHandler
 import pytest
 
 
@@ -32,11 +32,19 @@ def test_write_to_dh_multiple(default_data_handler):
             assert val == ret[key][i]
 
 
-def test_save_dh_data(complicated_data_handler, capsys):
+def test_save_load_dh_data(complicated_data_handler, capsys):
     dh = complicated_data_handler
     # TODO: How to assert this?
-    dh.set_session("random")
+    dh._set_session("default")
     dh.save()
+
+    path = dh.input_file
+
+    new_dh = DataHandler(str(path))
+    new_dh.load_data()
+
+    assert new_dh.session == dh.session
+    assert dh.data == new_dh.data
 
 
 def test_load_dh_object(complicated_data_handler):

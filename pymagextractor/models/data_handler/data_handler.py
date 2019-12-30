@@ -9,7 +9,7 @@ object_id = Handler("Object ID", "object_id", False)
 
 class DataHandler:
     # represent a csv file
-    def __init__(self, input_file, session):
+    def __init__(self, input_file):
         self.input_file = Path(input_file)
         self.data = {}
         self.handlers = [object_id]
@@ -110,10 +110,14 @@ class DataHandler:
     def load_data(self):
         if not self.input_file.exists(): return
 
-        try:
-            ret = pd.read_csv(self.input_file)
-        except pd.errors.EmptyDataError:
-            return
+        with open(self.input_file, "r") as fin:
+            self.session = fin.readline().strip().split("=")[-1]
+            fin.readline()  # extra line
+
+            try:
+                ret = pd.read_csv(fin)
+            except pd.errors.EmptyDataError:
+                return
 
         track_ids = ret["object_id"]
 
